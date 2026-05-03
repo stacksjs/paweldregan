@@ -12,11 +12,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
 
     env:
-      STX_PATH: ${{ github.workspace }}/stx
-      TS_CLOUD_PATH: ${{ github.workspace }}/ts-cloud
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: us-east-1
@@ -24,66 +22,17 @@ jobs:
       PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
 
     steps:
-      - name: Checkout paweldregan
-        uses: actions/checkout@v4
-        with:
-          path: paweldregan
+      - uses: actions/checkout@v4
 
-      - name: Checkout stx
-        uses: actions/checkout@v4
-        with:
-          repository: stacksjs/stx
-          path: stx
-
-      - name: Checkout ts-cloud
-        uses: actions/checkout@v4
-        with:
-          repository: stacksjs/ts-cloud
-          path: ts-cloud
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: Cache stx node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            stx/node_modules
-            stx/packages/*/node_modules
-          key: stx-${{ runner.os }}-${{ hashFiles('stx/bun.lock') }}-v2
-
-      - name: Cache ts-cloud node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ts-cloud/node_modules
-            ts-cloud/packages/*/node_modules
-          key: ts-cloud-${{ runner.os }}-${{ hashFiles('ts-cloud/bun.lock') }}-v2
-
-      - name: Install + build stx
-        working-directory: stx
-        run: |
-          bun install --frozen-lockfile
-          cd packages/router && bun --bun build.ts
-          cd ../bun-plugin && bun --bun build.ts
-          cd ../stx && bun --bun build.ts
-
-      - name: Install + build ts-cloud
-        working-directory: ts-cloud
-        run: |
-          bun install --frozen-lockfile
-          bun run --filter '*' build
-
-      - name: Install paweldregan
-        working-directory: paweldregan
+      - name: Install dependencies
         run: bun install --frozen-lockfile
 
       - name: Build site
-        working-directory: paweldregan
         run: bun run build
 
       - name: Deploy to AWS
-        working-directory: paweldregan
         run: bun run deploy

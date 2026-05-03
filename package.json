@@ -8,8 +8,12 @@
     "dev": "bun --bun scripts/dev.ts",
     "build": "bun --bun scripts/build.ts",
     "deploy": "bun --bun scripts/deploy.ts",
-    "preview": "bun --bun scripts/preview.ts",
-    "postinstall": "bun --bun scripts/link-stx.ts"
+    "preview": "bun --bun scripts/preview.ts"
+  },
+  "dependencies": {
+    "@stacksjs/stx": "^0.2.24",
+    "@stacksjs/ts-cloud": "^0.2.7",
+    "bun-plugin-stx": "^0.2.24"
   },
   "devDependencies": {
     "@types/bun": "^1.1.13"
