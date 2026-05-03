@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Paweł Dregan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .font-display { font-family: 'Bebas Neue', Impact, sans-serif; }
+  </style>
+</head>
+
+<body class="bg-black text-white font-sans antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 lg:px-12 py-4 flex justify-between items-center bg-black/90 backdrop-blur-xl border-b border-white/5">
+    <a href="/" class="text-xs font-bold tracking-[0.2em] uppercase">Paweł Dregan</a>
+    <ul class="hidden md:flex items-center gap-10">
+      <li><a href="/" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">Home</a></li>
+      <li><a href="/about" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">About</a></li>
+      <li><a href="/races" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">Races</a></li>
+      <li><a href="/coaching" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">Coaching</a></li>
+    </ul>
+  </nav>
+
+  <main class="min-h-screen flex flex-col justify-center items-center px-6 lg:px-12 text-center">
+    <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-white/30 mb-8">Error 404</p>
+    <h1 class="font-display text-[clamp(6rem,16vw,16rem)] leading-[0.85] tracking-tight mb-8">
+      OFF
+      <span class="block text-white/10">TRAIL</span>
+    </h1>
+    <p class="text-base text-white/35 leading-relaxed max-w-[420px] mb-12">
+      This route doesn't exist. Even ultra runners take wrong turns — let's get you back on course.
+    </p>
+    <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-black text-xs font-semibold tracking-wide hover:bg-white/85 transition-colors">
+      Back to Home →
+    </a>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 px-6 lg:px-12 py-8">
+    <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <span class="text-xs text-white/20">© 2026 Paweł Dregan</span>
+      <div class="flex items-center gap-8">
+        <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-white/25 hover:text-white transition-colors">Instagram</a>
+        <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-white/25 hover:text-white transition-colors">YouTube</a>
+        <a href="/coaching" class="text-xs text-white/25 hover:text-white transition-colors">Coaching</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

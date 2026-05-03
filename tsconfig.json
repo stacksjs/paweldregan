@@ -11,5 +11,5 @@
     "noEmit": true,
     "types": ["bun-types"]
   },
-  "include": ["scripts/**/*.ts", "pages/**/*.stx"]
+  "include": ["scripts/**/*.ts", "site.config.ts", "pages/**/*.stx"]
 }

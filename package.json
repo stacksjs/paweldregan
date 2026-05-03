@@ -8,14 +8,16 @@
     "dev": "bun --bun scripts/dev.ts",
     "build": "bun --bun scripts/build.ts",
     "deploy": "bun --bun scripts/deploy.ts",
-    "preview": "bun --bun scripts/preview.ts"
+    "preview": "bun --bun scripts/preview.ts",
+    "typecheck": "bun --bun tsc --noEmit"
   },
   "dependencies": {
-    "@stacksjs/stx": "^0.2.24",
-    "@stacksjs/ts-cloud": "^0.2.7",
-    "bun-plugin-stx": "^0.2.24"
+    "@stacksjs/stx": "^0.2.26",
+    "@stacksjs/ts-cloud": "^0.2.8",
+    "bun-plugin-stx": "^0.2.26"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.13"
+    "@types/bun": "^1.1.13",
+    "typescript": "^5.9.3"
   }
 }
