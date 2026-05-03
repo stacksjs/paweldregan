@@ -1,0 +1,17 @@
+{
+  "name": "paweldregan",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Paweł Dregan — Ultra Runner. Marketing site.",
+  "scripts": {
+    "dev": "bun --bun scripts/dev.ts",
+    "build": "bun --bun scripts/build.ts",
+    "deploy": "bun --bun scripts/deploy.ts",
+    "preview": "bun --bun scripts/preview.ts",
+    "postinstall": "bun --bun scripts/link-stx.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.13"
+  }
+}
