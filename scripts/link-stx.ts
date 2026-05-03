@@ -5,20 +5,25 @@
  * inner deps via `workspace:*`, so we can't `bun install` them as `file:`
  * deps from outside the workspace. Instead, we symlink the already-built
  * packages so Bun can resolve them at runtime.
+ *
+ * Override the source paths via STX_PATH and TS_CLOUD_PATH env vars (used by CI).
  */
 import { existsSync, mkdirSync, rmSync, symlinkSync, statSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 
 const repoRoot = resolve(import.meta.dir, '..')
-const stxRoot = resolve(repoRoot, '../../Tools/stx')
-const tsCloudRoot = resolve(repoRoot, '../../Tools/ts-cloud')
+const stxRoot = process.env.STX_PATH
+  ? resolve(process.env.STX_PATH)
+  : resolve(repoRoot, '../../Tools/stx')
+const tsCloudRoot = process.env.TS_CLOUD_PATH
+  ? resolve(process.env.TS_CLOUD_PATH)
+  : resolve(repoRoot, '../../Tools/ts-cloud')
 const nodeModules = join(repoRoot, 'node_modules')
 
 const links: Array<{ name: string, target: string }> = [
   { name: 'bun-plugin-stx', target: join(stxRoot, 'packages/bun-plugin') },
   { name: '@stacksjs/stx', target: join(stxRoot, 'packages/stx') },
-  { name: '@stx/deploy', target: join(stxRoot, 'packages/deploy') },
   { name: '@stacksjs/ts-cloud', target: join(tsCloudRoot, 'packages/ts-cloud') },
 ]
 

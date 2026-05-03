@@ -1,6 +1,6 @@
 import process from 'node:process'
 import { existsSync } from 'node:fs'
-import { cloudAdapter } from '@stx/deploy'
+import { deployStaticSiteWithExternalDnsFull } from '@stacksjs/ts-cloud'
 
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   console.error('Missing AWS credentials. Populate .env or export them in your shell.')
@@ -17,15 +17,22 @@ if (!existsSync('./dist/index.html')) {
   process.exit(1)
 }
 
-const adapter = cloudAdapter({
+const start = Date.now()
+
+const result = await deployStaticSiteWithExternalDnsFull({
   siteName: 'paweldregan',
   region: process.env.AWS_REGION ?? 'us-east-1',
   domain: 'paweldregan.com',
   defaultRootObject: 'index.html',
   errorDocument: '404.html',
   cacheControl: 'max-age=31536000, public',
+  sourceDir: './dist',
   cleanBucket: false,
-  dnsProvider: { provider: 'porkbun' },
+  dnsProvider: {
+    provider: 'porkbun',
+    apiKey: process.env.PORKBUN_API_KEY!,
+    secretKey: process.env.PORKBUN_SECRET_KEY!,
+  },
   tags: {
     Project: 'paweldregan',
     Environment: 'production',
@@ -35,20 +42,17 @@ const adapter = cloudAdapter({
   },
 })
 
-console.log('Deploying paweldregan.com to AWS via Porkbun DNS...\n')
-
-const result = await adapter.deploy!({
-  outputDir: './dist',
-  production: true,
-})
-
 if (!result.success) {
-  console.error('\nDeployment failed:')
-  for (const line of result.logs) console.error(`  ${line}`)
+  console.error(`\nDeployment failed: ${result.message}`)
   process.exit(1)
 }
 
 console.log('\nDeployment complete!')
-for (const line of result.logs) console.log(`  ${line}`)
-if (result.url) console.log(`\nLive: ${result.url}`)
-console.log(`Duration: ${(result.duration / 1000).toFixed(1)}s`)
+if (result.stackName) console.log(`  Stack: ${result.stackName}`)
+if (result.bucket) console.log(`  Bucket: ${result.bucket}`)
+if (result.distributionDomain) console.log(`  CDN: ${result.distributionDomain}`)
+if (result.domain) console.log(`  Domain: ${result.domain}`)
+if (typeof result.filesUploaded === 'number') console.log(`  Files uploaded: ${result.filesUploaded}`)
+if (typeof result.filesSkipped === 'number') console.log(`  Files unchanged: ${result.filesSkipped}`)
+if (result.domain) console.log(`\nLive: https://${result.domain}`)
+console.log(`Duration: ${((Date.now() - start) / 1000).toFixed(1)}s`)
