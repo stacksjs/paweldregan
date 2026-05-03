@@ -11,9 +11,6 @@
     "preview": "bun --bun scripts/preview.ts",
     "postinstall": "bun --bun scripts/link-stx.ts"
   },
-  "dependencies": {
-    "@cwcss/crosswind": "^0.2.4"
-  },
   "devDependencies": {
     "@types/bun": "^1.1.13"
   }

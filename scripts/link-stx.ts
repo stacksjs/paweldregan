@@ -25,6 +25,10 @@ const links: Array<{ name: string, target: string }> = [
   { name: 'bun-plugin-stx', target: join(stxRoot, 'packages/bun-plugin') },
   { name: '@stacksjs/stx', target: join(stxRoot, 'packages/stx') },
   { name: '@stacksjs/ts-cloud', target: join(tsCloudRoot, 'packages/ts-cloud') },
+  // stx's runtime deps that get dynamic-import'd from inside stx — Bun resolves
+  // those from the build's CWD (paweldregan), not from the symlink target,
+  // so we expose stx's already-installed copies here so they're discoverable.
+  { name: '@cwcss/crosswind', target: join(stxRoot, 'node_modules/@cwcss/crosswind') },
 ]
 
 let linked = 0
