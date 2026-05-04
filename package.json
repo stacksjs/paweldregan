@@ -13,7 +13,7 @@
     "verify": "bun --bun scripts/verify.ts"
   },
   "dependencies": {
-    "@stacksjs/stx": "^0.2.35",
+    "@stacksjs/stx": "^0.2.36",
     "@stacksjs/ts-cloud": "^0.2.10"
   },
   "devDependencies": {

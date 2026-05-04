@@ -92,6 +92,23 @@ const progressInitial = await evaluate<{ exists: boolean, parent: string | null 
 check('progress bar element exists', progressInitial.exists)
 check('progress bar attached to <html> (survives body swaps)', progressInitial.parent === 'HTML', `parent=${progressInitial.parent}`)
 
+const transition = await evaluate<{ hasMain: boolean, mainName: string | null, cssInjected: boolean, supported: boolean, hasMarker: boolean }>(`(() => {
+  const main = document.querySelector('main')
+  return {
+    hasMain: !!main,
+    mainName: main ? getComputedStyle(main).viewTransitionName : null,
+    cssInjected: !!document.getElementById('stx-view-transitions'),
+    supported: typeof document.startViewTransition === 'function',
+    // Magic: framework auto-wrapped — no data-stx-content attribute needed in source
+    hasMarker: !!document.querySelector('[data-stx-content]'),
+  }
+})()`)
+check('framework auto-wrapped page in <main>', transition.hasMain)
+check('view-transition-name=stx-content applied to <main>', transition.mainName === 'stx-content', `got "${transition.mainName}"`)
+check('view-transitions stylesheet injected', transition.cssInjected)
+check('document.startViewTransition supported', transition.supported)
+check('no data-stx-content attribute needed in source', !transition.hasMarker)
+
 // Plant a sentinel on window — survives SPA nav, gets wiped on full reload
 await evaluate(`window.__stxNavSentinel = '${baseUrl}-' + Date.now()`)
 const sentinelBefore = await evaluate<string>(`window.__stxNavSentinel`)
