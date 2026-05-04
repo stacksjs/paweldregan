@@ -85,11 +85,35 @@ check('light: nav bg is white-ish', /rgba?\(25[0-5],\s*25[0-5],\s*25[0-5]/.test(
 check('light: theme-color meta is white', lightNav.themeColor === '#ffffff', `theme-color="${lightNav.themeColor}"`)
 check('nav height stable across theme', darkNav.navHeight === lightNav.navHeight, `dark=${darkNav.navHeight}px, light=${lightNav.navHeight}px`)
 
+const progressInitial = await evaluate<{ exists: boolean, parent: string | null }>(`(() => {
+  const el = document.getElementById('stx-router-progress')
+  return { exists: !!el, parent: el ? el.parentElement?.tagName ?? null : null }
+})()`)
+check('progress bar element exists', progressInitial.exists)
+check('progress bar attached to <html> (survives body swaps)', progressInitial.parent === 'HTML', `parent=${progressInitial.parent}`)
+
 // Plant a sentinel on window — survives SPA nav, gets wiped on full reload
 await evaluate(`window.__stxNavSentinel = '${baseUrl}-' + Date.now()`)
 const sentinelBefore = await evaluate<string>(`window.__stxNavSentinel`)
 const t0 = Date.now()
 await view.click('a[href="/about"]')
+
+// Sample the progress bar at one point during nav — it should be visible
+let progressVisibleSample: { opacity: number, parent: string | null } | null = null
+for (let i = 0; i < 6; i++) {
+  await wait(40)
+  const sample = await evaluate<{ opacity: number, parent: string | null }>(`(() => {
+    const el = document.getElementById('stx-router-progress')
+    if (!el) return { opacity: -1, parent: null }
+    return { opacity: parseFloat(getComputedStyle(el).opacity), parent: el.parentElement?.tagName ?? null }
+  })()`)
+  if (sample.opacity > 0.1) { progressVisibleSample = sample; break }
+}
+check(
+  'progress bar visible during nav',
+  progressVisibleSample !== null && progressVisibleSample.opacity > 0.1,
+  progressVisibleSample ? `opacity=${progressVisibleSample.opacity.toFixed(2)}` : 'never visible',
+)
 let landed = false
 for (let i = 0; i < 50; i++) {
   await wait(100)
