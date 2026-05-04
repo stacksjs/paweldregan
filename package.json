@@ -9,7 +9,8 @@
     "build": "bun --bun scripts/build.ts",
     "deploy": "bun --bun scripts/deploy.ts",
     "preview": "bun --bun scripts/preview.ts",
-    "typecheck": "bun --bun tsc --noEmit"
+    "typecheck": "bun --bun tsc --noEmit",
+    "verify": "bun --bun scripts/verify.ts"
   },
   "dependencies": {
     "@stacksjs/stx": "^0.2.31",
@@ -17,7 +18,6 @@
   },
   "devDependencies": {
     "@types/bun": "^1.1.13",
-    "typescript": "^5.9.3",
-    "very-happy-dom": "^0.1.4"
+    "typescript": "^5.9.3"
   }
 }
