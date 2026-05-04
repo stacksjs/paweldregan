@@ -113,7 +113,7 @@ const races: Race[] = [
   },
   {
     date: '2023.08',
-    name: '100 Miles',
+    name: '{t:races.name.100miles}',
     sub: 'KAT100 by UTMB 2023',
     flag: '🇦🇹',
     category: '100M',
@@ -149,7 +149,7 @@ const races: Race[] = [
   },
   {
     date: '2020.07',
-    name: '100 Mile',
+    name: '{t:races.name.100mile}',
     sub: 'Chiemgauer 100 2020',
     flag: '🇩🇪',
     category: '100M',
@@ -194,10 +194,10 @@ const races: Race[] = [
 
   <!-- Header -->
   <header class="pt-40 lg:pt-48 pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
-    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">Race Results</span>
-    <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">THE RECORD.</h1>
+    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">{t:races.kicker}</span>
+    <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">{t:races.title}</h1>
     <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[560px] mt-8">
-      UTMB-indexed results from 100K to 700K. Every start line, every finish, every lesson.
+      {t:races.lede}
     </p>
   </header>
 
@@ -207,19 +207,19 @@ const races: Race[] = [
     <div class="grid grid-cols-2 lg:grid-cols-4 border-t border-black/5 dark:border-white/5 mb-16">
       <div class="p-8 border-b border-r border-black/5 dark:border-white/5">
         <div class="text-3xl font-extrabold tracking-tight">9</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">UTMB Races</div>
+        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.utmbRaces}</div>
       </div>
       <div class="p-8 border-b border-black/5 dark:border-white/5 lg:border-r">
         <div class="text-3xl font-extrabold tracking-tight">700km</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">Longest Distance</div>
+        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.longest}</div>
       </div>
       <div class="p-8 border-b border-r border-black/5 dark:border-white/5">
         <div class="text-3xl font-extrabold tracking-tight">49,000m</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">Max Elevation</div>
+        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.elevation}</div>
       </div>
       <div class="p-8 border-b border-black/5 dark:border-white/5">
         <div class="text-3xl font-extrabold tracking-tight">8 / 9</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">Finish Rate</div>
+        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.finishRate}</div>
       </div>
     </div>
 
@@ -228,13 +228,13 @@ const races: Race[] = [
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-b border-black/10 dark:border-white/10">
-            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">Date</th>
-            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">Race</th>
-            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25 hidden md:table-cell">Cat.</th>
-            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">Distance</th>
-            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25 hidden lg:table-cell">Elevation</th>
-            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">Time</th>
-            <th class="text-right py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">Rank</th>
+            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.date}</th>
+            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.race}</th>
+            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25 hidden md:table-cell">{t:races.table.category}</th>
+            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.distance}</th>
+            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25 hidden lg:table-cell">{t:races.table.elevation}</th>
+            <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.time}</th>
+            <th class="text-right py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.rank}</th>
           </tr>
         </thead>
         <tbody>

@@ -50,63 +50,50 @@ interface ProcessStep {
   description: string
 }
 
+// {t:key} tokens stay literal here — stx interpolates them as text
+// into the rendered HTML, then the framework's translation pass
+// replaces them with the active locale's value during the build.
 const services: Service[] = [
   {
     number: '01',
-    title: 'Training Plans',
-    description: 'Custom periodized programs built around your race calendar, lifestyle, and current fitness. From 50K first-timers to 500K+ veterans.',
+    title: '{t:coaching.services.plans.title}',
+    description: '{t:coaching.services.plans.desc}',
     includes: [
-      'Weekly structured training',
-      'Periodization & tapering',
-      'Strength & mobility work',
-      'Altitude preparation'
-    ]
+      '{t:coaching.services.plans.i1}',
+      '{t:coaching.services.plans.i2}',
+      '{t:coaching.services.plans.i3}',
+      '{t:coaching.services.plans.i4}',
+    ],
   },
   {
     number: '02',
-    title: 'Race Strategy',
-    description: 'Pacing plans, gear selection, and nutrition protocols tested across hundreds of hours in the mountains. No guesswork, only experience.',
+    title: '{t:coaching.services.race.title}',
+    description: '{t:coaching.services.race.desc}',
     includes: [
-      'Course-specific pacing',
-      'Nutrition & hydration plans',
-      'Gear selection & testing',
-      'Mental preparation'
-    ]
+      '{t:coaching.services.race.i1}',
+      '{t:coaching.services.race.i2}',
+      '{t:coaching.services.race.i3}',
+      '{t:coaching.services.race.i4}',
+    ],
   },
   {
     number: '03',
-    title: '1:1 Support',
-    description: 'Weekly check-ins, workout analysis, and direct messaging. You are never alone on the trail or in your preparation.',
+    title: '{t:coaching.services.support.title}',
+    description: '{t:coaching.services.support.desc}',
     includes: [
-      'Weekly video calls',
-      'Daily message support',
-      'Workout analysis & feedback',
-      'Race-week guidance'
-    ]
-  }
+      '{t:coaching.services.support.i1}',
+      '{t:coaching.services.support.i2}',
+      '{t:coaching.services.support.i3}',
+      '{t:coaching.services.support.i4}',
+    ],
+  },
 ]
 
 const steps: ProcessStep[] = [
-  {
-    number: '01',
-    title: 'Initial Assessment',
-    description: 'We start with a deep conversation about your running history, goals, schedule, and the races you want to target. No templates — everything is built from scratch.'
-  },
-  {
-    number: '02',
-    title: 'Plan Design',
-    description: 'I build your training program around your life, not the other way around. Structured weeks that build progressively, with flexibility for when life happens.'
-  },
-  {
-    number: '03',
-    title: 'Execute & Adapt',
-    description: 'Training begins. We review every week together, adjusting intensity, volume, and focus based on how your body responds. The plan evolves with you.'
-  },
-  {
-    number: '04',
-    title: 'Race & Reflect',
-    description: 'Full race-week support: final prep, pacing strategy, nutrition timing, and mental cues. After the race, we debrief and plan what comes next.'
-  }
+  { number: '01', title: '{t:coaching.process.step1}', description: '{t:coaching.process.step1Desc}' },
+  { number: '02', title: '{t:coaching.process.step2}', description: '{t:coaching.process.step2Desc}' },
+  { number: '03', title: '{t:coaching.process.step3}', description: '{t:coaching.process.step3Desc}' },
+  { number: '04', title: '{t:coaching.process.step4}', description: '{t:coaching.process.step4Desc}' },
 ]
 </script>
 
@@ -142,11 +129,10 @@ const steps: ProcessStep[] = [
 
   <!-- Header -->
   <header class="pt-40 lg:pt-48 pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
-    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">1:1 Coaching</span>
-    <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">GO FURTHER.</h1>
+    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">{t:coaching.kicker}</span>
+    <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">{t:coaching.title}</h1>
     <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[560px] mt-8">
-      Personalized ultra running coaching built on real experience — not theory.
-      From your first 50K to your biggest dream race.
+      {t:coaching.lede}
     </p>
   </header>
 
@@ -156,18 +142,14 @@ const steps: ProcessStep[] = [
     <!-- Philosophy -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 py-16 lg:py-24">
       <p class="text-2xl lg:text-3xl font-light leading-relaxed text-black/50 dark:text-white/50">
-        I have run <strong class="text-black dark:text-white font-bold">700 km</strong> in a single race. <strong class="text-black dark:text-white font-bold">515 km</strong> through
-        the Arctic at -30°C. The lessons from those experiences <strong class="text-black dark:text-white font-bold">cannot be found in a textbook</strong>.
+        {t:coaching.philosophyLead}
       </p>
       <div>
         <p class="text-base text-black/35 dark:text-white/35 leading-relaxed mb-6">
-          Every athlete is different. Your training plan should reflect your life, your body,
-          and your goals — not a generic template downloaded from the internet.
+          {t:coaching.philosophy1}
         </p>
         <p class="text-base text-black/35 dark:text-white/35 leading-relaxed">
-          I coach because I believe everyone deserves the feeling of crossing a finish line
-          they once thought was impossible. That is what ultra running gave me, and it is
-          what I want to give back.
+          {t:coaching.philosophy2}
         </p>
       </div>
     </div>
@@ -176,23 +158,23 @@ const steps: ProcessStep[] = [
 
     <!-- Credentials -->
     <section class="py-16 lg:py-24">
-      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">WHY TRAIN WITH ME</h2>
+      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">{t:coaching.whyTitle}</h2>
       <div class="grid grid-cols-2 lg:grid-cols-4 border-t border-black/5 dark:border-white/5">
         <div class="p-8 text-center border-b border-r border-black/5 dark:border-white/5">
           <div class="text-3xl font-extrabold tracking-tight">700km</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">Longest Finish</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:coaching.stats.longest}</div>
         </div>
         <div class="p-8 text-center border-b border-black/5 dark:border-white/5 lg:border-r">
           <div class="text-3xl font-extrabold tracking-tight">2nd</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">Lappland 500K</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:coaching.stats.lappland}</div>
         </div>
         <div class="p-8 text-center border-b border-r border-black/5 dark:border-white/5">
           <div class="text-3xl font-extrabold tracking-tight">8 / 9</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">UTMB Finish Rate</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:coaching.stats.utmbRate}</div>
         </div>
         <div class="p-8 text-center border-b border-black/5 dark:border-white/5">
           <div class="text-3xl font-extrabold tracking-tight">5+</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">Years Racing</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:coaching.stats.yearsRacing}</div>
         </div>
       </div>
     </section>
@@ -223,7 +205,7 @@ const steps: ProcessStep[] = [
 
     <!-- Process -->
     <section class="py-16 lg:py-24">
-      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">HOW IT WORKS</h2>
+      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">{t:coaching.processTitle}</h2>
       <div class="flex flex-col">
         @foreach (steps as step)
           <div class="flex flex-col lg:flex-row lg:items-baseline gap-2 lg:gap-8 py-6 border-b border-black/5 dark:border-white/5">
@@ -237,13 +219,12 @@ const steps: ProcessStep[] = [
 
     <!-- CTA -->
     <section class="py-24 lg:py-32 text-center">
-      <h2 class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.85] tracking-tight mb-6">READY TO START?</h2>
+      <h2 class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.85] tracking-tight mb-6">{t:coaching.ctaTitle}</h2>
       <p class="text-base text-black/35 dark:text-white/35 max-w-[480px] mx-auto leading-relaxed mb-12">
-        Send me a DM on Instagram to discuss your goals and how we can work together.
-        No commitment — just a conversation.
+        {t:coaching.ctaBody}
       </p>
       <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-sm font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
-        DM on Instagram →
+        {t:coaching.ctaButton}
       </a>
     </section>
   </div>
@@ -255,7 +236,7 @@ const steps: ProcessStep[] = [
       <div class="flex items-center gap-8">
         <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
         <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
-        <a href="/races" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Races</a>
+        <a href="/races" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.races}</a>
       </div>
     </div>
   </footer>

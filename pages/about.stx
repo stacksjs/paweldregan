@@ -43,14 +43,17 @@ interface Milestone {
   detail: string
 }
 
+// Race names that have translatable wording (e.g. "100 Miles" → "100 Meilen")
+// reference translation keys; race-specific brand names like "SwissPeaks
+// Trail 700K — Finisher" are kept as proper nouns by the translator.
 const milestones: Milestone[] = [
-  { year: '2025', title: 'Lappland Arctic Ultra 500K — 2nd Place', detail: '515 km · 6d 23h 27m' },
-  { year: '2025', title: 'SwissPeaks Trail 700K — Finisher', detail: '700 km · 175:43:56' },
-  { year: '2024', title: 'Eiger Ultra Trail E250 by UTMB', detail: '254 km · 70:42:49' },
-  { year: '2023', title: 'KAT100 by UTMB — 100 Miles', detail: '160 km · 36:15:50' },
-  { year: '2023', title: 'KoBoLT 140 KM — 6th Place', detail: '140 km · 19:57:00' },
-  { year: '2022', title: 'Pitz Alpine Glacier Trail P105', detail: '106 km · 26:31:54' },
-  { year: '2020', title: 'Chiemgauer 100 — First 100 Miler', detail: '160.9 km · 31:47:42' },
+  { year: '2025', title: '{t:about.milestone.lappland}', detail: '515 km · 6d 23h 27m' },
+  { year: '2025', title: '{t:about.milestone.swisspeaks}', detail: '700 km · 175:43:56' },
+  { year: '2024', title: '{t:about.milestone.eiger}', detail: '254 km · 70:42:49' },
+  { year: '2023', title: '{t:about.milestone.kat100}', detail: '160 km · 36:15:50' },
+  { year: '2023', title: '{t:about.milestone.kobolt}', detail: '140 km · 19:57:00' },
+  { year: '2022', title: '{t:about.milestone.pitz}', detail: '106 km · 26:31:54' },
+  { year: '2020', title: '{t:about.milestone.chiemgauer}', detail: '160.9 km · 31:47:42' },
 ]
 
 interface BioDetail {
@@ -59,12 +62,12 @@ interface BioDetail {
 }
 
 const bioDetails: BioDetail[] = [
-  { label: 'Based In', value: 'Germany' },
-  { label: 'Specialty', value: 'Ultra Distance (100K–700K)' },
-  { label: 'Longest Finish', value: 'SwissPeaks 700K' },
-  { label: 'Best Result', value: '2nd — Lappland Arctic Ultra 500K' },
-  { label: 'Next Race', value: 'Crossing Switzerland 400K' },
-  { label: 'Coaching', value: '1:1 — DM on Instagram' },
+  { label: '{t:about.bioDetails.basedIn}', value: '{t:about.bioDetails.basedInValue}' },
+  { label: '{t:about.bioDetails.specialty}', value: '{t:about.bioDetails.specialtyValue}' },
+  { label: '{t:about.bioDetails.longestFinish}', value: '{t:about.bioDetails.longestFinishValue}' },
+  { label: '{t:about.bioDetails.bestResult}', value: '{t:about.bioDetails.bestResultValue}' },
+  { label: '{t:about.bioDetails.nextRace}', value: '{t:about.bioDetails.nextRaceValue}' },
+  { label: '{t:about.bioDetails.coaching}', value: '{t:about.bioDetails.coachingValue}' },
 ]
 </script>
 
@@ -100,8 +103,8 @@ const bioDetails: BioDetail[] = [
 
   <!-- Header -->
   <header class="pt-40 lg:pt-48 pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
-    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">About</span>
-    <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">BORN TO RUN FAR.</h1>
+    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">{t:about.kicker}</span>
+    <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">{t:about.title}</h1>
   </header>
 
   <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
@@ -111,19 +114,13 @@ const bioDetails: BioDetail[] = [
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 py-16 lg:py-24">
       <div>
         <p class="text-lg text-black/60 dark:text-white/60 leading-relaxed mb-6">
-          I am an ultra runner specializing in the longest, most demanding races on the planet.
-          From the frozen trails of the Lappland Arctic Ultra to the endless alpine ridges of
-          SwissPeaks 700K, I seek out challenges that test every dimension of human endurance.
+          {t:about.bio1}
         </p>
         <p class="text-base text-black/40 dark:text-white/40 leading-relaxed mb-6">
-          My journey in ultra running has taught me that the body is capable of far more than
-          the mind believes. Crossing 515 km of frozen Lapland wilderness, pulling a sled at
-          -30°C for nearly seven days — these experiences reshaped my understanding of limits.
+          {t:about.bio2}
         </p>
         <p class="text-base text-black/40 dark:text-white/40 leading-relaxed">
-          I carry that philosophy into my coaching, helping athletes of all levels unlock their
-          potential and cross finish lines they once thought impossible. When I am not on the trail,
-          I am a husband and a dedicated coach. Running is not just a sport — it is a way of life.
+          {t:about.bio3}
         </p>
       </div>
       <div>
@@ -140,7 +137,7 @@ const bioDetails: BioDetail[] = [
 
     <!-- Milestones -->
     <section class="py-16 lg:py-24">
-      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">MILESTONES</h2>
+      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">{t:about.milestones}</h2>
       <div class="flex flex-col">
         @foreach (milestones as milestone)
           <div class="flex items-baseline justify-between py-5 border-b border-black/5 dark:border-white/5 hover:bg-black/[0.015] dark:hover:bg-white/[0.015] -mx-4 px-4 transition-colors">
@@ -158,15 +155,15 @@ const bioDetails: BioDetail[] = [
 
     <!-- Partners -->
     <section class="py-16 lg:py-24">
-      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">PARTNERS</h2>
+      <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">{t:about.partners}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2">
         <div class="border-t border-r border-black/5 dark:border-white/5 p-10">
           <div class="text-xl font-bold mb-2">Rappid.Runs</div>
-          <div class="text-sm text-black/30 dark:text-white/30">Team Athlete</div>
+          <div class="text-sm text-black/30 dark:text-white/30">{t:about.partner.rappidRole}</div>
         </div>
         <div class="border-t border-black/5 dark:border-white/5 p-10">
           <div class="text-xl font-bold mb-2">Falke Sport</div>
-          <div class="text-sm text-black/30 dark:text-white/30">Apparel Partner</div>
+          <div class="text-sm text-black/30 dark:text-white/30">{t:about.partner.falkeRole}</div>
         </div>
       </div>
     </section>
@@ -179,7 +176,7 @@ const bioDetails: BioDetail[] = [
       <div class="flex items-center gap-8">
         <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
         <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
-        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Coaching</a>
+        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.coaching}</a>
       </div>
     </div>
   </footer>

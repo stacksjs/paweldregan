@@ -58,16 +58,16 @@
   </nav>
 
   <main class="min-h-screen flex flex-col justify-center items-center px-6 lg:px-12 text-center">
-    <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 mb-8">Error 404</p>
+    <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 mb-8">{t:notFound.kicker}</p>
     <h1 class="font-display text-[clamp(6rem,16vw,16rem)] leading-[0.85] tracking-tight mb-8">
       OFF
       <span class="block text-black/10 dark:text-white/10">TRAIL</span>
     </h1>
     <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[420px] mb-12">
-      This route doesn't exist. Even ultra runners take wrong turns — let's get you back on course.
+      {t:notFound.lede}
     </p>
     <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
-      Back to Home →
+      {t:notFound.cta}
     </a>
   </main>
 
@@ -78,7 +78,7 @@
       <div class="flex items-center gap-8">
         <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
         <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
-        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Coaching</a>
+        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.coaching}</a>
       </div>
     </div>
   </footer>
