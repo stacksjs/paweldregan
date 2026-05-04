@@ -1,4 +1,4 @@
-import { defineSiteConfig } from './lib'
+import { defineSiteConfig } from '@stacksjs/stx'
 
 export const site = defineSiteConfig({
   name: 'Paweł Dregan',

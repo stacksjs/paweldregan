@@ -1,11 +1,10 @@
 import process from 'node:process'
-import { deploySite } from '../lib'
+import { deploySite } from '@stacksjs/ts-cloud'
 import { site } from '../site.config'
 
 const result = await deploySite({
   siteName: 'paweldregan',
   domain: new URL(site.url).hostname,
-  dnsProvider: 'porkbun',
 })
 
 if (!result.success) {

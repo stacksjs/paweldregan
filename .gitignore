@@ -6,3 +6,4 @@ dist
 *.log
 /.stx/cache
 .claude
+/pantry
