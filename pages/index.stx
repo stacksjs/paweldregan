@@ -27,36 +27,40 @@ const marqueeItems = [
 ]
 </script>
 
-<body class="bg-black text-white font-sans antialiased">
+<body class="bg-white dark:bg-black text-black dark:text-white font-sans antialiased">
 
   <!-- Nav -->
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 px-6 lg:px-12 py-5 flex justify-between items-center transition-all duration-300">
     <a href="/" class="text-xs font-bold tracking-[0.2em] uppercase">Paweł Dregan</a>
     <ul class="hidden md:flex items-center gap-10">
-      <li><a href="/" class="text-xs font-medium tracking-wide text-white transition-colors">Home</a></li>
-      <li><a href="/about" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">About</a></li>
-      <li><a href="/races" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">Races</a></li>
-      <li><a href="/coaching" class="text-xs font-medium tracking-wide text-white/50 hover:text-white transition-colors">Coaching</a></li>
+      <li><a href="/" class="text-xs font-medium tracking-wide text-black dark:text-white transition-colors">Home</a></li>
+      <li><a href="/about" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">About</a></li>
+      <li><a href="/races" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">Races</a></li>
+      <li><a href="/coaching" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">Coaching</a></li>
     </ul>
     <div class="flex items-center gap-5">
-      <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white/40 hover:text-white transition-colors">
+      <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
         <svg class="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
       </a>
-      <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-white/40 hover:text-white transition-colors">
+      <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
         <svg class="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </a>
+      <button id="theme-toggle" type="button" aria-label="Toggle theme" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
+        <svg class="w-[18px] h-[18px] hidden dark:block fill-current" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13l2 .01c.55 0 .99-.45.99-1s-.44-1-.99-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0l2 .01c.55 0 .99-.45.99-1s-.44-1-.99-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/></svg>
+        <svg class="w-[18px] h-[18px] dark:hidden fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+      </button>
     </div>
   </nav>
 
   <!-- Hero -->
   <section class="min-h-screen flex flex-col justify-center px-6 lg:px-12 pt-32 pb-24 max-w-[1400px] mx-auto">
-    <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-white/30 mb-8">Ultra Runner · Coach · Husband</p>
+    <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 mb-8">Ultra Runner · Coach · Husband</p>
     <h1 class="font-display text-[clamp(5rem,12vw,12rem)] leading-[0.85] tracking-tight mb-12">
       PAWEŁ
-      <span class="block text-white/10">DREGAN</span>
+      <span class="block text-black/10 dark:text-white/10">DREGAN</span>
     </h1>
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mt-auto pt-16 gap-12">
-      <p class="text-base font-light text-white/45 leading-relaxed max-w-[420px]">
+      <p class="text-base font-light text-black/45 dark:text-white/45 leading-relaxed max-w-[420px]">
         Finisher of SwissPeaks 700K, Lappland Arctic Ultra 500K, and the
         world's most demanding mountain races. Pushing limits where the
         trail ends and willpower begins.
@@ -64,15 +68,15 @@ const marqueeItems = [
       <div class="flex gap-12 lg:gap-16">
         <div class="text-right">
           <div class="text-3xl font-extrabold tracking-tight">700km</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-white/25 mt-2">Longest Race</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/25 dark:text-white/25 mt-2">Longest Race</div>
         </div>
         <div class="text-right">
           <div class="text-3xl font-extrabold tracking-tight">2nd</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-white/25 mt-2">Lappland 500K</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/25 dark:text-white/25 mt-2">Lappland 500K</div>
         </div>
         <div class="text-right">
           <div class="text-3xl font-extrabold tracking-tight">6d 23h</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-white/25 mt-2">Arctic Finish</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/25 dark:text-white/25 mt-2">Arctic Finish</div>
         </div>
       </div>
     </div>
@@ -82,41 +86,41 @@ const marqueeItems = [
   <div class="overflow-hidden py-4">
     <div class="flex gap-12 whitespace-nowrap" style="animation: scroll 30s linear infinite;">
       @foreach (marqueeItems as item)
-        <span class="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-white/10 shrink-0">{{ item }}</span>
-        <span class="text-white/[0.05] shrink-0">·</span>
+        <span class="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-black/10 dark:text-white/10 shrink-0">{{ item }}</span>
+        <span class="text-black/[0.05] dark:text-white/[0.05] shrink-0">·</span>
       @endforeach
       @foreach (marqueeItems as item)
-        <span class="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-white/10 shrink-0">{{ item }}</span>
-        <span class="text-white/[0.05] shrink-0">·</span>
+        <span class="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-black/10 dark:text-white/10 shrink-0">{{ item }}</span>
+        <span class="text-black/[0.05] dark:text-white/[0.05] shrink-0">·</span>
       @endforeach
     </div>
   </div>
 
   <!-- Featured: Lappland -->
   <section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-24 lg:py-32">
-    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-white/25 block mb-12">Latest Achievement</span>
+    <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-12">Latest Achievement</span>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
       <div>
         <h2 class="font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.9] tracking-tight mb-8">LAPPLAND ARCTIC ULTRA 500K</h2>
-        <p class="text-base text-white/40 leading-relaxed max-w-[500px]">
+        <p class="text-base text-black/40 dark:text-white/40 leading-relaxed max-w-[500px]">
           515 km through the frozen wilderness of Swedish Lapland. Temperatures
           dropping well below -30°C, pulling a sled through snow and ice for
           nearly seven days straight. Silver medal finish.
         </p>
       </div>
       <div class="flex items-end">
-        <div class="grid grid-cols-3 gap-8 w-full pt-8 border-t border-white/5">
+        <div class="grid grid-cols-3 gap-8 w-full pt-8 border-t border-black/5 dark:border-white/5">
           <div>
             <div class="text-2xl font-extrabold tracking-tight">515km</div>
-            <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-white/20 mt-1">Distance</div>
+            <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-black/20 dark:text-white/20 mt-1">Distance</div>
           </div>
           <div>
             <div class="text-2xl font-extrabold tracking-tight">6d 23h</div>
-            <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-white/20 mt-1">Finish Time</div>
+            <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-black/20 dark:text-white/20 mt-1">Finish Time</div>
           </div>
           <div>
             <div class="text-2xl font-extrabold tracking-tight">2nd</div>
-            <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-white/20 mt-1">Overall</div>
+            <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-black/20 dark:text-white/20 mt-1">Overall</div>
           </div>
         </div>
       </div>
@@ -125,13 +129,13 @@ const marqueeItems = [
 
   <!-- Next Race -->
   <div class="max-w-[1400px] mx-auto px-6 lg:px-12 pb-32">
-    <div class="border border-white/10 p-8 lg:p-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 hover:border-white/20 transition-colors">
+    <div class="border border-black/10 dark:border-white/10 p-8 lg:p-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 hover:border-black/20 dark:hover:border-white/20 transition-colors">
       <div>
-        <div class="text-[0.55rem] font-bold tracking-[0.2em] uppercase text-white/25 mb-3">Upcoming</div>
+        <div class="text-[0.55rem] font-bold tracking-[0.2em] uppercase text-black/25 dark:text-white/25 mb-3">Upcoming</div>
         <div class="font-display text-4xl lg:text-5xl tracking-tight">CROSSING SWITZERLAND 400K</div>
-        <div class="text-sm text-white/35 mt-2">400 km across the Swiss Alps — the next chapter</div>
+        <div class="text-sm text-black/35 dark:text-white/35 mt-2">400 km across the Swiss Alps — the next chapter</div>
       </div>
-      <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-7 py-3 bg-white text-black text-xs font-semibold tracking-wide shrink-0 hover:bg-white/85 transition-colors">
+      <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-7 py-3 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide shrink-0 hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
         Follow the Journey →
       </a>
     </div>
@@ -140,44 +144,44 @@ const marqueeItems = [
   <!-- Section Previews -->
   <div class="max-w-[1400px] mx-auto px-6 lg:px-12 pb-32">
     <div class="grid grid-cols-1 md:grid-cols-3">
-      <a href="/about" class="group border-t border-r border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-white/[0.02] transition-colors">
-        <span class="text-[0.6rem] font-semibold text-white/10 tracking-wide">01</span>
+      <a href="/about" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+        <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">01</span>
         <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">ABOUT</h3>
-        <p class="text-sm text-white/35 leading-relaxed mb-auto">
+        <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
           From first ultra to 700K finisher. The story, the philosophy,
           and the partnerships that fuel the journey.
         </p>
-        <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-white/25 mt-10 group-hover:text-white transition-colors">Learn More →</span>
+        <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">Learn More →</span>
       </a>
-      <a href="/races" class="group border-t border-r border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-white/[0.02] transition-colors">
-        <span class="text-[0.6rem] font-semibold text-white/10 tracking-wide">02</span>
+      <a href="/races" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+        <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">02</span>
         <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">RACES</h3>
-        <p class="text-sm text-white/35 leading-relaxed mb-auto">
+        <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
           Full UTMB-indexed results. From Chiemgauer 100 to SwissPeaks 700K —
           every start line, every finish.
         </p>
-        <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-white/25 mt-10 group-hover:text-white transition-colors">View Results →</span>
+        <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">View Results →</span>
       </a>
-      <a href="/coaching" class="group border-t border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-white/[0.02] transition-colors">
-        <span class="text-[0.6rem] font-semibold text-white/10 tracking-wide">03</span>
+      <a href="/coaching" class="group border-t border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+        <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">03</span>
         <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">COACHING</h3>
-        <p class="text-sm text-white/35 leading-relaxed mb-auto">
+        <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
           1:1 coaching built on real experience. Personalized plans for
           athletes ready to go further.
         </p>
-        <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-white/25 mt-10 group-hover:text-white transition-colors">Get Started →</span>
+        <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">Get Started →</span>
       </a>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="border-t border-white/5 px-6 lg:px-12 py-8">
+  <footer class="border-t border-black/5 dark:border-white/5 px-6 lg:px-12 py-8">
     <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-      <span class="text-xs text-white/20">© 2026 Paweł Dregan</span>
+      <span class="text-xs text-black/20 dark:text-white/20">© 2026 Paweł Dregan</span>
       <div class="flex items-center gap-8">
-        <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-white/25 hover:text-white transition-colors">Instagram</a>
-        <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-white/25 hover:text-white transition-colors">YouTube</a>
-        <a href="/coaching" class="text-xs text-white/25 hover:text-white transition-colors">Coaching</a>
+        <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
+        <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
+        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Coaching</a>
       </div>
     </div>
   </footer>
