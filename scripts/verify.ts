@@ -52,30 +52,38 @@ check('theme toggle handler registered', initial.toggle === 1)
 check('SPA router loaded', initial.router === 'object', `typeof __stxRouter = ${initial.router}`)
 check('theme-toggle button present', initial.hasButton)
 
-await evaluate(`window.scrollTo(0, 300)`)
-await wait(250)
-const darkScrolled = await evaluate<{ hasScrolledClass: boolean, navBg: string }>(`(() => {
-  const n = document.getElementById('navbar')
-  return { hasScrolledClass: n.classList.contains('nav-scrolled'), navBg: getComputedStyle(n).backgroundColor }
+const darkNav = await evaluate<{ navBg: string, navHeight: number, themeColor: string | null }>(`(() => {
+  const n = document.querySelector('nav')
+  const tc = document.querySelector('meta[name="theme-color"]:not([media])')
+  return {
+    navBg: getComputedStyle(n).backgroundColor,
+    navHeight: n.getBoundingClientRect().height,
+    themeColor: tc ? tc.getAttribute('content') : null,
+  }
 })()`)
-check('dark: nav-scrolled class applied', darkScrolled.hasScrolledClass)
-check('dark: scrolled nav bg is dark', /^rgba?\(0,\s*0,\s*0/.test(darkScrolled.navBg), darkScrolled.navBg)
+check('dark: nav bg is dark', /^rgba?\(0,\s*0,\s*0/.test(darkNav.navBg), darkNav.navBg)
+check('dark: theme-color meta is dark', darkNav.themeColor === '#000000', `theme-color="${darkNav.themeColor}"`)
 
 await view.click('#theme-toggle')
 await wait(300)
-const lightScrolled = await evaluate<{ htmlClass: string, storage: string, bodyBg: string, navBg: string }>(`(() => {
-  const n = document.getElementById('navbar')
+const lightNav = await evaluate<{ htmlClass: string, storage: string, bodyBg: string, navBg: string, navHeight: number, themeColor: string | null }>(`(() => {
+  const n = document.querySelector('nav')
+  const tc = document.querySelector('meta[name="theme-color"]:not([media])')
   return {
     htmlClass: document.documentElement.className,
     storage: localStorage.getItem('theme'),
     bodyBg: getComputedStyle(document.body).backgroundColor,
     navBg: getComputedStyle(n).backgroundColor,
+    navHeight: n.getBoundingClientRect().height,
+    themeColor: tc ? tc.getAttribute('content') : null,
   }
 })()`)
-check('light: dark class removed from <html>', !lightScrolled.htmlClass.includes('dark'), `class="${lightScrolled.htmlClass}"`)
-check('light: persisted to localStorage', lightScrolled.storage === 'light', `localStorage["theme"] = "${lightScrolled.storage}"`)
-check('light: body bg is white', /^rgb\(255,\s*255,\s*255/.test(lightScrolled.bodyBg), lightScrolled.bodyBg)
-check('light: scrolled nav bg is white-ish', /rgba?\(25[0-5],\s*25[0-5],\s*25[0-5]/.test(lightScrolled.navBg), lightScrolled.navBg)
+check('light: dark class removed from <html>', !lightNav.htmlClass.includes('dark'), `class="${lightNav.htmlClass}"`)
+check('light: persisted to localStorage', lightNav.storage === 'light', `localStorage["theme"] = "${lightNav.storage}"`)
+check('light: body bg is white', /^rgb\(255,\s*255,\s*255/.test(lightNav.bodyBg), lightNav.bodyBg)
+check('light: nav bg is white-ish', /rgba?\(25[0-5],\s*25[0-5],\s*25[0-5]/.test(lightNav.navBg), lightNav.navBg)
+check('light: theme-color meta is white', lightNav.themeColor === '#ffffff', `theme-color="${lightNav.themeColor}"`)
+check('nav height stable across theme', darkNav.navHeight === lightNav.navHeight, `dark=${darkNav.navHeight}px, light=${lightNav.navHeight}px`)
 
 // Plant a sentinel on window — survives SPA nav, gets wiped on full reload
 await evaluate(`window.__stxNavSentinel = '${baseUrl}-' + Date.now()`)
