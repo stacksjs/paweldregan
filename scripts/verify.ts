@@ -92,6 +92,20 @@ const progressInitial = await evaluate<{ exists: boolean, parent: string | null 
 check('progress bar element exists', progressInitial.exists)
 check('progress bar attached to <html> (survives body swaps)', progressInitial.parent === 'HTML', `parent=${progressInitial.parent}`)
 
+const transition = await evaluate<{ contentNamed: string | null, contentExists: boolean, cssInjected: boolean, supported: boolean }>(`(() => {
+  const main = document.querySelector('main[data-stx-content]')
+  return {
+    contentExists: !!main,
+    contentNamed: main ? getComputedStyle(main).viewTransitionName : null,
+    cssInjected: !!document.getElementById('stx-view-transitions'),
+    supported: typeof document.startViewTransition === 'function',
+  }
+})()`)
+check('main[data-stx-content] wraps page content', transition.contentExists)
+check('view-transition-name=stx-content applied to content', transition.contentNamed === 'stx-content', `got "${transition.contentNamed}"`)
+check('view-transitions stylesheet injected by router', transition.cssInjected)
+check('document.startViewTransition supported', transition.supported)
+
 // Plant a sentinel on window — survives SPA nav, gets wiped on full reload
 await evaluate(`window.__stxNavSentinel = '${baseUrl}-' + Date.now()`)
 const sentinelBefore = await evaluate<string>(`window.__stxNavSentinel`)
