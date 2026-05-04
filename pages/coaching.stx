@@ -113,8 +113,6 @@ const steps: ProcessStep[] = [
     </div>
   </nav>
 
-  <main data-stx-content>
-
   <!-- Header -->
   <header class="pt-40 lg:pt-48 pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
     <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">1:1 Coaching</span>
@@ -224,8 +222,6 @@ const steps: ProcessStep[] = [
   </div>
 
   <!-- Footer -->
-  </main>
-
   <footer class="border-t border-black/5 dark:border-white/5 px-6 lg:px-12 py-8">
     <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
       <span class="text-xs text-black/20 dark:text-white/20">© 2026 Paweł Dregan</span>
