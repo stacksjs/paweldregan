@@ -77,6 +77,9 @@ check('light: persisted to localStorage', lightScrolled.storage === 'light', `lo
 check('light: body bg is white', /^rgb\(255,\s*255,\s*255/.test(lightScrolled.bodyBg), lightScrolled.bodyBg)
 check('light: scrolled nav bg is white-ish', /rgba?\(25[0-5],\s*25[0-5],\s*25[0-5]/.test(lightScrolled.navBg), lightScrolled.navBg)
 
+// Plant a sentinel on window — survives SPA nav, gets wiped on full reload
+await evaluate(`window.__stxNavSentinel = '${baseUrl}-' + Date.now()`)
+const sentinelBefore = await evaluate<string>(`window.__stxNavSentinel`)
 const t0 = Date.now()
 await view.click('a[href="/about"]')
 let landed = false
@@ -85,16 +88,33 @@ for (let i = 0; i < 50; i++) {
   const path = await evaluate<string>(`location.pathname`)
   if (path === '/about') { landed = true; break }
 }
-const navResult = await evaluate<{ url: string, title: string, htmlClass: string, navEntries: number }>(`(() => ({
+const navResult = await evaluate<{ url: string, title: string, htmlClass: string, sentinel: string | undefined }>(`(() => ({
   url: location.pathname,
   title: document.title,
   htmlClass: document.documentElement.className,
-  navEntries: performance.getEntriesByType('navigation').length,
+  sentinel: window.__stxNavSentinel,
 }))()`)
 check(`SPA navigated to /about`, landed, `${Date.now() - t0}ms`)
 check('title swapped on SPA nav', navResult.title.includes('About'), navResult.title)
-check('only 1 navigation entry — no full reload', navResult.navEntries === 1, `entries=${navResult.navEntries}`)
+check('window sentinel survived — no full reload', navResult.sentinel === sentinelBefore, `before=${sentinelBefore} after=${navResult.sentinel ?? '<gone>'}`)
 check('theme persisted across SPA nav', !navResult.htmlClass.includes('dark'), `class="${navResult.htmlClass}"`)
+
+// Multi-hop SPA navigation — every nav link should stay client-side
+for (const target of ['/races', '/coaching', '/']) {
+  const before = await evaluate<string>(`window.__stxNavSentinel`)
+  await view.click(`a[href="${target}"]`)
+  for (let i = 0; i < 50; i++) {
+    await wait(100)
+    const path = await evaluate<string>(`location.pathname`)
+    if (path === target) break
+  }
+  const after = await evaluate<{ url: string, title: string, sentinel: string | undefined }>(`(() => ({
+    url: location.pathname,
+    title: document.title,
+    sentinel: window.__stxNavSentinel,
+  }))()`)
+  check(`SPA: nav → ${target}`, after.url === target && after.sentinel === before, `${after.title} (sentinel=${after.sentinel ?? '<gone>'})`)
+}
 
 view.close()
 
