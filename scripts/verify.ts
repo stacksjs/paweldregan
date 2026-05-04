@@ -210,6 +210,17 @@ check('i18n: nav.home rendered as "Start"', dePage.navHome === 'Start', `got "${
 check('i18n: nav.about rendered as "Über mich"', dePage.navAbout === 'Über mich', `got "${dePage.navAbout}"`)
 check('i18n: picker now marks DE as active', dePage.picker === 'de', `current=${dePage.picker}`)
 
+// Internal nav links on the German page should already be prefixed with
+// /de/ — clicking "Über mich" must keep the visitor on the German side
+// of the site, not yank them back to /about (English).
+const deNavHref = await evaluate<string | null>(`(() => {
+  const menu = document.querySelector('nav ul, nav ol') ?? document.querySelector('nav');
+  if (!menu) return null;
+  const about = Array.from(menu.querySelectorAll('a')).find(a => /about/.test(a.getAttribute('href') ?? ''));
+  return about?.getAttribute('href') ?? null;
+})()`)
+check('i18n: nav links on /de/ stay inside /de/', deNavHref === '/de/about', `nav.about href="${deNavHref}"`)
+
 view.close()
 
 if (failed > 0) {
