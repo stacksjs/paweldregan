@@ -37,7 +37,7 @@ interface BioDetail {
 }
 
 const bioDetails: BioDetail[] = [
-  { label: 'Based In', value: 'Austria' },
+  { label: 'Based In', value: 'Germany' },
   { label: 'Specialty', value: 'Ultra Distance (100K–700K)' },
   { label: 'Longest Finish', value: 'SwissPeaks 700K' },
   { label: 'Best Result', value: '2nd — Lappland Arctic Ultra 500K' },
