@@ -165,6 +165,51 @@ for (const target of ['/races', '/coaching', '/']) {
   check(`SPA: nav → ${target}`, after.url === target && after.sentinel === before, `${after.title} (sentinel=${after.sentinel ?? '<gone>'})`)
 }
 
+// i18n — language picker is present and renders the right options.
+const picker = await evaluate<{ found: boolean, langs: string[], current: string | null }>(`(() => {
+  const p = document.querySelector('#lang-picker');
+  if (!p) return { found: false, langs: [], current: null };
+  const btns = Array.from(p.querySelectorAll('[data-lang]'));
+  const langs = btns.map(b => b.getAttribute('data-lang') ?? '');
+  const active = btns.find(b => b.getAttribute('aria-current') === 'true');
+  return { found: true, langs, current: active?.getAttribute('data-lang') ?? null };
+})()`)
+check('i18n: lang picker present', picker.found)
+check('i18n: picker has EN/DE/PL options', picker.langs.join(',') === 'en,de,pl', picker.langs.join(','))
+check('i18n: home page marks EN as active', picker.current === 'en', `current=${picker.current}`)
+
+// Click DE → SPA navigates to /de, German nav labels appear, picker shows DE active.
+const beforeLangNav = await evaluate<string>(`window.__stxNavSentinel`)
+await view.click(`#lang-picker [data-lang="de"]`)
+for (let i = 0; i < 60; i++) {
+  await wait(100)
+  const path = await evaluate<string>(`location.pathname`)
+  if (path === '/de' || path === '/de/') break
+}
+const dePage = await evaluate<{ url: string, lang: string, sentinel: string | undefined, navHome: string | null, navAbout: string | null, picker: string | null }>(`(() => {
+  // Scope nav-link queries to the menu list so the test doesn't pick
+  // up the brand/logo anchor (which also points at "/" in many layouts).
+  const menu = document.querySelector('nav ul, nav ol') ?? document.querySelector('nav');
+  const links = menu ? Array.from(menu.querySelectorAll('a')) : [];
+  const home = links.find(a => /^\\/(?:de|pl)?\\/?$/.test(a.getAttribute('href') ?? ''));
+  const about = links.find(a => /\\/about\\/?$/.test(a.getAttribute('href') ?? ''));
+  const active = document.querySelector('#lang-picker [aria-current="true"]');
+  return {
+    url: location.pathname,
+    lang: document.documentElement.lang,
+    sentinel: window.__stxNavSentinel,
+    navHome: home?.textContent?.trim() ?? null,
+    navAbout: about?.textContent?.trim() ?? null,
+    picker: active?.getAttribute('data-lang') ?? null,
+  };
+})()`)
+check('i18n: SPA navigated to /de', dePage.url === '/de' || dePage.url === '/de/', dePage.url)
+check('i18n: <html lang> updated to "de"', dePage.lang === 'de', `lang="${dePage.lang}"`)
+check('i18n: SPA-nav (no full reload)', dePage.sentinel === beforeLangNav, `sentinel=${dePage.sentinel ?? '<gone>'}`)
+check('i18n: nav.home rendered as "Start"', dePage.navHome === 'Start', `got "${dePage.navHome}"`)
+check('i18n: nav.about rendered as "Über mich"', dePage.navAbout === 'Über mich', `got "${dePage.navAbout}"`)
+check('i18n: picker now marks DE as active', dePage.picker === 'de', `current=${dePage.picker}`)
+
 view.close()
 
 if (failed > 0) {

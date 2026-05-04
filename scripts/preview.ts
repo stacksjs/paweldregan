@@ -17,7 +17,14 @@ Bun.serve({
     let pathname = url.pathname
 
     if (pathname === '/') pathname = '/index.html'
-    else if (!pathname.includes('.')) pathname = `${pathname}.html`
+    else if (!pathname.includes('.')) {
+      // Try directory-style (/de → /de/index.html) first, then flat
+      // (/about → /about.html). Mirrors S3+CloudFront's index-document
+      // behavior for prefixed paths so the local preview matches prod.
+      const dirIndex = Bun.file(join(distDir, pathname, 'index.html'))
+      if (await dirIndex.exists()) return new Response(dirIndex)
+      pathname = `${pathname}.html`
+    }
 
     const file = Bun.file(join(distDir, pathname))
     if (await file.exists()) return new Response(file)
