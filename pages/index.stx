@@ -10,6 +10,19 @@
   <style>
     .font-display { font-family: 'Bebas Neue', Impact, sans-serif; }
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    /* Nav backdrop adapts to theme — Tailwind colors are baked in via the
+       html.dark variant so this works whether or not the user has flipped. */
+    #navbar.nav-scrolled {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+    html.dark #navbar.nav-scrolled {
+      background: rgba(0, 0, 0, 0.9);
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
   </style>
 </head>
 
@@ -189,22 +202,15 @@ const marqueeItems = [
 </body>
 
 <script client>
+  // Class-based so the actual colors come from CSS — that's how the theme
+  // toggle on <html> stays the source of truth. The previous version
+  // hardcoded rgba(0,0,0,0.9) which stuck in light mode.
   const navbar = document.getElementById('navbar')
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.style.background = 'rgba(0,0,0,0.9)'
-      navbar.style.backdropFilter = 'blur(20px)'
-      navbar.style.borderBottom = '1px solid rgba(255,255,255,0.06)'
-      navbar.style.paddingTop = '0.75rem'
-      navbar.style.paddingBottom = '0.75rem'
-    } else {
-      navbar.style.background = 'transparent'
-      navbar.style.backdropFilter = 'none'
-      navbar.style.borderBottom = 'none'
-      navbar.style.paddingTop = '1.25rem'
-      navbar.style.paddingBottom = '1.25rem'
-    }
-  })
+  if (navbar) {
+    const onScroll = () => navbar.classList.toggle('nav-scrolled', window.scrollY > 50)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+  }
 </script>
 
 </html>
