@@ -142,7 +142,7 @@ const steps: ProcessStep[] = [
     <!-- Philosophy -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 py-16 lg:py-24">
       <p class="text-2xl lg:text-3xl font-light leading-relaxed text-black/50 dark:text-white/50">
-        {t:coaching.philosophyLead}
+        {t!:coaching.philosophyLead}
       </p>
       <div>
         <p class="text-base text-black/35 dark:text-white/35 leading-relaxed mb-6">
