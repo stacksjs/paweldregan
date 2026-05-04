@@ -4,6 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — Paweł Dregan</title>
+  <meta name="description" content="From first ultra to 700K finisher. The story, the philosophy, and the partnerships behind the journey.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/favicon.svg">
+
+  {{-- Open Graph --}}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Paweł Dregan">
+  <meta property="og:title" content="About — Paweł Dregan">
+  <meta property="og:description" content="From first ultra to 700K finisher. The story, the philosophy, and the partnerships behind the journey.">
+  <meta property="og:url" content="https://paweldregan.com/about">
+  <meta property="og:image" content="https://paweldregan.com/images/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+
+  {{-- Twitter --}}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ultrarunnerpaw">
+  <meta name="twitter:title" content="About — Paweł Dregan">
+  <meta name="twitter:description" content="From first ultra to 700K finisher. The story, the philosophy, and the partnerships behind the journey.">
+  <meta name="twitter:image" content="https://paweldregan.com/images/og.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
