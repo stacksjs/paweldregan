@@ -4,6 +4,6 @@ dist
 .env
 .env.local
 *.log
-/.stx/cache
+.stx
 .claude
 /pantry
