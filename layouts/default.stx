@@ -1,0 +1,33 @@
+{{-- Marketing layout: head + nav + main + footer.
+     SEO meta (<title>, <meta description>, og/twitter, canonical, hreflang)
+     is injected per-page by buildStaticSite from site.config.ts pages[*]. --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {{-- Favicon is auto-injected by site-builder from site.config.ts seo.favicon --}}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    .font-display { font-family: 'Bebas Neue', Impact, sans-serif; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  </style>
+</head>
+
+<body class="bg-white dark:bg-black text-black dark:text-white font-sans antialiased">
+
+  <Nav />
+
+  <main>
+    @yield('content')
+  </main>
+
+  <Footer />
+
+</body>
+</html>

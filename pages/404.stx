@@ -1,87 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 — Paweł Dregan</title>
-  <meta name="description" content="Page not found on Paweł Dregan's site.">
-  <meta name="theme-color" content="#000000">
-  <meta name="robots" content="noindex">
-  <link rel="icon" href="/favicon.svg">
+@extends('layouts/default')
 
-  {{-- Open Graph (still useful when a 404 URL gets shared) --}}
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Paweł Dregan">
-  <meta property="og:title" content="Paweł Dregan — Ultra Runner">
-  <meta property="og:description" content="Finisher of SwissPeaks 700K, Lappland Arctic Ultra 500K, and the world's most demanding mountain races.">
-  <meta property="og:url" content="https://paweldregan.com/">
-  <meta property="og:image" content="https://paweldregan.com/images/og.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="en_US">
+@section('content')
 
-  {{-- Twitter --}}
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@ultrarunnerpaw">
-  <meta name="twitter:title" content="Paweł Dregan — Ultra Runner">
-  <meta name="twitter:description" content="Finisher of SwissPeaks 700K, Lappland Arctic Ultra 500K, and the world's most demanding mountain races.">
-  <meta name="twitter:image" content="https://paweldregan.com/images/og.jpg">
+<section class="min-h-screen flex flex-col justify-center items-center px-6 lg:px-12 text-center">
+  <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 mb-8">{t:notFound.kicker}</p>
+  <h1 class="font-display text-[clamp(6rem,16vw,16rem)] leading-[0.85] tracking-tight mb-8">
+    OFF
+    <span class="block text-black/10 dark:text-white/10">TRAIL</span>
+  </h1>
+  <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[420px] mb-12">
+    {t:notFound.lede}
+  </p>
+  <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
+    {t:notFound.cta}
+  </a>
+</section>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    .font-display { font-family: 'Bebas Neue', Impact, sans-serif; }
-  </style>
-</head>
-
-<body class="bg-white dark:bg-black text-black dark:text-white font-sans antialiased">
-
-  <!-- Nav -->
-  <nav class="fixed top-0 left-0 right-0 z-50 px-6 lg:px-12 py-4 flex justify-between items-center bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-black/5 dark:border-white/5">
-    <a href="/" class="text-xs font-bold tracking-[0.2em] uppercase">Paweł Dregan</a>
-    <ul class="hidden md:flex items-center gap-10">
-      <li><a href="/" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.home}</a></li>
-      <li><a href="/about" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.about}</a></li>
-      <li><a href="/races" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.races}</a></li>
-      <li><a href="/coaching" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.coaching}</a></li>
-    </ul>
-    <div id="lang-picker" class="hidden md:flex items-center gap-1 mr-2 text-[0.6rem] font-semibold tracking-wider">
-      <button data-lang="en" type="button" class="px-1.5 py-1 text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white aria-[current=true]:text-black dark:aria-[current=true]:text-white transition-colors">EN</button>
-      <button data-lang="de" type="button" class="px-1.5 py-1 text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white aria-[current=true]:text-black dark:aria-[current=true]:text-white transition-colors">DE</button>
-      <button data-lang="pl" type="button" class="px-1.5 py-1 text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white aria-[current=true]:text-black dark:aria-[current=true]:text-white transition-colors">PL</button>
-    </div>
-    <button id="theme-toggle" type="button" aria-label="Toggle theme" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors">
-      <svg class="w-[18px] h-[18px] hidden dark:block fill-current" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13l2 .01c.55 0 .99-.45.99-1s-.44-1-.99-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0l2 .01c.55 0 .99-.45.99-1s-.44-1-.99-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/></svg>
-      <svg class="w-[18px] h-[18px] dark:hidden fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
-    </button>
-  </nav>
-
-  <main class="min-h-screen flex flex-col justify-center items-center px-6 lg:px-12 text-center">
-    <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 mb-8">{t:notFound.kicker}</p>
-    <h1 class="font-display text-[clamp(6rem,16vw,16rem)] leading-[0.85] tracking-tight mb-8">
-      OFF
-      <span class="block text-black/10 dark:text-white/10">TRAIL</span>
-    </h1>
-    <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[420px] mb-12">
-      {t:notFound.lede}
-    </p>
-    <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
-      {t:notFound.cta}
-    </a>
-  </main>
-
-  <!-- Footer -->
-  <footer class="border-t border-black/5 dark:border-white/5 px-6 lg:px-12 py-8">
-    <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-      <span class="text-xs text-black/20 dark:text-white/20">© 2026 Paweł Dregan</span>
-      <div class="flex items-center gap-8">
-        <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
-        <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
-        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.coaching}</a>
-      </div>
-    </div>
-  </footer>
-
-</body>
-</html>
+@endsection
