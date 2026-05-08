@@ -161,5 +161,22 @@
     "kicker": "Error 404",
     "lede": "This route doesn't exist. Even ultra runners take wrong turns — let's get you back on course.",
     "cta": "Back to Home →"
+  },
+  "contact": {
+    "kicker": "Get in Touch",
+    "lede": "Send a message and I'll get back to you. No commitment — just a conversation.",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "message": "Message",
+    "messagePlaceholder": "Tell me about your goals…",
+    "submit": "Send Message",
+    "submitting": "Sending…",
+    "success": "Message sent. I'll be in touch.",
+    "invalid": "Please fill in your name, a valid email, and a message.",
+    "rateLimited": "Please wait a moment before sending another message.",
+    "error": "Something went wrong. Try again, or DM me on Instagram.",
+    "fallback": "Or DM me on Instagram →"
   }
 }

@@ -2,6 +2,10 @@
      SEO meta (<title>, <meta description>, og/twitter, canonical, hreflang)
      is injected per-page by buildStaticSite from site.config.ts pages[*]. --}}
 
+<script server>
+import { analytics } from '../site.config'
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +21,22 @@
     .font-display { font-family: 'Bebas Neue', Impact, sans-serif; }
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
   </style>
+
+  {{-- @stacksjs/ts-analytics loader. Pulls tracker.js async, queues an
+       initial pageview, and re-fires on stx:navigate so SPA route
+       changes count too. siteId + endpoint live in site.config.ts. --}}
+  <script>
+    (function (w, d, s, endpoint, siteId) {
+      w.sa = w.sa || function () { (w.sa.q = w.sa.q || []).push(arguments) }
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s)
+      j.async = 1
+      j.src = endpoint + '/sites/' + siteId + '/tracker.js'
+      f.parentNode.insertBefore(j, f)
+      w.sa('init', siteId)
+      w.sa('pageview')
+      w.addEventListener('stx:navigate', function () { w.sa('pageview') })
+    })(window, document, 'script', {{ analytics.endpoint }}, {{ analytics.siteId }})
+  </script>
 </head>
 
 <body class="bg-white dark:bg-black text-black dark:text-white font-sans antialiased">

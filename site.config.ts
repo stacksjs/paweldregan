@@ -2,6 +2,7 @@ import { defineSiteConfig } from '@stacksjs/stx'
 
 export const site = defineSiteConfig({
   name: 'Paweł Dregan',
+  port: 5555,
   url: 'https://paweldregan.com',
   description: 'Ultra runner. Coach. Husband. Finisher of SwissPeaks 700K, Lappland Arctic Ultra 500K, and the world\'s most demanding mountain races.',
   social: {
@@ -48,3 +49,11 @@ export const site = defineSiteConfig({
     },
   },
 })
+
+// @stacksjs/ts-analytics integration. The loader snippet in
+// layouts/default.stx reads from here so siteId + endpoint are
+// configured in one place.
+export const analytics = {
+  siteId: 'paweldregan',
+  endpoint: 'https://analytics.paweldregan.com',
+}

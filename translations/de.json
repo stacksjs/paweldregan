@@ -161,5 +161,22 @@
     "kicker": "Fehler 404",
     "lede": "Diese Route existiert nicht. Auch Ultraläufer biegen mal falsch ab — lass uns dich zurück auf den Kurs bringen.",
     "cta": "Zurück zur Startseite →"
+  },
+  "contact": {
+    "kicker": "Kontakt",
+    "lede": "Schreib mir eine Nachricht und ich melde mich. Kein Commitment — einfach ein Gespräch.",
+    "name": "Name",
+    "namePlaceholder": "Dein Name",
+    "email": "E-Mail",
+    "emailPlaceholder": "du@beispiel.de",
+    "message": "Nachricht",
+    "messagePlaceholder": "Erzähl mir von deinen Zielen…",
+    "submit": "Nachricht senden",
+    "submitting": "Wird gesendet…",
+    "success": "Nachricht gesendet. Ich melde mich.",
+    "invalid": "Bitte gib deinen Namen, eine gültige E-Mail und eine Nachricht ein.",
+    "rateLimited": "Bitte warte einen Moment, bevor du eine weitere Nachricht sendest.",
+    "error": "Etwas ist schiefgelaufen. Versuch es erneut oder schreib mir eine DM auf Instagram.",
+    "fallback": "Oder schreib mir eine DM auf Instagram →"
   }
 }

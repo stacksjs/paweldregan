@@ -161,5 +161,22 @@
     "kicker": "Błąd 404",
     "lede": "Ta trasa nie istnieje. Nawet ultramaratończycy czasem skręcają w złą stronę — wróćmy cię na właściwą drogę.",
     "cta": "Wróć na stronę główną →"
+  },
+  "contact": {
+    "kicker": "Kontakt",
+    "lede": "Napisz wiadomość, a odezwę się do Ciebie. Bez zobowiązań — po prostu rozmowa.",
+    "name": "Imię",
+    "namePlaceholder": "Twoje imię",
+    "email": "E-mail",
+    "emailPlaceholder": "ty@przyklad.pl",
+    "message": "Wiadomość",
+    "messagePlaceholder": "Opowiedz mi o swoich celach…",
+    "submit": "Wyślij wiadomość",
+    "submitting": "Wysyłanie…",
+    "success": "Wiadomość wysłana. Odezwę się.",
+    "invalid": "Wpisz imię, poprawny e-mail i wiadomość.",
+    "rateLimited": "Poczekaj chwilę przed wysłaniem kolejnej wiadomości.",
+    "error": "Coś poszło nie tak. Spróbuj ponownie lub napisz mi DM na Instagramie.",
+    "fallback": "Albo napisz mi DM na Instagramie →"
   }
 }

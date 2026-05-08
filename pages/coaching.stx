@@ -152,15 +152,21 @@ const steps: ProcessStep[] = [
     </div>
   </section>
 
-  {{-- CTA --}}
-  <section class="py-24 lg:py-32 text-center">
-    <h2 class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.85] tracking-tight mb-6">{t:coaching.ctaTitle}</h2>
-    <p class="text-base text-black/35 dark:text-white/35 max-w-[480px] mx-auto leading-relaxed mb-12">
-      {t:coaching.ctaBody}
+  {{-- Contact --}}
+  <section class="py-24 lg:py-32">
+    <div class="text-center mb-16">
+      <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-6">{t:contact.kicker}</span>
+      <h2 class="font-display text-[clamp(3rem,6vw,6rem)] leading-[0.85] tracking-tight mb-6">{t:coaching.ctaTitle}</h2>
+      <p class="text-base text-black/35 dark:text-white/35 max-w-[480px] mx-auto leading-relaxed">
+        {t:contact.lede}
+      </p>
+    </div>
+
+    <ContactForm />
+
+    <p class="text-center text-xs text-black/35 dark:text-white/35 mt-12">
+      <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="hover:text-black dark:hover:text-white transition-colors">{t:contact.fallback}</a>
     </p>
-    <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-sm font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
-      {t:coaching.ctaButton}
-    </a>
   </section>
 </div>
 
