@@ -1,5 +1,12 @@
 import { defineSiteConfig } from '@stacksjs/stx'
 
+// Component/layout/partial source files live under `resources/` (Stacks
+// convention), but bun-plugin-stx hard-resolves <Component /> tags
+// against the root-level `components/`, `layouts/`, `partials/`
+// directories without honoring stx.config.ts or any passed-in dirs.
+// Root-level symlinks (`components -> resources/components`, etc.)
+// bridge the two: editors work in `resources/`, framework finds them
+// at its defaults. The symlinks are committed; no config glue needed.
 export const site = defineSiteConfig({
   name: 'Paweł Dregan',
   port: 5555,
@@ -16,13 +23,17 @@ export const site = defineSiteConfig({
     type: 'website',
     favicon: '/favicon.svg',
   },
+  pagesDir: 'resources/views',
   i18n: {
-    // Translations live in translations/<locale>.json — keys are nested
-    // and get flattened to dotted lookup paths (nav.home, coaching.lede,
-    // etc.) at build time. JSON files keep large copy out of TS source.
+    // Translations live in resources/translations/<locale>.json — keys
+    // are nested and get flattened to dotted lookup paths (nav.home,
+    // coaching.lede, etc.) at build time. JSON files keep large copy
+    // out of TS source.
     locales: ['en', 'de', 'pl'],
     defaultLocale: 'en',
     labels: { en: 'EN', de: 'DE', pl: 'PL' },
+    translationsDir: 'resources/translations',
+    format: 'json',
   },
   pages: {
     '/': {
@@ -51,8 +62,8 @@ export const site = defineSiteConfig({
 })
 
 // @stacksjs/ts-analytics integration. The loader snippet in
-// layouts/default.stx reads from here so siteId + endpoint are
-// configured in one place.
+// resources/layouts/default.stx reads from here so siteId + endpoint
+// are configured in one place.
 export const analytics = {
   siteId: 'paweldregan',
   endpoint: 'https://analytics.paweldregan.com',

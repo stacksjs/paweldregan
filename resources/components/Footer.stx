@@ -1,0 +1,28 @@
+{{-- Site footer. --}}
+
+<footer class="border-t border-black/5 dark:border-white/5 px-6 lg:px-12 py-10">
+  <div class="max-w-[1400px] mx-auto flex flex-col gap-10">
+
+    {{-- Newsletter --}}
+    <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-16">
+      <div class="md:flex-1">
+        <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/40 dark:text-white/40 block mb-3">{t:subscribe.kicker}</span>
+        <p class="text-sm text-black/45 dark:text-white/45 leading-relaxed max-w-[420px]">{t:subscribe.lede}</p>
+      </div>
+      <div class="md:flex-shrink-0">
+        <SubscribeForm />
+      </div>
+    </div>
+
+    {{-- Bottom row --}}
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-black/5 dark:border-white/5">
+      <span class="text-xs text-black/20 dark:text-white/20">© 2026 Paweł Dregan</span>
+      <div class="flex items-center gap-8">
+        <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
+        <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
+        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.coaching}</a>
+      </div>
+    </div>
+
+  </div>
+</footer>

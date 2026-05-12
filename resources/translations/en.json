@@ -1,0 +1,192 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "races": "Races",
+    "coaching": "Coaching"
+  },
+  "footer": {
+    "coaching": "Coaching",
+    "races": "Races"
+  },
+  "home": {
+    "kicker": "Ultra Runner · Coach · Husband",
+    "lede": "Finisher of SwissPeaks 700K, Lappland Arctic Ultra 500K, and the world's most demanding mountain races. Pushing limits where the trail ends and willpower begins.",
+    "stats": {
+      "longest": "Longest Race",
+      "lappland": "Lappland 500K",
+      "arctic": "Arctic Finish"
+    },
+    "featured": {
+      "kicker": "Latest Achievement",
+      "body": "515 km through the frozen wilderness of Swedish Lapland. Temperatures dropping well below -30°C, pulling a sled through snow and ice for nearly seven days straight. Silver medal finish.",
+      "distance": "Distance",
+      "time": "Finish Time",
+      "overall": "Overall"
+    },
+    "upcoming": "Upcoming",
+    "upcomingSub": "400 km across the Swiss Alps — the next chapter",
+    "followCta": "Follow the Journey →",
+    "section": {
+      "about": {
+        "body": "From first ultra to 700K finisher. The story, the philosophy, and the partnerships that fuel the journey.",
+        "cta": "Learn More →"
+      },
+      "races": {
+        "body": "Full UTMB-indexed results. From Chiemgauer 100 to SwissPeaks 700K — every start line, every finish.",
+        "cta": "View Results →"
+      },
+      "coaching": {
+        "body": "1:1 coaching built on real experience. Personalized plans for athletes ready to go further.",
+        "cta": "Get Started →"
+      }
+    }
+  },
+  "about": {
+    "kicker": "About",
+    "title": "BORN TO RUN FAR.",
+    "bio1": "I am an ultra runner specializing in the longest, most demanding races on the planet. From the frozen trails of the Lappland Arctic Ultra to the endless alpine ridges of SwissPeaks 700K, I seek out challenges that test every dimension of human endurance.",
+    "bio2": "My journey in ultra running has taught me that the body is capable of far more than the mind believes. Crossing 515 km of frozen Lapland wilderness, pulling a sled at -30°C for nearly seven days — these experiences reshaped my understanding of limits.",
+    "bio3": "I carry that philosophy into my coaching, helping athletes of all levels unlock their potential and cross finish lines they once thought impossible. When I am not on the trail, I am a husband and a dedicated coach. Running is not just a sport — it is a way of life.",
+    "bioDetails": {
+      "basedIn": "Based In",
+      "basedInValue": "Germany",
+      "specialty": "Specialty",
+      "specialtyValue": "Ultra Distance (100K–700K)",
+      "longestFinish": "Longest Finish",
+      "longestFinishValue": "SwissPeaks 700K",
+      "bestResult": "Best Result",
+      "bestResultValue": "2nd — Lappland Arctic Ultra 500K",
+      "nextRace": "Next Race",
+      "nextRaceValue": "Crossing Switzerland 400K",
+      "coaching": "Coaching",
+      "coachingValue": "1:1 — DM on Instagram"
+    },
+    "milestones": "MILESTONES",
+    "milestone": {
+      "lappland": "Lappland Arctic Ultra 500K — 2nd Place",
+      "swisspeaks": "SwissPeaks Trail 700K — Finisher",
+      "eiger": "Eiger Ultra Trail E250 by UTMB",
+      "kat100": "KAT100 by UTMB — 100 Miles",
+      "kobolt": "KoBoLT 140 KM — 6th Place",
+      "pitz": "Pitz Alpine Glacier Trail P105",
+      "chiemgauer": "Chiemgauer 100 — First 100 Miler"
+    },
+    "partners": "PARTNERS",
+    "partner": {
+      "rappidRole": "Team Athlete",
+      "falkeRole": "Apparel Partner"
+    }
+  },
+  "coaching": {
+    "kicker": "1:1 Coaching",
+    "title": "GO FURTHER.",
+    "lede": "Personalized ultra running coaching built on real experience — not theory. From your first 50K to your biggest dream race.",
+    "philosophyLead": "I have run <strong class=\"text-black dark:text-white font-bold\">700 km</strong> in a single race. <strong class=\"text-black dark:text-white font-bold\">515 km</strong> through the Arctic at -30°C. The lessons from those experiences <strong class=\"text-black dark:text-white font-bold\">cannot be found in a textbook</strong>.",
+    "philosophy1": "Every athlete is different. Your training plan should reflect your life, your body, and your goals — not a generic template downloaded from the internet.",
+    "philosophy2": "I coach because I believe everyone deserves the feeling of crossing a finish line they once thought was impossible. That is what ultra running gave me, and it is what I want to give back.",
+    "whyTitle": "WHY TRAIN WITH ME",
+    "stats": {
+      "longest": "Longest Finish",
+      "lappland": "Lappland 500K",
+      "utmbRate": "UTMB Finish Rate",
+      "yearsRacing": "Years Racing"
+    },
+    "services": {
+      "plans": {
+        "title": "Training Plans",
+        "desc": "Custom periodized programs built around your race calendar, lifestyle, and current fitness. From 50K first-timers to 500K+ veterans.",
+        "i1": "Weekly structured training",
+        "i2": "Periodization & tapering",
+        "i3": "Strength & mobility work",
+        "i4": "Altitude preparation"
+      },
+      "race": {
+        "title": "Race Strategy",
+        "desc": "Pacing plans, gear selection, and nutrition protocols tested across hundreds of hours in the mountains. No guesswork, only experience.",
+        "i1": "Course-specific pacing",
+        "i2": "Nutrition & hydration plans",
+        "i3": "Gear selection & testing",
+        "i4": "Mental preparation"
+      },
+      "support": {
+        "title": "1:1 Support",
+        "desc": "Weekly check-ins, workout analysis, and direct messaging. You are never alone on the trail or in your preparation.",
+        "i1": "Weekly video calls",
+        "i2": "Daily message support",
+        "i3": "Workout analysis & feedback",
+        "i4": "Race-week guidance"
+      }
+    },
+    "processTitle": "HOW IT WORKS",
+    "process": {
+      "step1": "Initial Assessment",
+      "step1Desc": "We start with a deep conversation about your running history, goals, schedule, and the races you want to target. No templates — everything is built from scratch.",
+      "step2": "Plan Design",
+      "step2Desc": "I build your training program around your life, not the other way around. Structured weeks that build progressively, with flexibility for when life happens.",
+      "step3": "Execute & Adapt",
+      "step3Desc": "Training begins. We review every week together, adjusting intensity, volume, and focus based on how your body responds. The plan evolves with you.",
+      "step4": "Race & Reflect",
+      "step4Desc": "Full race-week support: final prep, pacing strategy, nutrition timing, and mental cues. After the race, we debrief and plan what comes next."
+    },
+    "ctaTitle": "READY TO START?",
+    "ctaBody": "Send me a DM on Instagram to discuss your goals and how we can work together. No commitment — just a conversation.",
+    "ctaButton": "DM on Instagram →"
+  },
+  "races": {
+    "kicker": "Race Results",
+    "title": "THE RECORD.",
+    "lede": "UTMB-indexed results from 100K to 700K. Every start line, every finish, every lesson.",
+    "stats": {
+      "utmbRaces": "UTMB Races",
+      "longest": "Longest Distance",
+      "elevation": "Max Elevation",
+      "finishRate": "Finish Rate"
+    },
+    "table": {
+      "date": "Date",
+      "race": "Race",
+      "category": "Cat.",
+      "distance": "Distance",
+      "elevation": "Elevation",
+      "time": "Time",
+      "rank": "Rank"
+    },
+    "name": {
+      "100mile": "100 Mile",
+      "100miles": "100 Miles"
+    }
+  },
+  "notFound": {
+    "kicker": "Error 404",
+    "lede": "This route doesn't exist. Even ultra runners take wrong turns — let's get you back on course.",
+    "cta": "Back to Home →"
+  },
+  "subscribe": {
+    "kicker": "Stay in the Loop",
+    "lede": "Race reports, training notes, and behind-the-scenes from the trail. No spam — just the long road.",
+    "placeholder": "you@example.com",
+    "submit": "Subscribe",
+    "submitting": "Subscribing…",
+    "success": "Thanks — you're on the list.",
+    "invalid": "Please enter a valid email.",
+    "error": "Something went wrong. Please try again later."
+  },
+  "contact": {
+    "kicker": "Get in Touch",
+    "lede": "Send a message and I'll get back to you. No commitment — just a conversation.",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "message": "Message",
+    "messagePlaceholder": "Tell me about your goals…",
+    "submit": "Send Message",
+    "submitting": "Sending…",
+    "success": "Message sent. I'll be in touch.",
+    "invalid": "Please fill in your name, a valid email, and a message.",
+    "rateLimited": "Please wait a moment before sending another message.",
+    "error": "Something went wrong. Try again, or DM me on Instagram.",
+    "fallback": "Or DM me on Instagram →"
+  }
+}

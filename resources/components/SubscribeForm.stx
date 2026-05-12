@@ -1,0 +1,80 @@
+{{-- Newsletter subscribe form. POSTs to /api/subscribe — see
+     api/subscribe.ts for the backend stub + deployment plan.
+
+     State + fetch are inlined here on purpose. stx client scripts
+     get wrapped in an IIFE and ES import statements aren't lifted
+     out, so import inside the scope is a SyntaxError that kills
+     hydration. Until that lands upstream the resources/functions
+     composable pattern isn't usable for client-side state. --}}
+
+<script client>
+  const isSubmitting = state(false)
+  const isSuccess = state(false)
+  const isInvalid = state(false)
+  const isError = state(false)
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  function clearStatus() {
+    isSubmitting.set(false)
+    isSuccess.set(false)
+    isInvalid.set(false)
+    isError.set(false)
+  }
+
+  async function onSubmit(event) {
+    event.preventDefault()
+    const form = event.target
+    const email = (new FormData(form).get('email') || '').toString().trim()
+
+    if (!email || !EMAIL_REGEX.test(email)) {
+      clearStatus()
+      isInvalid.set(true)
+      return
+    }
+
+    clearStatus()
+    isSubmitting.set(true)
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (!res.ok) throw new Error(`subscribe endpoint returned ${res.status}`)
+      clearStatus()
+      isSuccess.set(true)
+      form.reset()
+    } catch {
+      clearStatus()
+      isError.set(true)
+    }
+  }
+</script>
+
+<form @submit="onSubmit($event)" novalidate class="w-full md:w-[420px] flex flex-col gap-3">
+  <div class="flex items-center gap-3 border-b border-black/15 dark:border-white/15 focus-within:border-black dark:focus-within:border-white transition-colors">
+    <input
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      placeholder="{t:subscribe.placeholder}"
+      x-disabled="isSubmitting || isSuccess"
+      class="flex-1 bg-transparent outline-none py-2 text-sm placeholder-black/25 dark:placeholder-white/25 disabled:opacity-50"
+    />
+    <button
+      type="submit"
+      x-disabled="isSubmitting || isSuccess"
+      class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+    >
+      <span :show="!isSubmitting">{t:subscribe.submit}</span>
+      <span :show="isSubmitting">{t:subscribe.submitting}</span>
+    </button>
+  </div>
+
+  <div :show="isSuccess" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.success}</div>
+  <div :show="isInvalid" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.invalid}</div>
+  <div :show="isError" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.error}</div>
+</form>

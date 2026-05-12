@@ -1,15 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "noEmit": true,
-    "types": ["bun-types"]
-  },
-  "include": ["scripts/**/*.ts", "site.config.ts", "pages/**/*.stx"]
+  "extends": "./storage/framework/core/tsconfig.json"
 }
