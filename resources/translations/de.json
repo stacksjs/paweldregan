@@ -170,6 +170,7 @@
     "submitting": "Wird abonniert…",
     "success": "Danke — du bist dabei.",
     "invalid": "Bitte gib eine gültige E-Mail ein.",
+    "alreadySubscribed": "Du bist schon dabei. Willkommen zurück.",
     "error": "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
   },
   "contact": {

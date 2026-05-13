@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS "newsletters_newsletters_email_unique";

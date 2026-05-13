@@ -1,55 +1,31 @@
-{{-- Newsletter subscribe form. POSTs to /api/subscribe — see
-     api/subscribe.ts for the backend stub + deployment plan.
-
-     State + fetch are inlined here on purpose. stx client scripts
-     get wrapped in an IIFE and ES import statements aren't lifted
-     out, so import inside the scope is a SyntaxError that kills
-     hydration. Until that lands upstream the resources/functions
-     composable pattern isn't usable for client-side state. --}}
+{{-- Newsletter subscribe form. Reactive state + fetch live in
+     resources/stores/subscribe.ts; this component is markup +
+     input bindings only. --}}
 
 <script client>
-  const isSubmitting = state(false)
-  const isSuccess = state(false)
-  const isInvalid = state(false)
-  const isError = state(false)
+  import type { SubscribeStore } from '~/resources/stores/subscribe'
 
-  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const subscribe = useStore('subscribe') as SubscribeStore
 
-  function clearStatus() {
-    isSubmitting.set(false)
-    isSuccess.set(false)
-    isInvalid.set(false)
-    isError.set(false)
-  }
+  // Pull each signal into a bare local so `:show="isSubmitting"` etc.
+  // bind reactively — property access on the store object doesn't.
+  const isSubmitting = subscribe.isSubmitting
+  const isSuccess = subscribe.isSuccess
+  const isInvalid = subscribe.isInvalid
+  const isAlreadySubscribed = subscribe.isAlreadySubscribed
+  const isError = subscribe.isError
 
-  async function onSubmit(event) {
+  // Local controlled input. Two purposes: (1) gives the framework
+  // a `state(...)` call so it wraps this component in `data-stx-scope`
+  // (no scope = no `:show`/`x-disabled` binding), (2) lets the store's
+  // `submit` resolve a clean string without pulling FormData out of
+  // the event target.
+  const email = state<string>('')
+
+  async function onSubmit(event: SubmitEvent): Promise<void> {
     event.preventDefault()
-    const form = event.target
-    const email = (new FormData(form).get('email') || '').toString().trim()
-
-    if (!email || !EMAIL_REGEX.test(email)) {
-      clearStatus()
-      isInvalid.set(true)
-      return
-    }
-
-    clearStatus()
-    isSubmitting.set(true)
-
-    try {
-      const res = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      if (!res.ok) throw new Error(`subscribe endpoint returned ${res.status}`)
-      clearStatus()
-      isSuccess.set(true)
-      form.reset()
-    } catch {
-      clearStatus()
-      isError.set(true)
-    }
+    const ok = await subscribe.submit(email(), 'footer')
+    if (ok) email.set('')
   }
 </script>
 
@@ -61,6 +37,7 @@
       required
       autocomplete="email"
       placeholder="{t:subscribe.placeholder}"
+      x-model="email"
       x-disabled="isSubmitting || isSuccess"
       class="flex-1 bg-transparent outline-none py-2 text-sm placeholder-black/25 dark:placeholder-white/25 disabled:opacity-50"
     />
@@ -76,5 +53,6 @@
 
   <div :show="isSuccess" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.success}</div>
   <div :show="isInvalid" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.invalid}</div>
+  <div :show="isAlreadySubscribed" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.alreadySubscribed}</div>
   <div :show="isError" class="text-xs text-black/45 dark:text-white/45">{t:subscribe.error}</div>
 </form>

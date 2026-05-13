@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS "contacts_contacts_uuid_unique";

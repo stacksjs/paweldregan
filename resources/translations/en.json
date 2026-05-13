@@ -170,6 +170,7 @@
     "submitting": "Subscribing…",
     "success": "Thanks — you're on the list.",
     "invalid": "Please enter a valid email.",
+    "alreadySubscribed": "You're already on the list. Welcome back.",
     "error": "Something went wrong. Please try again later."
   },
   "contact": {

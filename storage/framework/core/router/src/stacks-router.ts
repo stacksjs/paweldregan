@@ -1335,12 +1335,17 @@ function wrapHandler(handler: StacksHandler, skipParsing = false): RouteHandlerF
       }
       catch (error) {
         log.error(`[Router] Error handling request for '${handlerPath}':`, error)
+        // Honor HttpError(status, …) thrown from action handlers so a
+        // validation/dedupe 422 doesn't surface as 500 to the client.
+        // The middleware error path already does this via
+        // createMiddlewareErrorResponse; same idea applied here for
+        // the action handler branch.
+        const err = error instanceof Error ? error : new Error(String(error))
+        const status = (err as Error & { statusCode?: number, status?: number }).statusCode
+          ?? (err as Error & { statusCode?: number, status?: number }).status
+          ?? 500
         // Return Ignition-style error page in development, JSON in production
-        return await createErrorResponse(
-          error instanceof Error ? error : new Error(String(error)),
-          req,
-          { handlerPath },
-        )
+        return await createErrorResponse(err, req, { handlerPath, status })
       }
     }
   }

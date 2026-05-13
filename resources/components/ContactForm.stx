@@ -1,87 +1,39 @@
-{{-- Contact form. Posts to /api/contact (a server endpoint hosted on
-     the mail-os EC2 box — see github issue #7/#8). On a deploy without
-     that endpoint live, submission errors and the form falls back to
-     the IG link below. --}}
+{{-- Contact form. Reactive state + fetch live in
+     resources/stores/contact.ts; this component is markup +
+     input bindings only. See SubscribeForm.stx for the rationale
+     behind local `state(...)` declarations (controlled inputs +
+     framework scope detection). --}}
 
 <script client>
-  // The framework's `:show` directive only reactively subscribes to
-  // bare signal references (see SubscribeForm.stx for the same note),
-  // so we model each state as its own boolean signal instead of a
-  // single status string.
-  const isSubmitting = state(false)
-  const isSuccess = state(false)
-  const isInvalid = state(false)
-  const isRateLimited = state(false)
-  const isError = state(false)
+  import type { ContactStore } from '~/resources/stores/contact'
 
-  function clearStatus() {
-    isSubmitting.set(false)
-    isSuccess.set(false)
-    isInvalid.set(false)
-    isRateLimited.set(false)
-    isError.set(false)
-  }
+  const contact = useStore('contact') as ContactStore
 
-  // Per-browser rate limit, mirrored on the server for real enforcement.
-  // 60s matches the spec in issue #8.
-  const RATE_LIMIT_MS = 60_000
-  const STORAGE_KEY = 'contact:lastSubmit'
+  const isSubmitting = contact.isSubmitting
+  const isSuccess = contact.isSuccess
+  const isInvalid = contact.isInvalid
+  const isRateLimited = contact.isRateLimited
+  const isError = contact.isError
 
-  function emailLooksValid(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-  }
+  const name = state<string>('')
+  const email = state<string>('')
+  const message = state<string>('')
+  // Honeypot. Real users never fill this; bots usually do.
+  const website = state<string>('')
 
-  async function onSubmit(event) {
+  async function onSubmit(event: SubmitEvent): Promise<void> {
     event.preventDefault()
 
-    const form = event.target
-    const data = new FormData(form)
-
-    // Honeypot. Real users never fill this; bots usually do.
-    // Pretend success so we don't tip them off.
-    if ((data.get('website') || '').toString().trim() !== '') {
-      clearStatus()
-      isSuccess.set(true)
-      form.reset()
+    // Bot? Pretend success and bail before we touch the server.
+    if (website().trim() !== '') {
+      contact.reset()
+      contact.isSuccess.set(true)
+      name.set(''); email.set(''); message.set(''); website.set('')
       return
     }
 
-    const name = (data.get('name') || '').toString().trim()
-    const email = (data.get('email') || '').toString().trim()
-    const message = (data.get('message') || '').toString().trim()
-
-    if (!name || !email || !message || !emailLooksValid(email)) {
-      clearStatus()
-      isInvalid.set(true)
-      return
-    }
-
-    try {
-      const last = Number(localStorage.getItem(STORAGE_KEY) || 0)
-      if (Date.now() - last < RATE_LIMIT_MS) {
-        clearStatus()
-        isRateLimited.set(true)
-        return
-      }
-    } catch {}
-
-    clearStatus()
-    isSubmitting.set(true)
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message }),
-      })
-      if (!res.ok) throw new Error('contact endpoint returned ' + res.status)
-      try { localStorage.setItem(STORAGE_KEY, String(Date.now())) } catch {}
-      clearStatus()
-      isSuccess.set(true)
-      form.reset()
-    } catch {
-      clearStatus()
-      isError.set(true)
-    }
+    const ok = await contact.submit({ name: name(), email: email(), message: message() })
+    if (ok) { name.set(''); email.set(''); message.set('') }
   }
 </script>
 
@@ -95,6 +47,7 @@
       required
       autocomplete="name"
       placeholder="{t:contact.namePlaceholder}"
+      x-model="name"
       class="w-full bg-transparent border-b border-black/15 dark:border-white/15 focus:border-black dark:focus:border-white outline-none py-2 text-base placeholder-black/25 dark:placeholder-white/25 transition-colors"
     />
   </div>
@@ -108,6 +61,7 @@
       required
       autocomplete="email"
       placeholder="{t:contact.emailPlaceholder}"
+      x-model="email"
       class="w-full bg-transparent border-b border-black/15 dark:border-white/15 focus:border-black dark:focus:border-white outline-none py-2 text-base placeholder-black/25 dark:placeholder-white/25 transition-colors"
     />
   </div>
@@ -120,6 +74,7 @@
       rows="5"
       required
       placeholder="{t:contact.messagePlaceholder}"
+      x-model="message"
       class="w-full bg-transparent border-b border-black/15 dark:border-white/15 focus:border-black dark:focus:border-white outline-none py-2 text-base placeholder-black/25 dark:placeholder-white/25 transition-colors resize-none"
     ></textarea>
   </div>
@@ -128,7 +83,7 @@
        parsing the DOM see a normal field and fill it. --}}
   <div aria-hidden="true" class="hidden">
     <label for="contact-website">Website (leave blank)</label>
-    <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" x-model="website" />
   </div>
 
   <div class="md:col-span-2 flex flex-col gap-6 pt-2">

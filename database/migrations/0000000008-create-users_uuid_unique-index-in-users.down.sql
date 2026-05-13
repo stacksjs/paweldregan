@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS "users_users_uuid_unique";
