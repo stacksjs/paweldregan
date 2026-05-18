@@ -37,12 +37,12 @@ const orderTypes = [
     <!-- Orders Table -->
     <OrdersTable
       :orders="paginatedOrders"
-      :search-query="searchQuery"
-      :status-filter="statusFilter"
-      :sort-by="sortBy"
-      :sort-order="sortOrder"
-      :current-page="currentPage"
-      :items-per-page="itemsPerPage"
+      :searchQuery="searchQuery"
+      :statusFilter="statusFilter"
+      :sortBy="sortBy"
+      :sortOrder="sortOrder"
+      :currentPage="currentPage"
+      :itemsPerPage="itemsPerPage"
       :statuses="statuses"
       @toggle-sort="toggleSort"
     />

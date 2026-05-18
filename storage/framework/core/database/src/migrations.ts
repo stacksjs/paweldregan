@@ -65,29 +65,6 @@ function getDialect(): 'sqlite' | 'mysql' | 'postgres' {
 }
 
 /**
- * Resolve the user models directory and confirm it exists.
- *
- * Every migration / reset / generation call below depends on scanning
- * this directory. When it's missing, the underlying `scandir` throws a
- * raw `ENOENT` deep inside bun-query-builder with a stack trace that
- * doesn't tell the operator how to recover. Surface that as a clean,
- * actionable error so a fresh `./buddy migrate` on a project that
- * hasn't scaffolded any models yet prints the fix instead of a stack.
- */
-function requireUserModelsDir(): string {
-  const dir = path.userModelsPath()
-  if (existsSync(dir))
-    return dir
-
-  const rel = dir.replace(`${process.cwd()}/`, '')
-  throw new Error(
-    `models directory not found at ${rel}. Create at least one model before running this command — `
-    + `e.g. \`mkdir -p ${rel} && touch ${rel}/User.ts\`, then copy a starter from `
-    + `storage/framework/defaults/app/Models/ (User.ts is a good baseline).`,
-  )
-}
-
-/**
  * Configure bun-query-builder with stacks database settings
  */
 function configureQueryBuilder(): void {
@@ -107,6 +84,11 @@ function configureQueryBuilder(): void {
 
   // Reset the connection to ensure the new config is used
   resetConnection()
+}
+
+function prepareMigrationModelsDir(): { modelsDir: string, skip: boolean } {
+  const userModelsDir = path.userModelsPath()
+  return { modelsDir: userModelsDir, skip: !existsSync(userModelsDir) }
 }
 
 /**
@@ -413,7 +395,7 @@ export async function runDatabaseMigration(): Promise<Result<string, Error>> {
       preprocessSqliteMigrations()
     }
 
-    const modelsDir = requireUserModelsDir()
+    const modelsDir = path.userModelsPath()
 
     // Execute existing migration files
     log.debug(`[migration] Running migrations from: ${modelsDir}`)
@@ -457,7 +439,7 @@ export async function resetDatabase(): Promise<Result<string, Error>> {
     // Configure bun-query-builder with stacks database settings
     configureQueryBuilder()
 
-    const modelsDir = requireUserModelsDir()
+    const modelsDir = path.userModelsPath()
     const dialect = getDialect()
 
     // Drop framework tables first (OAuth, passkeys, etc.)
@@ -567,8 +549,12 @@ export async function generateMigrations(): Promise<Result<string, Error>> {
     // Configure bun-query-builder with stacks database settings
     configureQueryBuilder()
 
-    const modelsDir = requireUserModelsDir()
     const dialect = getDialect()
+    const { modelsDir, skip } = prepareMigrationModelsDir()
+    if (skip) {
+      log.info('No app/Models directory found; using committed framework migrations')
+      return ok('Migrations generated')
+    }
 
     log.debug(`[migration] Generating migrations for dialect: ${dialect}, models: ${modelsDir}`)
     const result = await qbGenerateMigration(modelsDir, { dialect })
@@ -682,7 +668,7 @@ function nextMigrationNumber(migrationsDir: string): number {
   try {
     for (const f of readdirSync(migrationsDir)) {
       const m = f.match(/^(\d+)-/)
-      if (m) max = Math.max(max, Number.parseInt(m[1], 10))
+      if (m?.[1]) max = Math.max(max, Number.parseInt(m[1], 10))
     }
   }
   catch { /* directory missing — start at 1 */ }
@@ -699,8 +685,12 @@ export async function generateMigrations2(): Promise<Result<string, Error>> {
     // Configure bun-query-builder with stacks database settings
     configureQueryBuilder()
 
-    const modelsDir = requireUserModelsDir()
     const dialect = getDialect()
+    const { modelsDir, skip } = prepareMigrationModelsDir()
+    if (skip) {
+      log.info('No app/Models directory found; using committed framework migrations')
+      return ok('Migrations generated')
+    }
 
     await qbGenerateMigration(modelsDir, { dialect, full: true })
 

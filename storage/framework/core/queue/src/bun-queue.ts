@@ -83,4 +83,4 @@ export {
   FailedJobManager,
   type FailedJob,
   // @ts-ignore - bun-queue resolved by Bun's module resolver
-} from '@stacksjs/bun-queue'
+} from 'bun-queue'

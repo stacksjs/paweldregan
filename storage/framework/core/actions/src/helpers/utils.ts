@@ -203,13 +203,12 @@ export async function runAction(action: Action, options?: ActionOptions): Promis
         // scaffolds put them at resources/layouts and resources/components,
         // so we prefer the new layout when present and fall back to the
         // legacy paths otherwise.
-        //
-        // Uses `existsSync` (already imported at the top of this file)
-        // because `Bun.file(dir).exists()` returns false for directories
-        // — the old version silently fell through to `candidates[0]`,
-        // breaking apps whose components lived at the legacy
-        // `resources/components/` path.
-        const firstExisting = (candidates: string[]): string => {
+        // existsSync, not `Bun.file(dir).exists()` — `Bun.file` is file-only
+        // and returns false for any directory, which would cause every
+        // candidate to fall through to candidates[0] and silently break
+        // projects whose layouts/components live at the legacy paths
+        // (`resources/{layouts,components}/`).
+        const firstExisting = (candidates: [string, ...string[]]): string => {
           for (const candidate of candidates) {
             if (existsSync(p.projectPath(candidate)))
               return candidate
@@ -218,29 +217,6 @@ export async function runAction(action: Action, options?: ActionOptions): Promis
         }
         const layoutsDir = firstExisting(['resources/views/layouts', 'resources/layouts'])
         const partialsDir = firstExisting(['resources/views/components', 'resources/components'])
-
-        // Site config — load site.config.ts if the project ships one
-        // and hand the SiteConfig object straight to serve(). serve()
-        // runs `injectThemeBootstrap` + `injectSeo` + `applyTranslations`
-        // against every rendered HTML response, so the dev server's
-        // output matches what `buildStaticSite()` produces for prod:
-        // dark-mode toggle works, per-page SEO is filled in, and
-        // locale-prefix routes (`/de`, `/pl`) get the right copy.
-        //
-        // Apps without `site.config.ts` skip all of this — serve()
-        // falls through to the legacy "untouched HTML" path.
-        let siteConfig: any = null
-        if (existsSync(p.projectPath('site.config.ts'))) {
-          try {
-            const siteMod: any = await import(p.projectPath('site.config.ts'))
-            siteConfig = siteMod.site ?? siteMod.default ?? null
-          }
-          catch {
-            // Project's site.config.ts can throw at import time (bad
-            // env, broken syntax, missing dep) — don't crash the dev
-            // server over it; just skip the post-processing.
-          }
-        }
 
         await serve({
           patterns: ['resources/views', 'storage/framework/defaults/resources/views'],
@@ -255,7 +231,6 @@ export async function runAction(action: Action, options?: ActionOptions): Promis
           fallbackPartialsDir: 'resources/views',
           quiet: true,
           ...(stxModule && { stxModule }),
-          ...(siteConfig && { site: siteConfig }),
           auth: {
             cookieName: authCookie,
             redirectTo: '/login',

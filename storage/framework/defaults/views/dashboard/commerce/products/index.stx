@@ -46,10 +46,10 @@
 
     <ProductsTable
       :products="paginatedProducts"
-      :search-query="searchQuery"
-      :category-filter="categoryFilter"
-      :sort-by="sortBy"
-      :sort-order="sortOrder"
+      :searchQuery="searchQuery"
+      :categoryFilter="categoryFilter"
+      :sortBy="sortBy"
+      :sortOrder="sortOrder"
       :currentPage="currentPage"
       :itemsPerPage="itemsPerPage"
       :categories="categoryNames"

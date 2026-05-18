@@ -19,4 +19,5 @@ import { route } from '@stacksjs/router'
 
 route.group({ prefix: '/api/dashboard' }, () => {
   route.get('/authors', 'Actions/Dashboard/Content/AuthorIndexAction')
+  route.get('/posts', 'Actions/Dashboard/Content/PostIndexAction')
 })
