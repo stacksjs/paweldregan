@@ -11,9 +11,9 @@
   <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[420px] mb-12">
     {t:notFound.lede}
   </p>
-  <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
+  <StxLink to="/" class="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
     {t:notFound.cta}
-  </a>
+  </StxLink>
 </section>
 
 @endsection

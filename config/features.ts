@@ -18,6 +18,7 @@ import type { FeaturesConfig } from '@stacksjs/types'
  * core, auth, marketing, cms, commerce, dashboard, monitoring, realtime, queue.
  */
 export default {
+  commerce: false,
   core: true,
   auth: true,
 } satisfies FeaturesConfig

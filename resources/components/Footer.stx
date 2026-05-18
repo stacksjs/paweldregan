@@ -20,7 +20,7 @@
       <div class="flex items-center gap-8">
         <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">Instagram</a>
         <a href="https://www.youtube.com/channel/UC3BxCTwxiIROpXagOexE9gw" target="_blank" rel="noopener noreferrer" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">YouTube</a>
-        <a href="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.coaching}</a>
+        <StxLink to="/coaching" class="text-xs text-black/25 dark:text-white/25 hover:text-black dark:hover:text-white transition-colors">{t:footer.coaching}</StxLink>
       </div>
     </div>
 

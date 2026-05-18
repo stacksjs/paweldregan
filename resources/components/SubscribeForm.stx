@@ -38,12 +38,12 @@
       autocomplete="email"
       placeholder="{t:subscribe.placeholder}"
       x-model="email"
-      x-disabled="isSubmitting || isSuccess"
+      x-disabled="isSubmitting"
       class="flex-1 bg-transparent outline-none py-2 text-sm placeholder-black/25 dark:placeholder-white/25 disabled:opacity-50"
     />
     <button
       type="submit"
-      x-disabled="isSubmitting || isSuccess"
+      x-disabled="isSubmitting"
       class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
     >
       <span :show="!isSubmitting">{t:subscribe.submit}</span>

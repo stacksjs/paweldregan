@@ -102,30 +102,30 @@ const marqueeItems = [
 {{-- Section Previews --}}
 <div class="max-w-[1400px] mx-auto px-6 lg:px-12 pb-32">
   <div class="grid grid-cols-1 md:grid-cols-3">
-    <a href="/about" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+    <StxLink to="/about" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
       <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">01</span>
       <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">ABOUT</h3>
       <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
         {t:home.section.about.body}
       </p>
       <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.about.cta}</span>
-    </a>
-    <a href="/races" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+    </StxLink>
+    <StxLink to="/races" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
       <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">02</span>
       <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">RACES</h3>
       <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
         {t:home.section.races.body}
       </p>
       <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.races.cta}</span>
-    </a>
-    <a href="/coaching" class="group border-t border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+    </StxLink>
+    <StxLink to="/coaching" class="group border-t border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
       <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">03</span>
       <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">COACHING</h3>
       <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
         {t:home.section.coaching.body}
       </p>
       <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.coaching.cta}</span>
-    </a>
+    </StxLink>
   </div>
 </div>
 

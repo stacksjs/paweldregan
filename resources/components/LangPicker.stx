@@ -1,5 +1,7 @@
-{{-- Language picker. The site-builder bootstrap auto-marks the active
-     locale via aria-current and intercepts data-lang clicks. --}}
+{{-- Language picker. Buttons (not links) — these are locale switchers,
+     not page navigation. The site-builder bootstrap auto-marks the
+     active locale via aria-current and intercepts data-lang clicks,
+     routing them through __stxRouter.navigate for SPA navigation. --}}
 
 <div id="lang-picker" class="hidden md:flex items-center gap-1 mr-2 text-[0.6rem] font-semibold tracking-wider">
   <button data-lang="en" type="button" class="px-1.5 py-1 text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white aria-[current=true]:text-black dark:aria-[current=true]:text-white transition-colors">EN</button>

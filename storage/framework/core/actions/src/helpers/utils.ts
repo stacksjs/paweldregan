@@ -217,15 +217,27 @@ export async function runAction(action: Action, options?: ActionOptions): Promis
         }
         const layoutsDir = firstExisting(['resources/views/layouts', 'resources/layouts'])
         const partialsDir = firstExisting(['resources/views/components', 'resources/components'])
+        // Component resolution walks `componentsDir` (recursively, depth-8)
+        // but NOT `partialsDir` — so `<Footer />` from a project layout
+        // ends up resolving against `storage/framework/defaults/...`
+        // instead of the project's own `resources/components/Footer.stx`.
+        // Prefer the project's components dir when present so projects
+        // override framework defaults; only fall back to defaults when
+        // the project ships no components of its own.
+        const componentsDir = firstExisting([
+          'resources/views/components',
+          'resources/components',
+          'storage/framework/defaults/resources/components',
+        ])
 
         await serve({
           patterns: ['resources/views', 'storage/framework/defaults/resources/views'],
           port,
-          // Wider than the dashboard subdir so both Dashboard/* and
-          // Storefront/* (and any future <Namespace>/Component.stx) get
-          // resolved. stx-serve walks one subdirectory deep, so this
-          // gives us discovery without enumerating every namespace.
-          componentsDir: 'storage/framework/defaults/resources/components',
+          // Resolved above — prefers the project's own components dir
+          // (`resources/components/`) so `<Footer />` from a project
+          // layout finds the project's Footer.stx instead of falling
+          // through to `storage/framework/defaults/...`'s Storefront/.
+          componentsDir,
           layoutsDir,
           partialsDir,
           fallbackPartialsDir: 'resources/views',

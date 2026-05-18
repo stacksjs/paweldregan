@@ -30,13 +30,13 @@
 </script>
 
 <nav class="fixed top-0 left-0 right-0 z-50 px-6 lg:px-12 py-4 flex justify-between items-center bg-white/90 dark:bg-black/90 backdrop-blur-xl border-b border-black/5 dark:border-white/5">
-  <a href="/" class="z-50 text-xs font-bold tracking-[0.2em] uppercase">Paweł Dregan</a>
+  <StxLink to="/" class="z-50 text-xs font-bold tracking-[0.2em] uppercase">Paweł Dregan</StxLink>
 
   <ul class="hidden md:flex items-center gap-10">
-    <li><a href="/" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.home}</a></li>
-    <li><a href="/about" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.about}</a></li>
-    <li><a href="/races" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.races}</a></li>
-    <li><a href="/coaching" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.coaching}</a></li>
+    <li><StxLink to="/" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.home}</StxLink></li>
+    <li><StxLink to="/about" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.about}</StxLink></li>
+    <li><StxLink to="/races" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.races}</StxLink></li>
+    <li><StxLink to="/coaching" class="text-xs font-medium tracking-wide text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white transition-colors">{t:nav.coaching}</StxLink></li>
   </ul>
 
   <div class="flex items-center gap-5">
@@ -56,10 +56,10 @@
 
 {{-- Mobile menu overlay --}}
 <div :show="mobileMenu()" class="flex fixed inset-0 z-40 flex-col gap-8 items-center justify-center bg-white dark:bg-black md:hidden">
-  <a href="/" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.home}</a>
-  <a href="/about" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.about}</a>
-  <a href="/races" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.races}</a>
-  <a href="/coaching" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.coaching}</a>
+  <StxLink to="/" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.home}</StxLink>
+  <StxLink to="/about" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.about}</StxLink>
+  <StxLink to="/races" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.races}</StxLink>
+  <StxLink to="/coaching" @click="setMenu(false)" class="font-display text-4xl text-black/70 dark:text-white/70 tracking-tight hover:text-black dark:hover:text-white transition-colors">{t:nav.coaching}</StxLink>
   <div class="mt-8">
     <SocialLinks />
   </div>
