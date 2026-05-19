@@ -37,68 +37,78 @@ const bioDetails: BioDetail[] = [
 </script>
 
 {{-- Header --}}
-<header class="pt-40 lg:pt-48 pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
-  <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">{t:about.kicker}</span>
-  <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">{t:about.title}</h1>
+<header class="mx-auto pb-16 pt-40 px-6 lg:pt-48 lg:px-12 max-w-[1400px]">
+  <span class="block mb-8 font-semibold text-[0.6rem] text-black/25 tracking-[0.25em] uppercase dark:text-white/25">{t:about.kicker}</span>
+  <h1 class="font-display leading-[0.85] text-[clamp(4rem,9vw,8rem)] tracking-tight">{t:about.title}</h1>
 </header>
 
-<div class="max-w-[1400px] mx-auto px-6 lg:px-12">
-  <div class="border-t border-black/5 dark:border-white/5"></div>
+<div class="mx-auto px-6 lg:px-12 max-w-[1400px]">
+  <div class="border-black/5 border-t dark:border-white/5"></div>
 
-  {{-- Bio --}}
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 py-16 lg:py-24">
+  {{-- Bio. Three columns at lg+: portrait → bio copy → details list. On
+      mobile the portrait stacks above (smaller crop), bio below, details
+      last so the page leads with face → story → quick facts. --}}
+  <div class="grid gap-12 grid-cols-1 lg:gap-16 lg:grid-cols-[1fr_1.1fr_0.9fr] py-16 lg:py-24">
     <div>
-      <p class="text-lg text-black/60 dark:text-white/60 leading-relaxed mb-6">
+      <StxImage
+        src="/images/about.jpg"
+        alt="Paweł Dregan"
+        class="aspect-[3/4] object-cover w-full"
+        lazy="false"
+      />
+    </div>
+    <div>
+      <p class="mb-6 leading-relaxed text-black/60 text-lg dark:text-white/60">
         {t:about.bio1}
       </p>
-      <p class="text-base text-black/40 dark:text-white/40 leading-relaxed mb-6">
+      <p class="mb-6 leading-relaxed text-base text-black/40 dark:text-white/40">
         {t:about.bio2}
       </p>
-      <p class="text-base text-black/40 dark:text-white/40 leading-relaxed">
+      <p class="leading-relaxed text-base text-black/40 dark:text-white/40">
         {t:about.bio3}
       </p>
     </div>
     <div>
       @foreach (bioDetails as detail)
         <div class="py-5 border-b border-black/5 dark:border-white/5">
-          <div class="text-[0.55rem] font-semibold tracking-[0.2em] uppercase text-black/20 dark:text-white/20 mb-2">{{ detail.label }}</div>
-          <div class="text-sm font-medium">{{ detail.value }}</div>
+          <div class="mb-2 font-semibold text-[0.55rem] text-black/20 tracking-[0.2em] uppercase dark:text-white/20">{{ detail.label }}</div>
+          <div class="font-medium text-sm">{{ detail.value }}</div>
         </div>
       @endforeach
     </div>
   </div>
 
-  <div class="border-t border-black/5 dark:border-white/5"></div>
+  <div class="border-black/5 border-t dark:border-white/5"></div>
 
   {{-- Milestones --}}
   <section class="py-16 lg:py-24">
-    <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">{t:about.milestones}</h2>
+    <h2 class="mb-12 font-display text-5xl tracking-tight lg:text-6xl">{t:about.milestones}</h2>
     <div class="flex flex-col">
       @foreach (milestones as milestone)
-        <div class="flex items-baseline justify-between py-5 border-b border-black/5 dark:border-white/5 hover:bg-black/[0.015] dark:hover:bg-white/[0.015] -mx-4 px-4 transition-colors">
-          <div class="flex items-baseline gap-8 lg:gap-12">
-            <span class="text-xs font-semibold tracking-wide text-black/20 dark:text-white/20 w-16 shrink-0">{{ milestone.year }}</span>
-            <span class="text-base font-semibold">{{ milestone.title }}</span>
+        <div class="flex items-baseline justify-between -mx-4 px-4 py-5 hover:bg-black/[0.015] dark:hover:bg-white/[0.015] border-b border-black/5 dark:border-white/5 transition-colors">
+          <div class="flex gap-8 items-baseline lg:gap-12">
+            <span class="shrink-0 w-16 font-semibold text-black/20 text-xs tracking-wide dark:text-white/20">{{ milestone.year }}</span>
+            <span class="font-semibold text-base">{{ milestone.title }}</span>
           </div>
-          <span class="text-sm text-black/30 dark:text-white/30 hidden lg:block shrink-0 ml-8">{{ milestone.detail }}</span>
+          <span class="hidden lg:block shrink-0 ml-8 text-black/30 text-sm dark:text-white/30">{{ milestone.detail }}</span>
         </div>
       @endforeach
     </div>
   </section>
 
-  <div class="border-t border-black/5 dark:border-white/5"></div>
+  <div class="border-black/5 border-t dark:border-white/5"></div>
 
   {{-- Partners --}}
   <section class="py-16 lg:py-24">
-    <h2 class="font-display text-5xl lg:text-6xl tracking-tight mb-12">{t:about.partners}</h2>
+    <h2 class="mb-12 font-display text-5xl tracking-tight lg:text-6xl">{t:about.partners}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2">
-      <div class="border-t border-r border-black/5 dark:border-white/5 p-10">
-        <div class="text-xl font-bold mb-2">Rappid.Runs</div>
-        <div class="text-sm text-black/30 dark:text-white/30">{t:about.partner.rappidRole}</div>
+      <div class="p-10 border-black/5 border-r border-t dark:border-white/5">
+        <div class="mb-2 font-bold text-xl">Rappid.Runs</div>
+        <div class="text-black/30 text-sm dark:text-white/30">{t:about.partner.rappidRole}</div>
       </div>
-      <div class="border-t border-black/5 dark:border-white/5 p-10">
-        <div class="text-xl font-bold mb-2">Falke Sport</div>
-        <div class="text-sm text-black/30 dark:text-white/30">{t:about.partner.falkeRole}</div>
+      <div class="p-10 border-black/5 border-t dark:border-white/5">
+        <div class="mb-2 font-bold text-xl">Falke Sport</div>
+        <div class="text-black/30 text-sm dark:text-white/30">{t:about.partner.falkeRole}</div>
       </div>
     </div>
   </section>

@@ -15,28 +15,50 @@ const marqueeItems = [
 </script>
 
 {{-- Hero --}}
-<section class="min-h-screen flex flex-col justify-center px-6 lg:px-12 pt-32 pb-24 max-w-[1400px] mx-auto">
-  <p class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase text-black/30 dark:text-white/30 mb-8">{t:home.kicker}</p>
-  <h1 class="font-display text-[clamp(5rem,12vw,12rem)] leading-[0.85] tracking-tight mb-12">
-    PAWEŁ
-    <span class="block text-black/10 dark:text-white/10">DREGAN</span>
-  </h1>
-  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mt-auto pt-16 gap-12">
-    <p class="text-base font-light text-black/45 dark:text-white/45 leading-relaxed max-w-[420px]">
+<section class="flex flex-col justify-center mx-auto pb-24 pt-32 px-6 lg:px-12 max-w-[1400px] min-h-screen">
+  <div class="grid gap-12 grid-cols-1 items-center lg:gap-16 lg:grid-cols-[1.35fr_1fr]">
+    {{-- Typographic lockup --}}
+    <div>
+      <p class="mb-8 font-semibold text-[0.65rem] text-black/30 tracking-[0.25em] uppercase dark:text-white/30">{t:home.kicker}</p>
+      <h1 class="font-display leading-[0.85] text-[clamp(5rem,11vw,11rem)] tracking-tight">
+        PAWEŁ
+        <span class="block text-black/10 dark:text-white/10">DREGAN</span>
+      </h1>
+    </div>
+
+    {{-- Portrait. Square crop pairs with the lockup's right edge at lg+;
+        on mobile we stack a 4:3 crop above the lede so the photo still
+        reads at small widths without overwhelming the typography.
+        No width/height: StxImage would otherwise inline an aspect-ratio
+        style matching the source pixels (1:1 for hero2.jpg) and override
+        the responsive aspect classes below. --}}
+    <div class="order-first lg:order-none">
+      <StxImage
+        src="/images/hero2.jpg"
+        alt="Paweł Dregan"
+        class="aspect-[4/3] object-cover lg:aspect-square w-full grayscale-[0.15]"
+        lazy="false"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-12 items-start justify-between lg:flex-row lg:items-end mt-auto pt-16">
+    <p class="max-w-[420px] font-light leading-relaxed text-base text-black/45 dark:text-white/45">
       {t:home.lede}
     </p>
     <div class="flex gap-12 lg:gap-16">
       <div class="text-right">
-        <div class="text-3xl font-extrabold tracking-tight">700km</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/25 dark:text-white/25 mt-2">{t:home.stats.longest}</div>
+        <div class="font-extrabold text-3xl tracking-tight">700km</div>
+        <div class="mt-2 font-medium text-[0.6rem] text-black/25 tracking-[0.15em] uppercase dark:text-white/25">{t:home.stats.longest}</div>
       </div>
       <div class="text-right">
-        <div class="text-3xl font-extrabold tracking-tight">2nd</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/25 dark:text-white/25 mt-2">{t:home.stats.lappland}</div>
+        <div class="font-extrabold text-3xl tracking-tight">2nd</div>
+        <div class="mt-2 font-medium text-[0.6rem] text-black/25 tracking-[0.15em] uppercase dark:text-white/25">{t:home.stats.lappland}</div>
       </div>
       <div class="text-right">
-        <div class="text-3xl font-extrabold tracking-tight">6d 23h</div>
-        <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/25 dark:text-white/25 mt-2">{t:home.stats.arctic}</div>
+        <div class="font-extrabold text-3xl tracking-tight">6d 23h</div>
+        <div class="mt-2 font-medium text-[0.6rem] text-black/25 tracking-[0.15em] uppercase dark:text-white/25">{t:home.stats.arctic}</div>
       </div>
     </div>
   </div>
@@ -46,39 +68,48 @@ const marqueeItems = [
 <div class="overflow-hidden py-4">
   <div class="flex gap-12 whitespace-nowrap" style="animation: scroll 30s linear infinite;">
     @foreach (marqueeItems as item)
-      <span class="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-black/10 dark:text-white/10 shrink-0">{{ item }}</span>
-      <span class="text-black/[0.05] dark:text-white/[0.05] shrink-0">·</span>
+      <span class="shrink-0 font-semibold text-[0.65rem] text-black/10 tracking-[0.15em] uppercase dark:text-white/10">{{ item }}</span>
+      <span class="shrink-0 text-black/[0.05] dark:text-white/[0.05]">·</span>
     @endforeach
     @foreach (marqueeItems as item)
-      <span class="text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-black/10 dark:text-white/10 shrink-0">{{ item }}</span>
-      <span class="text-black/[0.05] dark:text-white/[0.05] shrink-0">·</span>
+      <span class="shrink-0 font-semibold text-[0.65rem] text-black/10 tracking-[0.15em] uppercase dark:text-white/10">{{ item }}</span>
+      <span class="shrink-0 text-black/[0.05] dark:text-white/[0.05]">·</span>
     @endforeach
   </div>
 </div>
 
 {{-- Featured: Lappland --}}
-<section class="max-w-[1400px] mx-auto px-6 lg:px-12 py-24 lg:py-32">
-  <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-12">{t:home.featured.kicker}</span>
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+<section class="mx-auto px-6 py-24 lg:px-12 lg:py-32 max-w-[1400px]">
+  <span class="block mb-12 font-semibold text-[0.6rem] text-black/25 tracking-[0.25em] uppercase dark:text-white/25">{t:home.featured.kicker}</span>
+  <div class="grid gap-12 grid-cols-1 items-start lg:gap-20 lg:grid-cols-[1fr_1fr]">
+    {{-- Race photo: portrait crop, fills the left column. --}}
     <div>
-      <h2 class="font-display text-[clamp(3rem,6vw,5.5rem)] leading-[0.9] tracking-tight mb-8">LAPPLAND ARCTIC ULTRA 500K</h2>
-      <p class="text-base text-black/40 dark:text-white/40 leading-relaxed max-w-[500px]">
-        {t:home.featured.body}
-      </p>
+      <StxImage
+        src="/images/lapland.jpg"
+        alt="Lappland Arctic Ultra 500K"
+        class="aspect-[3/4] object-cover w-full"
+      />
     </div>
-    <div class="flex items-end">
-      <div class="grid grid-cols-3 gap-8 w-full pt-8 border-t border-black/5 dark:border-white/5">
+    {{-- Heading + body + stats stacked in the right column. --}}
+    <div class="flex flex-col gap-10">
+      <div>
+        <h2 class="mb-8 font-display leading-[0.9] text-[clamp(3rem,6vw,5.5rem)] tracking-tight">LAPPLAND ARCTIC ULTRA 500K</h2>
+        <p class="max-w-[500px] leading-relaxed text-base text-black/40 dark:text-white/40">
+          {t:home.featured.body}
+        </p>
+      </div>
+      <div class="grid gap-8 grid-cols-3 pt-8 w-full border-black/5 border-t dark:border-white/5">
         <div>
-          <div class="text-2xl font-extrabold tracking-tight">515km</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-black/20 dark:text-white/20 mt-1">{t:home.featured.distance}</div>
+          <div class="font-extrabold text-2xl tracking-tight">515km</div>
+          <div class="mt-1 font-medium text-[0.6rem] text-black/20 tracking-[0.1em] uppercase dark:text-white/20">{t:home.featured.distance}</div>
         </div>
         <div>
-          <div class="text-2xl font-extrabold tracking-tight">6d 23h</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-black/20 dark:text-white/20 mt-1">{t:home.featured.time}</div>
+          <div class="font-extrabold text-2xl tracking-tight">6d 23h</div>
+          <div class="mt-1 font-medium text-[0.6rem] text-black/20 tracking-[0.1em] uppercase dark:text-white/20">{t:home.featured.time}</div>
         </div>
         <div>
-          <div class="text-2xl font-extrabold tracking-tight">2nd</div>
-          <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-black/20 dark:text-white/20 mt-1">{t:home.featured.overall}</div>
+          <div class="font-extrabold text-2xl tracking-tight">2nd</div>
+          <div class="mt-1 font-medium text-[0.6rem] text-black/20 tracking-[0.1em] uppercase dark:text-white/20">{t:home.featured.overall}</div>
         </div>
       </div>
     </div>
@@ -86,45 +117,45 @@ const marqueeItems = [
 </section>
 
 {{-- Next Race --}}
-<div class="max-w-[1400px] mx-auto px-6 lg:px-12 pb-32">
-  <div class="border border-black/10 dark:border-white/10 p-8 lg:p-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 hover:border-black/20 dark:hover:border-white/20 transition-colors">
+<div class="mx-auto pb-32 px-6 lg:px-12 max-w-[1400px]">
+  <div class="flex flex-col gap-8 items-start justify-between lg:flex-row lg:items-center p-8 lg:p-12 border border-black/10 dark:border-white/10 hover:border-black/20 dark:hover:border-white/20 transition-colors">
     <div>
-      <div class="text-[0.55rem] font-bold tracking-[0.2em] uppercase text-black/25 dark:text-white/25 mb-3">{t:home.upcoming}</div>
-      <div class="font-display text-4xl lg:text-5xl tracking-tight">CROSSING SWITZERLAND 400K</div>
-      <div class="text-sm text-black/35 dark:text-white/35 mt-2">{t:home.upcomingSub}</div>
+      <div class="mb-3 font-bold text-[0.55rem] text-black/25 tracking-[0.2em] uppercase dark:text-white/25">{t:home.upcoming}</div>
+      <div class="font-display text-4xl tracking-tight lg:text-5xl">CROSSING SWITZERLAND 400K</div>
+      <div class="mt-2 text-black/35 text-sm dark:text-white/35">{t:home.upcomingSub}</div>
     </div>
-    <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-7 py-3 bg-black dark:bg-white text-white dark:text-black text-xs font-semibold tracking-wide shrink-0 hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
+    <a href="https://www.instagram.com/ultrarunnerpaw" target="_blank" rel="noopener noreferrer" class="inline-flex gap-2 items-center shrink-0 px-7 py-3 font-semibold text-white text-xs tracking-wide dark:text-black bg-black dark:bg-white hover:bg-black/85 dark:hover:bg-white/85 transition-colors">
       {t:home.followCta}
     </a>
   </div>
 </div>
 
 {{-- Section Previews --}}
-<div class="max-w-[1400px] mx-auto px-6 lg:px-12 pb-32">
+<div class="mx-auto pb-32 px-6 lg:px-12 max-w-[1400px]">
   <div class="grid grid-cols-1 md:grid-cols-3">
-    <StxLink to="/about" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
-      <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">01</span>
-      <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">ABOUT</h3>
-      <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
+    <StxLink to="/about" class="flex flex-col p-10 lg:p-12 min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] border-black/5 border-r border-t dark:border-white/5 transition-colors group">
+      <span class="font-semibold text-[0.6rem] text-black/10 tracking-wide dark:text-white/10">01</span>
+      <h3 class="mb-4 mt-8 font-display text-4xl tracking-tight">ABOUT</h3>
+      <p class="mb-auto leading-relaxed text-black/35 text-sm dark:text-white/35">
         {t:home.section.about.body}
       </p>
-      <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.about.cta}</span>
+      <span class="mt-10 font-semibold text-[0.7rem] text-black/25 tracking-[0.1em] uppercase dark:text-white/25 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.about.cta}</span>
     </StxLink>
-    <StxLink to="/races" class="group border-t border-r border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
-      <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">02</span>
-      <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">RACES</h3>
-      <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
+    <StxLink to="/races" class="flex flex-col p-10 lg:p-12 min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] border-black/5 border-r border-t dark:border-white/5 transition-colors group">
+      <span class="font-semibold text-[0.6rem] text-black/10 tracking-wide dark:text-white/10">02</span>
+      <h3 class="mb-4 mt-8 font-display text-4xl tracking-tight">RACES</h3>
+      <p class="mb-auto leading-relaxed text-black/35 text-sm dark:text-white/35">
         {t:home.section.races.body}
       </p>
-      <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.races.cta}</span>
+      <span class="mt-10 font-semibold text-[0.7rem] text-black/25 tracking-[0.1em] uppercase dark:text-white/25 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.races.cta}</span>
     </StxLink>
-    <StxLink to="/coaching" class="group border-t border-black/5 dark:border-white/5 p-10 lg:p-12 flex flex-col min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
-      <span class="text-[0.6rem] font-semibold text-black/10 dark:text-white/10 tracking-wide">03</span>
-      <h3 class="font-display text-4xl tracking-tight mt-8 mb-4">COACHING</h3>
-      <p class="text-sm text-black/35 dark:text-white/35 leading-relaxed mb-auto">
+    <StxLink to="/coaching" class="flex flex-col p-10 lg:p-12 min-h-[320px] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] border-black/5 border-t dark:border-white/5 transition-colors group">
+      <span class="font-semibold text-[0.6rem] text-black/10 tracking-wide dark:text-white/10">03</span>
+      <h3 class="mb-4 mt-8 font-display text-4xl tracking-tight">COACHING</h3>
+      <p class="mb-auto leading-relaxed text-black/35 text-sm dark:text-white/35">
         {t:home.section.coaching.body}
       </p>
-      <span class="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-black/25 dark:text-white/25 mt-10 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.coaching.cta}</span>
+      <span class="mt-10 font-semibold text-[0.7rem] text-black/25 tracking-[0.1em] uppercase dark:text-white/25 group-hover:text-black dark:group-hover:text-white transition-colors">{t:home.section.coaching.cta}</span>
     </StxLink>
   </div>
 </div>

@@ -29,34 +29,48 @@ const races: Race[] = [
 ]
 </script>
 
-{{-- Header --}}
-<header class="pt-40 lg:pt-48 pb-16 px-6 lg:px-12 max-w-[1400px] mx-auto">
-  <span class="text-[0.6rem] font-semibold tracking-[0.25em] uppercase text-black/25 dark:text-white/25 block mb-8">{t:races.kicker}</span>
-  <h1 class="font-display text-[clamp(4rem,9vw,8rem)] leading-[0.85] tracking-tight">{t:races.title}</h1>
-  <p class="text-base text-black/35 dark:text-white/35 leading-relaxed max-w-[560px] mt-8">
-    {t:races.lede}
-  </p>
+{{-- Header. Photo flanks the title on lg+ (4-col span title, 2-col span
+    photo) to anchor the race list with a finish-line image. Stacked on
+    mobile with the photo below the lede. --}}
+<header class="mx-auto pb-16 pt-40 px-6 lg:pt-48 lg:px-12 max-w-[1400px]">
+  <div class="grid gap-12 grid-cols-1 items-end lg:gap-16 lg:grid-cols-[1.4fr_1fr]">
+    <div>
+      <span class="block mb-8 font-semibold text-[0.6rem] text-black/25 tracking-[0.25em] uppercase dark:text-white/25">{t:races.kicker}</span>
+      <h1 class="font-display leading-[0.85] text-[clamp(4rem,9vw,8rem)] tracking-tight">{t:races.title}</h1>
+      <p class="mt-8 max-w-[560px] leading-relaxed text-base text-black/35 dark:text-white/35">
+        {t:races.lede}
+      </p>
+    </div>
+    <div>
+      <StxImage
+        src="/images/ultra700.jpg"
+        alt="SwissPeaks Trail 700K"
+        class="aspect-[3/4] object-cover w-full"
+        lazy="false"
+      />
+    </div>
+  </div>
 </header>
 
-<div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+<div class="mx-auto px-6 lg:px-12 max-w-[1400px]">
 
   {{-- Summary Stats --}}
-  <div class="grid grid-cols-2 lg:grid-cols-4 border-t border-black/5 dark:border-white/5 mb-16">
-    <div class="p-8 border-b border-r border-black/5 dark:border-white/5">
-      <div class="text-3xl font-extrabold tracking-tight">9</div>
-      <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.utmbRaces}</div>
+  <div class="grid grid-cols-2 lg:grid-cols-4 mb-16 border-black/5 border-t dark:border-white/5">
+    <div class="p-8 border-b border-black/5 border-r dark:border-white/5">
+      <div class="font-extrabold text-3xl tracking-tight">9</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/20 tracking-[0.15em] uppercase dark:text-white/20">{t:races.stats.utmbRaces}</div>
     </div>
-    <div class="p-8 border-b border-black/5 dark:border-white/5 lg:border-r">
-      <div class="text-3xl font-extrabold tracking-tight">700km</div>
-      <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.longest}</div>
+    <div class="p-8 border-b border-black/5 lg:border-r dark:border-white/5">
+      <div class="font-extrabold text-3xl tracking-tight">700km</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/20 tracking-[0.15em] uppercase dark:text-white/20">{t:races.stats.longest}</div>
     </div>
-    <div class="p-8 border-b border-r border-black/5 dark:border-white/5">
-      <div class="text-3xl font-extrabold tracking-tight">49,000m</div>
-      <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.elevation}</div>
+    <div class="p-8 border-b border-black/5 border-r dark:border-white/5">
+      <div class="font-extrabold text-3xl tracking-tight">49,000m</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/20 tracking-[0.15em] uppercase dark:text-white/20">{t:races.stats.elevation}</div>
     </div>
     <div class="p-8 border-b border-black/5 dark:border-white/5">
-      <div class="text-3xl font-extrabold tracking-tight">8 / 9</div>
-      <div class="text-[0.6rem] font-medium tracking-[0.15em] uppercase text-black/20 dark:text-white/20 mt-3">{t:races.stats.finishRate}</div>
+      <div class="font-extrabold text-3xl tracking-tight">8 / 9</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/20 tracking-[0.15em] uppercase dark:text-white/20">{t:races.stats.finishRate}</div>
     </div>
   </div>
 
@@ -65,34 +79,34 @@ const races: Race[] = [
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-b border-black/10 dark:border-white/10">
-          <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.date}</th>
-          <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.race}</th>
-          <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25 hidden md:table-cell">{t:races.table.category}</th>
-          <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.distance}</th>
-          <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25 hidden lg:table-cell">{t:races.table.elevation}</th>
-          <th class="text-left py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.time}</th>
-          <th class="text-right py-4 px-4 text-[0.55rem] font-semibold tracking-[0.15em] uppercase text-black/25 dark:text-white/25">{t:races.table.rank}</th>
+          <th class="px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-left tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.date}</th>
+          <th class="px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-left tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.race}</th>
+          <th class="hidden md:table-cell px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-left tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.category}</th>
+          <th class="px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-left tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.distance}</th>
+          <th class="hidden lg:table-cell px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-left tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.elevation}</th>
+          <th class="px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-left tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.time}</th>
+          <th class="px-4 py-4 font-semibold text-[0.55rem] text-black/25 text-right tracking-[0.15em] uppercase dark:text-white/25">{t:races.table.rank}</th>
         </tr>
       </thead>
       <tbody>
         @foreach (races as race)
-          <tr class="border-b border-black/[0.03] dark:border-white/[0.03] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
-            <td class="py-4 px-4 text-sm text-black/30 dark:text-white/30 tabular-nums whitespace-nowrap">{{ race.date }}</td>
-            <td class="py-4 px-4">
-              <div class="text-sm font-semibold">{{ race.flag }} {{ race.name }}</div>
-              <div class="text-xs text-black/25 dark:text-white/25 mt-0.5 hidden md:block">{{ race.sub }}</div>
+          <tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] border-b border-black/[0.03] dark:border-white/[0.03] transition-colors">
+            <td class="px-4 py-4 tabular-nums text-black/30 text-sm whitespace-nowrap dark:text-white/30">{{ race.date }}</td>
+            <td class="px-4 py-4">
+              <div class="font-semibold text-sm">{{ race.flag }} {{ race.name }}</div>
+              <div class="hidden md:block mt-0.5 text-black/25 text-xs dark:text-white/25">{{ race.sub }}</div>
             </td>
-            <td class="py-4 px-4 hidden md:table-cell">
-              <span class="inline-block px-2.5 py-1 border border-black/10 dark:border-white/10 text-[0.65rem] font-semibold text-black/50 dark:text-white/50">{{ race.category }}</span>
+            <td class="hidden md:table-cell px-4 py-4">
+              <span class="inline-block px-2.5 py-1 font-semibold text-[0.65rem] text-black/50 dark:text-white/50 border border-black/10 dark:border-white/10">{{ race.category }}</span>
             </td>
-            <td class="py-4 px-4 text-sm font-medium tabular-nums">{{ race.distance }}</td>
-            <td class="py-4 px-4 text-sm text-black/35 dark:text-white/35 tabular-nums hidden lg:table-cell">{{ race.elevation }}</td>
+            <td class="px-4 py-4 font-medium tabular-nums text-sm">{{ race.distance }}</td>
+            <td class="hidden lg:table-cell px-4 py-4 tabular-nums text-black/35 text-sm dark:text-white/35">{{ race.elevation }}</td>
             @if (race.isDnf)
-              <td class="py-4 px-4 text-sm text-black/15 dark:text-white/15 italic">DNF</td>
-              <td class="py-4 px-4 text-sm text-black/15 dark:text-white/15 italic text-right">—</td>
+              <td class="px-4 py-4 italic text-black/15 text-sm dark:text-white/15">DNF</td>
+              <td class="px-4 py-4 italic text-black/15 text-right text-sm dark:text-white/15">—</td>
             @else
-              <td class="py-4 px-4 text-sm font-medium tabular-nums">{{ race.time }}</td>
-              <td class="py-4 px-4 text-sm font-bold tabular-nums text-right">{{ race.rank }}</td>
+              <td class="px-4 py-4 font-medium tabular-nums text-sm">{{ race.time }}</td>
+              <td class="px-4 py-4 font-bold tabular-nums text-right text-sm">{{ race.rank }}</td>
             @endif
           </tr>
         @endforeach

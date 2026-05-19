@@ -22,6 +22,10 @@ export const site = defineSiteConfig({
     locale: 'en_US',
     type: 'website',
     favicon: '/favicon.svg',
+    // Default og:image / twitter:image — site-builder will resolve to an
+    // absolute URL against `url` above. Per-page overrides live under
+    // `pages[*].image` so the right shot ships with each share card.
+    image: '/images/og.jpg',
   },
   pagesDir: 'resources/views',
   i18n: {
@@ -39,22 +43,26 @@ export const site = defineSiteConfig({
     '/': {
       title: 'Paweł Dregan — Ultra Runner',
       description: 'Finisher of SwissPeaks 700K, Lappland Arctic Ultra 500K, and the world\'s most demanding mountain races. Pushing limits where the trail ends and willpower begins.',
+      image: '/images/landing_landscape.jpg',
       priority: 1.0,
       changefreq: 'weekly',
     },
     '/about': {
       title: 'About — Paweł Dregan',
       description: 'From first ultra to 700K finisher. The story, the philosophy, and the partnerships behind the journey.',
+      image: '/images/about.jpg',
       priority: 0.9,
     },
     '/races': {
       title: 'Races — Paweł Dregan',
       description: 'UTMB-indexed race results from 100K to 700K. Every start line, every finish, every lesson.',
+      image: '/images/ultra700.jpg',
       priority: 0.9,
     },
     '/coaching': {
       title: 'Coaching — Paweł Dregan',
       description: 'Personalized 1:1 ultra running coaching built on real experience. From your first 50K to your biggest dream race.',
+      image: '/images/coach1.jpg',
       priority: 0.9,
       changefreq: 'monthly',
     },
