@@ -19,24 +19,25 @@ import { response, route } from '@stacksjs/router'
  * @see https://docs.stacksjs.com/routing
  */
 
-// Note: routes/api.ts does NOT auto-prefix with `/api` (per the
-// framework's route-loader: "key name becomes URL prefix EXCEPT 'api'
-// and 'web' which have no prefix"). We declare `/api/...` explicitly
-// so the URLs match the clients' fetch calls AND the serve.ts proxy
-// path filter.
+// Note: routes/api.ts auto-prefixes with `/api` (stacksjs/stacks#1835
+// root cause 4 — `'api'` moved out of NO_PREFIX_KEYS in May 2026). So
+// the paths declared here are *relative to `/api`* — `route.get('/')`
+// mounts at `/api`, `route.post('/subscribe')` at `/api/subscribe`,
+// etc. Writing `/api/foo` here would now double-prefix to
+// `/api/api/foo` and 404.
 
-// Sanity ping. Useful when verifying that the API dev server is up
-// before debugging /api/subscribe or /api/contact failures.
-route.get('/api', () => response.text('paweldregan api ok'))
+// Sanity ping (lives at `/api`). Useful when verifying that the API
+// dev server is up before debugging /api/subscribe failures.
+route.get('/', () => response.text('paweldregan api ok'))
 
 // Newsletter signup from <SubscribeForm /> in the footer.
 // Backed by resources/stores/subscribe.ts on the client.
-route.post('/api/subscribe', 'Actions/NewsletterSubscribeAction')
+route.post('/subscribe', 'Actions/NewsletterSubscribeAction')
   .name('paweldregan.subscribe')
   .skipCsrf()
 
 // Contact form from <ContactForm /> on /coaching.
 // Backed by resources/stores/contact.ts on the client.
-route.post('/api/contact', 'Actions/ContactSubmitAction')
+route.post('/contact', 'Actions/ContactSubmitAction')
   .name('paweldregan.contact')
   .skipCsrf()
