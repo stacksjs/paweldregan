@@ -1,7 +1,7 @@
 import type { Action as ActionType } from '@stacksjs/actions'
 import type { Result } from '@stacksjs/error-handling'
 import type { ActionOptions, CliOptions, CommandError, Subprocess } from '@stacksjs/types'
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import process from 'node:process'
 import { buddyOptions, runCommand, runCommands } from '@stacksjs/cli'
 import { err } from '@stacksjs/error-handling'
@@ -218,19 +218,49 @@ export async function runAction(action: Action, options?: ActionOptions): Promis
         const layoutsDir = firstExisting(['resources/views/layouts', 'resources/layouts'])
         const partialsDir = firstExisting(['resources/views/components', 'resources/components'])
 
+        // Component resolution. The framework defaults dir is the home of
+        // namespaced components (`<Dashboard.Foo />`, `<Storefront.Bar />`,
+        // `<Marketing.Baz />`) — projects scaffolded against those need it
+        // as the search root. BUT stx's component resolver walks one
+        // subdirectory deep, so a bare `<Footer />` in a project layout
+        // happily binds to `Storefront/Footer.stx` from the defaults
+        // before the project's own `resources/components/Footer.stx` is
+        // checked. When a project ships its own components dir with at
+        // least one .stx file, prefer it as the primary componentsDir so
+        // user files always win; the resolver's project-root fallback
+        // (`./components`) still picks up the defaults for direct matches.
+        const projectComponentsDir = (partialsDir && existsSync(p.projectPath(partialsDir))
+          && readdirSync(p.projectPath(partialsDir)).some(f => f.endsWith('.stx')))
+          ? partialsDir
+          : 'storage/framework/defaults/resources/components'
+
+        // Load site.config.ts so dev runs the same i18n + SEO pass as
+        // `buildStaticSite()`. Without this, `{t:nav.home}` tokens stay
+        // literal in dev because bun-plugin-stx's serve() only runs the
+        // translation pass when a site config is provided.
+        let siteConfig: any
+        for (const rel of ['site.config.ts', 'site.config.js', 'site.config.mjs']) {
+          const abs = p.projectPath(rel)
+          if (!existsSync(abs))
+            continue
+          try {
+            const mod = await import(abs)
+            siteConfig = mod.site ?? mod.default
+          }
+          catch { /* broken site config — boot without the i18n pass */ }
+          break
+        }
+
         await serve({
           patterns: ['resources/views', 'storage/framework/defaults/resources/views'],
           port,
-          // Wider than the dashboard subdir so both Dashboard/* and
-          // Storefront/* (and any future <Namespace>/Component.stx) get
-          // resolved. stx-serve walks one subdirectory deep, so this
-          // gives us discovery without enumerating every namespace.
-          componentsDir: 'storage/framework/defaults/resources/components',
+          componentsDir: projectComponentsDir,
           layoutsDir,
           partialsDir,
           fallbackPartialsDir: 'resources/views',
           quiet: true,
           ...(stxModule && { stxModule }),
+          ...(siteConfig && { site: siteConfig }),
           auth: {
             cookieName: authCookie,
             redirectTo: '/login',

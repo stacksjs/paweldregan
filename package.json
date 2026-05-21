@@ -10,6 +10,7 @@
     "build": "bun build.ts",
     "preview": "bun preview.ts",
     "start": "bun preview.ts",
+    "start:api": "PORT=3008 APP_ENV=production bun storage/framework/core/server/src/start.ts",
     "deploy": "bun scripts/deploy.ts",
     "check-locales": "bun scripts/check-locales.ts",
     "verify": "bun scripts/verify.ts",
@@ -29,8 +30,10 @@
   },
   "dependencies": {
     "@stacksjs/bun-queue": "workspace:*",
+    "@stacksjs/stx": "0.2.64",
     "@stacksjs/ts-craft": "^0.0.2",
     "@types/d3": "^7.4.3",
+    "bun-plugin-stx": "^0.2.65",
     "d3": "^7.9.0",
     "stacks": "workspace:*"
   },
@@ -47,9 +50,5 @@
       }
     },
     "commit-msg": "bunx gitlint --edit .git/COMMIT_EDITMSG"
-  },
-  "overrides": {
-    "@stacksjs/rpx": "0.11.5",
-    "@stacksjs/stx": "0.2.52"
   }
 }

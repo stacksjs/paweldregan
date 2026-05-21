@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import { config } from '@stacksjs/config'
 import { projectPath } from '@stacksjs/path'
 
@@ -141,6 +141,12 @@ async function startDefaultServer() {
   // uses it instead of letting bare-specifier resolution win.
   const stxModule = await resolveVendoredStxModule()
 
+  // Load site.config.ts so the dev server runs the same i18n + SEO
+  // post-processing as `buildStaticSite()`. Without this, `{t:nav.home}`
+  // tokens render literally in dev because bun-plugin-stx's serve()
+  // only runs the translation pass when a site config is provided.
+  const siteConfig = await resolveSiteConfig()
+
   const userViewsPath = 'resources/views'
   const defaultViewsPath = 'storage/framework/defaults/resources/views'
   // Layouts and partials live alongside views by default
@@ -165,20 +171,29 @@ async function startDefaultServer() {
   // `config.auth.defaultTokenName` is set to, falling back to `auth-token`.
   const authCookie = (config as any)?.auth?.defaultTokenName ?? 'auth-token'
 
+  // Prefer the user's components dir as `componentsDir` when it ships
+  // .stx files of its own — otherwise a bare `<Footer />` in the user's
+  // layout binds to a framework default like `Storefront/Footer.stx`
+  // (the resolver walks one subdir deep in componentsDir) instead of
+  // the user's own `Footer.stx`. Falls back to framework defaults for
+  // projects that lean entirely on namespaced scaffold components.
+  const userComponentsAbs = projectPath(userComponentsPath)
+  const componentsDir = existsSync(userComponentsAbs)
+    && readdirSync(userComponentsAbs).some(f => f.endsWith('.stx'))
+    ? userComponentsPath
+    : 'storage/framework/defaults/resources/components'
+
   await serve({
     patterns: [userViewsPath, defaultViewsPath],
     port: preferredPort,
-    // Wider than the dashboard subdir so both Dashboard/* and
-    // Storefront/* (and any future <Namespace>/Component.stx) get
-    // resolved. stx-serve walks one subdirectory deep, so this
-    // gives us discovery without enumerating every namespace.
-    componentsDir: 'storage/framework/defaults/resources/components',
+    componentsDir,
     layoutsDir: userLayoutsPath,
     partialsDir: userComponentsPath,
     fallbackLayoutsDir: defaultLayoutsPath,
     fallbackPartialsDir: defaultViewsPath,
     quiet: true,
     ...(stxModule && { stxModule }),
+    ...(siteConfig && { site: siteConfig }),
     auth: {
       cookieName: authCookie,
       redirectTo: '/login',
@@ -241,5 +256,29 @@ async function resolveVendoredStxModule(): Promise<any | undefined> {
       return await import(vendored)
   }
   catch { /* fall through — let serve() use its own bare-specifier import */ }
+  return undefined
+}
+
+// Locate the project's site.config.ts and return its `site` export.
+// Accepts either `export const site = defineSiteConfig({...})` (the
+// scaffolded form) or `export default defineSiteConfig({...})` so
+// older / hand-rolled configs still work. Returns undefined when the
+// file is absent — projects without a site config keep the legacy
+// no-post-process behaviour.
+async function resolveSiteConfig(): Promise<any | undefined> {
+  for (const rel of ['site.config.ts', 'site.config.js', 'site.config.mjs']) {
+    const abs = projectPath(rel)
+    if (!existsSync(abs))
+      continue
+    try {
+      const mod = await import(abs)
+      return mod.site ?? mod.default ?? undefined
+    }
+    catch {
+      // A broken site config shouldn't take the whole dev server down.
+      // Fall through so serve() boots without the i18n/SEO pass.
+      return undefined
+    }
+  }
   return undefined
 }
