@@ -18,7 +18,7 @@
             "type": "string",
             "isPrimaryKey": false,
             "isUnique": false,
-            "isNullable": false,
+            "isNullable": true,
             "hasDefault": false
           },
           {
@@ -26,7 +26,7 @@
             "type": "text",
             "isPrimaryKey": false,
             "isUnique": false,
-            "isNullable": false,
+            "isNullable": true,
             "hasDefault": false
           },
           {
@@ -34,7 +34,7 @@
             "type": "text",
             "isPrimaryKey": false,
             "isUnique": false,
-            "isNullable": false,
+            "isNullable": true,
             "hasDefault": false
           },
           {
@@ -220,7 +220,7 @@
             "type": "string",
             "isPrimaryKey": false,
             "isUnique": false,
-            "isNullable": false,
+            "isNullable": true,
             "hasDefault": false
           },
           {
@@ -228,7 +228,7 @@
             "type": "string",
             "isPrimaryKey": false,
             "isUnique": true,
-            "isNullable": false,
+            "isNullable": true,
             "hasDefault": false
           },
           {
@@ -236,7 +236,7 @@
             "type": "string",
             "isPrimaryKey": false,
             "isUnique": false,
-            "isNullable": false,
+            "isNullable": true,
             "hasDefault": false
           },
           {
@@ -284,7 +284,7 @@
       }
     ]
   },
-  "hash": "4a975d6d8430318fb52eab0481d095e237261798a9e04a651dce1a141332ac82",
+  "hash": "7131408bd83f622c51c54d36e8ec0c324d4f0fa3ef2a54e27ba779650f460c50",
   "dialect": "sqlite",
-  "updatedAt": "2026-05-13T09:30:58.745Z"
+  "updatedAt": "2026-05-29T12:44:22.682Z"
 }

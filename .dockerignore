@@ -1,0 +1,25 @@
+# Dependencies — reinstalled inside the Linux container so native binaries
+# match the container platform (host node_modules are macOS-built).
+node_modules
+**/node_modules
+
+# Frontend build — served separately via S3+CloudFront, not needed in the API image.
+dist
+
+# VCS / local tooling caches
+.git
+.github
+pantry
+.pantry
+bin
+
+# Secrets — injected at runtime via the ECS task definition, never baked in.
+.env
+.env.*
+
+# Generated infra / noise
+cloudformation
+**/*.test.ts
+**/*.spec.ts
+*.log
+.DS_Store

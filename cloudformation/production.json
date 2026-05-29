@@ -1,0 +1,458 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Paweł Dregan - production",
+  "Resources": {
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-production-vpc"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "paweldreganproductionIGW": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-production-igw"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "paweldreganproductionIGWAttach": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "paweldreganproductionIGW"
+        }
+      }
+    },
+    "paweldreganproductionPublicRT": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-production-public-rt"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "paweldreganproductionPublicRoute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "paweldreganproductionPublicRT"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "paweldreganproductionIGW"
+        }
+      },
+      "DependsOn": "paweldreganproductionIGWAttach"
+    },
+    "PublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "AvailabilityZone": "us-east-1a",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-production-public-a"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "PublicSubnet1RTAssoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PublicSubnet1"
+        },
+        "RouteTableId": {
+          "Ref": "paweldreganproductionPublicRT"
+        }
+      }
+    },
+    "PublicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "AvailabilityZone": "us-east-1b",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-production-public-b"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "PublicSubnet2RTAssoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "PublicSubnet2"
+        },
+        "RouteTableId": {
+          "Ref": "paweldreganproductionPublicRT"
+        }
+      }
+    },
+    "paweldreganproductionDeployBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "paweldregan-production-deploy",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "Id": "expire-old-releases",
+              "Status": "Enabled",
+              "ExpirationInDays": 7,
+              "Prefix": "releases/"
+            }
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Project",
+            "Value": "paweldregan"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "ts-cloud"
+          }
+        ]
+      }
+    },
+    "PaweldreganAppProductionServerSg": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupName": "paweldregan-app-production-server-sg",
+        "GroupDescription": "Security group for paweldregan-app server",
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 80"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 443"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 3008,
+            "ToPort": 3008,
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 3008"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 4173,
+            "ToPort": 4173,
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 4173"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 3008,
+            "ToPort": 3008,
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Port 3008"
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-app-production-server-sg"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "PaweldreganAppProductionServerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "paweldregan-app-production-server-role",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+          "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+        ],
+        "Policies": [
+          {
+            "PolicyName": "StacksServerPermissions",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ses:SendEmail",
+                    "ses:SendRawEmail",
+                    "ses:SendBulkEmail",
+                    "ses:VerifyDomainIdentity",
+                    "ses:VerifyDomainDkim",
+                    "ses:GetIdentityDkimAttributes",
+                    "ses:GetIdentityVerificationAttributes"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:PutObject",
+                    "s3:ListBucket"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "route53:ChangeResourceRecordSets",
+                    "route53:ListResourceRecordSets",
+                    "route53:GetHostedZone"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:GetParameters"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          },
+          {
+            "PolicyName": "DeployBucketRead",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::paweldregan-production-deploy",
+                    "arn:aws:s3:::paweldregan-production-deploy/*"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "PaweldreganAppProductionServerProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "InstanceProfileName": "paweldregan-app-production-server-profile",
+        "Roles": [
+          {
+            "Ref": "PaweldreganAppProductionServerRole"
+          }
+        ]
+      }
+    },
+    "PaweldreganAppProductionServer": {
+      "Type": "AWS::EC2::Instance",
+      "DependsOn": [
+        "PaweldreganAppProductionServerProfile"
+      ],
+      "Properties": {
+        "ImageId": "ami-0f3caa1cf4417e51b",
+        "InstanceType": "t3.micro",
+        "KeyName": "paweldregan-production",
+        "SubnetId": {
+          "Ref": "PublicSubnet1"
+        },
+        "SecurityGroupIds": [
+          {
+            "Ref": "PaweldreganAppProductionServerSg"
+          }
+        ],
+        "IamInstanceProfile": {
+          "Ref": "PaweldreganAppProductionServerProfile"
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": 20,
+              "VolumeType": "gp3",
+              "Encrypted": true,
+              "DeleteOnTermination": true
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-app-production-server"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          },
+          {
+            "Key": "Project",
+            "Value": "paweldregan"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          },
+          {
+            "Key": "Role",
+            "Value": "app"
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "ts-cloud"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": "#!/bin/bash\nset -euo pipefail\n\n# Amazon Linux 2023 base setup\ndnf update -y\ndnf install -y curl tar gzip unzip git\n\n# System packages (latest from AL2023 repo)\ndnf install -y sqlite\n\n# AWS CLI v2 (needed by the deploy step to pull release artifacts from S3)\nif ! command -v aws &> /dev/null; then\n  curl -fsSL \"https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip\" -o /tmp/awscliv2.zip\n  unzip -q /tmp/awscliv2.zip -d /tmp\n  /tmp/aws/install\n  rm -rf /tmp/aws /tmp/awscliv2.zip\nfi\n\n# Bun runtime (pinned to 1.3.0)\nexport BUN_INSTALL=\"/root/.bun\"\ncurl -fsSL https://bun.sh/install | bash -s \"bun-v1.3.0\"\nln -sf /root/.bun/bin/bun /usr/local/bin/bun\necho 'export BUN_INSTALL=\"/root/.bun\"' > /etc/profile.d/bun.sh\necho 'export PATH=\"$BUN_INSTALL/bin:$PATH\"' >> /etc/profile.d/bun.sh\n\n# Reserved root for site deploys (each site lands at /var/www/<site>/)\nmkdir -p /var/www\n\n# Caddy (reverse proxy + automatic TLS via Let's Encrypt)\nARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')\ncurl -fsSL \"https://caddyserver.com/api/download?os=linux&arch=${ARCH}\" -o /usr/local/bin/caddy\nchmod +x /usr/local/bin/caddy\n\n# Dedicated service account\ngetent group caddy >/dev/null || groupadd --system caddy\ngetent passwd caddy >/dev/null || useradd --system --gid caddy \\\n  --create-home --home-dir /var/lib/caddy \\\n  --shell /usr/sbin/nologin --comment \"Caddy web server\" caddy\n\nmkdir -p /etc/caddy /var/lib/caddy /var/log/caddy\nchown -R caddy:caddy /var/lib/caddy /var/log/caddy\n\ncat > /etc/systemd/system/caddy.service <<'CADDY_UNIT_EOF'\n[Unit]\nDescription=Caddy\nDocumentation=https://caddyserver.com/docs/\nAfter=network.target network-online.target\nRequires=network-online.target\n\n[Service]\nType=notify\nUser=caddy\nGroup=caddy\nExecStart=/usr/local/bin/caddy run --environ --config /etc/caddy/Caddyfile\nExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile --force\nTimeoutStopSec=5s\nLimitNOFILE=1048576\nPrivateTmp=true\nProtectSystem=full\nAmbientCapabilities=CAP_NET_BIND_SERVICE\n\n[Install]\nWantedBy=multi-user.target\nCADDY_UNIT_EOF\n\ncat > /etc/caddy/Caddyfile <<'CADDY_CONFIG_EOF'\npaweldregan.com {\n  handle /api/* {\n    reverse_proxy localhost:3008\n  }\n  handle {\n    reverse_proxy localhost:4173\n  }\n}\nCADDY_CONFIG_EOF\n\nsystemctl daemon-reload\nsystemctl enable caddy\nsystemctl start caddy\n\necho \"ts-cloud bootstrap complete â instance is ready for site deploys\"\n"
+        }
+      }
+    },
+    "PaweldreganAppProductionEip": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "paweldregan-app-production-eip"
+          },
+          {
+            "Key": "Environment",
+            "Value": "production"
+          }
+        ]
+      }
+    },
+    "PaweldreganAppProductionEipAssoc": {
+      "Type": "AWS::EC2::EIPAssociation",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "PaweldreganAppProductionEip",
+            "AllocationId"
+          ]
+        },
+        "InstanceId": {
+          "Ref": "PaweldreganAppProductionServer"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "deployBucketName": {
+      "Value": {
+        "Ref": "paweldreganproductionDeployBucket"
+      },
+      "Description": "S3 bucket where release tarballs are uploaded"
+    },
+    "appInstanceId": {
+      "Value": {
+        "Ref": "PaweldreganAppProductionServer"
+      },
+      "Description": "EC2 instance ID for the app server"
+    },
+    "appPublicIp": {
+      "Value": {
+        "Ref": "PaweldreganAppProductionEip"
+      },
+      "Description": "Public IP for the app server"
+    }
+  }
+}
