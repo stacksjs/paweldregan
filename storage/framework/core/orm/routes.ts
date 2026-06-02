@@ -8,29 +8,31 @@
 import type { EnhancedRequest } from '@stacksjs/bun-router'
 import { route } from '@stacksjs/router'
 import { projectPath } from '@stacksjs/path'
-import { createQueryBuilder, defaultConfig, setConfig } from '@stacksjs/query-builder'
+import { createQueryBuilder, setConfig } from '@stacksjs/query-builder'
 import { HttpError } from '@stacksjs/error-handling'
 import { log } from '@stacksjs/logging'
 
-// Initialize the query builder config from the project's optional
-// `config/qb.ts` override (stacksjs/stacks#1930).
+// Apply the project's optional `config/qb.ts` override (stacksjs/stacks#1930)
+// if present. This file is NOT scaffolded by the framework — it's a
+// per-project escape hatch and is absent on most clones.
 //
-// This file is NOT scaffolded by the framework — it's a per-project
-// escape hatch. On a fresh clone / clean container build it's absent,
-// and a hard `await import(...)` here used to throw `Cannot find
-// module config/qb.ts` and abort the entire ORM-route bootstrap (so
-// every model-backed Action 404'd in production while `buddy dev`
-// masked it against stale local state). Fall back to
-// bun-query-builder's `defaultConfig` (env-driven) when the override
-// is missing so a clean environment boots cleanly.
+// IMPORTANT: when it's absent we must NOT fall back to bun-query-builder's
+// `defaultConfig` — that default hardcodes `dialect: 'postgres'`, and calling
+// `setConfig(defaultConfig)` here clobbers the dialect/connection that
+// `@stacksjs/database` already derived from the environment (DB_CONNECTION,
+// DB_DATABASE, …). The old fallback silently forced every model query onto
+// postgres regardless of the configured driver — e.g. a MySQL project would
+// see `relation "x" does not exist` because the ORM routes reset the dialect
+// after startup. So the no-override path is a deliberate no-op: keep whatever
+// `@stacksjs/database` configured.
 const qbConfigPath = projectPath('config/qb.ts')
 try {
   const projectQbConfig = (await import(qbConfigPath)).default
-  setConfig(projectQbConfig ?? defaultConfig)
+  if (projectQbConfig)
+    setConfig(projectQbConfig)
 }
 catch {
-  log.debug(`[orm] No config/qb.ts override found — using bun-query-builder defaults`)
-  setConfig(defaultConfig)
+  log.debug(`[orm] No config/qb.ts override found — keeping the dialect already configured by @stacksjs/database`)
 }
 
 // Load all models from app/Models/ (individually, so one broken model doesn't block the rest)

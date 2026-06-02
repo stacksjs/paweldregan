@@ -35,10 +35,21 @@ RUN apt-get update \
 
 # 3. Runtime config. config-production.ts reads PORT (defaults 3000); the ECS
 #    task definition can override any of these at deploy time.
+#    DB_DATABASE_PATH points at the mounted volume (Docker volume locally, EFS
+#    on Fargate) so the SQLite file persists across deploys/restarts and lives
+#    OUTSIDE the immutable image layer.
 ENV NODE_ENV=production
 ENV APP_ENV=production
 ENV PORT=3000
+ENV DB_CONNECTION=sqlite
+ENV DB_DIALECT=sqlite
+ENV DB_DATABASE_PATH=/data/paweldregan.sqlite
 EXPOSE 3000/tcp
+
+# Volume mount point for the persistent SQLite DB. Created + owned by `bun` so
+# a fresh volume inherits writable ownership on first mount.
+RUN mkdir -p /data && chown bun:bun /data
+VOLUME ["/data"]
 
 # 4. Health probe. NOTE: /health does not exist yet — the API currently only
 #    serves /api. Using /api here so the local container check passes; we'll
@@ -49,9 +60,17 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
 # 5. Source + deps were copied/installed as root, but we run as `bun`. Make
 #    the runtime-writable paths owned by bun: the framework logger writes to
 #    storage/logs, and SQLite / uploads also live under storage/.
-RUN mkdir -p storage/logs && chown -R bun:bun storage database
+# Source + deps were copied/installed as root, but we run as `bun`. Every dir
+# the framework writes to at runtime must be bun-owned: storage/ (logs, etc.),
+# .stacks/ (migration lock + markers — a non-writable .stacks makes `migrate`
+# silently process.exit()), and .qb/ (model snapshot). The DB itself lives on
+# the mounted /data volume (chowned above).
+RUN mkdir -p storage/logs .stacks .qb && chown -R bun:bun storage database .stacks .qb
 
-# 6. Run as the non-root bun user.
+# 6. Make the entrypoint executable (migrate-on-start, then serve).
+RUN chmod +x cloud/entrypoint.sh
+
+# 7. Run as the non-root bun user.
 USER bun
 
-ENTRYPOINT ["bun", "storage/framework/core/server/src/start.ts"]
+ENTRYPOINT ["./cloud/entrypoint.sh"]

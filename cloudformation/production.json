@@ -84,7 +84,7 @@
           "Ref": "VPC"
         },
         "CidrBlock": "10.0.0.0/24",
-        "AvailabilityZone": "us-east-1a",
+        "AvailabilityZone": "us-west-2a",
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
@@ -116,7 +116,7 @@
           "Ref": "VPC"
         },
         "CidrBlock": "10.0.1.0/24",
-        "AvailabilityZone": "us-east-1b",
+        "AvailabilityZone": "us-west-2b",
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
@@ -206,13 +206,6 @@
             "ToPort": 3008,
             "CidrIp": "0.0.0.0/0",
             "Description": "Port 3008"
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": 4173,
-            "ToPort": 4173,
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Port 4173"
           },
           {
             "IpProtocol": "tcp",
@@ -348,9 +341,8 @@
         "PaweldreganAppProductionServerProfile"
       ],
       "Properties": {
-        "ImageId": "ami-0f3caa1cf4417e51b",
-        "InstanceType": "t3.micro",
-        "KeyName": "paweldregan-production",
+        "ImageId": "ami-029a761f237195c2c",
+        "InstanceType": "t2.small",
         "SubnetId": {
           "Ref": "PublicSubnet1"
         },
@@ -400,7 +392,7 @@
           }
         ],
         "UserData": {
-          "Fn::Base64": "#!/bin/bash\nset -euo pipefail\n\n# Amazon Linux 2023 base setup\ndnf update -y\ndnf install -y curl tar gzip unzip git\n\n# System packages (latest from AL2023 repo)\ndnf install -y sqlite\n\n# AWS CLI v2 (needed by the deploy step to pull release artifacts from S3)\nif ! command -v aws &> /dev/null; then\n  curl -fsSL \"https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip\" -o /tmp/awscliv2.zip\n  unzip -q /tmp/awscliv2.zip -d /tmp\n  /tmp/aws/install\n  rm -rf /tmp/aws /tmp/awscliv2.zip\nfi\n\n# Bun runtime (pinned to 1.3.0)\nexport BUN_INSTALL=\"/root/.bun\"\ncurl -fsSL https://bun.sh/install | bash -s \"bun-v1.3.0\"\nln -sf /root/.bun/bin/bun /usr/local/bin/bun\necho 'export BUN_INSTALL=\"/root/.bun\"' > /etc/profile.d/bun.sh\necho 'export PATH=\"$BUN_INSTALL/bin:$PATH\"' >> /etc/profile.d/bun.sh\n\n# Reserved root for site deploys (each site lands at /var/www/<site>/)\nmkdir -p /var/www\n\n# Caddy (reverse proxy + automatic TLS via Let's Encrypt)\nARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')\ncurl -fsSL \"https://caddyserver.com/api/download?os=linux&arch=${ARCH}\" -o /usr/local/bin/caddy\nchmod +x /usr/local/bin/caddy\n\n# Dedicated service account\ngetent group caddy >/dev/null || groupadd --system caddy\ngetent passwd caddy >/dev/null || useradd --system --gid caddy \\\n  --create-home --home-dir /var/lib/caddy \\\n  --shell /usr/sbin/nologin --comment \"Caddy web server\" caddy\n\nmkdir -p /etc/caddy /var/lib/caddy /var/log/caddy\nchown -R caddy:caddy /var/lib/caddy /var/log/caddy\n\ncat > /etc/systemd/system/caddy.service <<'CADDY_UNIT_EOF'\n[Unit]\nDescription=Caddy\nDocumentation=https://caddyserver.com/docs/\nAfter=network.target network-online.target\nRequires=network-online.target\n\n[Service]\nType=notify\nUser=caddy\nGroup=caddy\nExecStart=/usr/local/bin/caddy run --environ --config /etc/caddy/Caddyfile\nExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile --force\nTimeoutStopSec=5s\nLimitNOFILE=1048576\nPrivateTmp=true\nProtectSystem=full\nAmbientCapabilities=CAP_NET_BIND_SERVICE\n\n[Install]\nWantedBy=multi-user.target\nCADDY_UNIT_EOF\n\ncat > /etc/caddy/Caddyfile <<'CADDY_CONFIG_EOF'\npaweldregan.com {\n  handle /api/* {\n    reverse_proxy localhost:3008\n  }\n  handle {\n    reverse_proxy localhost:4173\n  }\n}\nCADDY_CONFIG_EOF\n\nsystemctl daemon-reload\nsystemctl enable caddy\nsystemctl start caddy\n\necho \"ts-cloud bootstrap complete â instance is ready for site deploys\"\n"
+          "Fn::Base64": "#!/bin/bash\nset -euo pipefail\n\n# Amazon Linux 2023 base setup\ndnf update -y\ndnf install -y curl tar gzip unzip git\n\n# System packages (latest from AL2023 repo)\ndnf install -y sqlite\n\n# AWS CLI v2 (needed by the deploy step to pull release artifacts from S3)\nif ! command -v aws &> /dev/null; then\n  curl -fsSL \"https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip\" -o /tmp/awscliv2.zip\n  unzip -q /tmp/awscliv2.zip -d /tmp\n  /tmp/aws/install\n  rm -rf /tmp/aws /tmp/awscliv2.zip\nfi\n\n# Bun runtime (pinned to 1.3.0)\nexport BUN_INSTALL=\"/root/.bun\"\ncurl -fsSL https://bun.sh/install | bash -s \"bun-v1.3.0\"\nln -sf /root/.bun/bin/bun /usr/local/bin/bun\necho 'export BUN_INSTALL=\"/root/.bun\"' > /etc/profile.d/bun.sh\necho 'export PATH=\"$BUN_INSTALL/bin:$PATH\"' >> /etc/profile.d/bun.sh\n\n# Reserved root for site deploys (each site lands at /var/www/<site>/)\nmkdir -p /var/www\n\n# Caddy (reverse proxy + automatic TLS via Let's Encrypt)\nARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')\ncurl -fsSL \"https://caddyserver.com/api/download?os=linux&arch=${ARCH}\" -o /usr/local/bin/caddy\nchmod +x /usr/local/bin/caddy\n\n# Dedicated service account\ngetent group caddy >/dev/null || groupadd --system caddy\ngetent passwd caddy >/dev/null || useradd --system --gid caddy \\\n  --create-home --home-dir /var/lib/caddy \\\n  --shell /usr/sbin/nologin --comment \"Caddy web server\" caddy\n\nmkdir -p /etc/caddy /var/lib/caddy /var/log/caddy\nchown -R caddy:caddy /var/lib/caddy /var/log/caddy\n\ncat > /etc/systemd/system/caddy.service <<'CADDY_UNIT_EOF'\n[Unit]\nDescription=Caddy\nDocumentation=https://caddyserver.com/docs/\nAfter=network.target network-online.target\nRequires=network-online.target\n\n[Service]\nType=notify\nUser=caddy\nGroup=caddy\nExecStart=/usr/local/bin/caddy run --environ --config /etc/caddy/Caddyfile\nExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile --force\nTimeoutStopSec=5s\nLimitNOFILE=1048576\nPrivateTmp=true\nProtectSystem=full\nAmbientCapabilities=CAP_NET_BIND_SERVICE\n\n[Install]\nWantedBy=multi-user.target\nCADDY_UNIT_EOF\n\ncat > /etc/caddy/Caddyfile <<'CADDY_CONFIG_EOF'\napi.paweldregan.com {\n  handle {\n    reverse_proxy localhost:3008\n  }\n}\nCADDY_CONFIG_EOF\n\nsystemctl daemon-reload\nsystemctl enable caddy\nsystemctl start caddy\n\necho \"ts-cloud bootstrap complete â instance is ready for site deploys\"\n"
         }
       }
     },

@@ -170,10 +170,25 @@ let _configInitPromise: Promise<void> | null = null
 function ensureConfigLoaded(): Promise<void> {
   if (!_configInitPromise) {
     _configInitPromise = (async () => {
+      // When SKIP_CONFIG_LOADING is set (production binary / standalone
+      // server), @stacksjs/config does NOT load the user's `config/*.ts`
+      // files — it returns the framework DEFAULT config, whose
+      // `database.default` is hardcoded to `'sqlite'`. Applying that here
+      // would clobber the env-derived dialect (DB_CONNECTION=mysql) that
+      // module init already pushed into bun-query-builder, silently
+      // dropping the server back onto an in-memory SQLite. In skip mode the
+      // env vars are authoritative, so don't touch the already-set config.
+      if (process.env.SKIP_CONFIG_LOADING === 'true')
+        return
       try {
-        const { config } = await import('@stacksjs/config')
-        if (config) {
-          initializeDbConfig(config)
+        const configMod = await import('@stacksjs/config') as { config: any, overridesReady?: Promise<unknown> }
+        // Wait for `loadUserConfigs()` to finish patching user values onto
+        // the synchronous default object. Without this, `config.database.default`
+        // still reads the framework default (`'sqlite'`) and clobbers the
+        // env-derived `mysql`/`postgres` we just set at module init.
+        if (configMod.overridesReady) await configMod.overridesReady
+        if (configMod.config) {
+          initializeDbConfig(configMod.config)
           // Reset instance so next access uses updated config
           _dbInstance = null
         }
@@ -198,6 +213,16 @@ function getDb(): ReturnType<typeof createQueryBuilder> {
   }
   return _dbInstance
 }
+
+// Push env-derived dialect + connection into bun-query-builder *synchronously*
+// so the very first model query (which goes through `createModel`, not our
+// `getDb()`, and so doesn't trigger lazy config loading) sees the right
+// driver. Without this, bun-query-builder keeps its `dialect: 'postgres'`
+// default, the `new SQL('postgres://…/test_db')` connection fails, and
+// `getBunSql()` silently falls back to an in-memory SQLite — every query
+// then 500s with `SQLiteError: no such table: <name>`. The async
+// `ensureConfigLoaded()` below patches in user-config overrides later.
+updateQueryBuilderConfig()
 
 // Start config loading in the background
 ensureConfigLoaded()

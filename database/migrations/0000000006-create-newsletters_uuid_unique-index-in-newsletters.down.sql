@@ -1,1 +1,0 @@
-DROP INDEX IF EXISTS "newsletters_newsletters_uuid_unique";

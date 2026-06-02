@@ -1,1 +1,0 @@
-DROP INDEX IF EXISTS "users_users_email_unique";

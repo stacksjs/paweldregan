@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "newsletters_newsletters_email_unique" ON "newsletters" ("email");

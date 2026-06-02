@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { config, overridesReady } from '@stacksjs/config'
@@ -195,14 +195,24 @@ async function startDefaultServer() {
   // `config.auth.defaultTokenName` is set to, falling back to `auth-token`.
   const authCookie = (config as any)?.auth?.defaultTokenName ?? 'auth-token'
 
+  // Prefer the project's own components dir as `componentsDir` when it ships
+  // .stx files. stx's resolver walks `componentsDir` one subdirectory deep,
+  // so pointing it at the framework defaults makes a bare `<Footer />` (or
+  // any unnamespaced tag) bind to a default like `Storefront/Footer.stx`
+  // BEFORE the project's `resources/components/Footer.stx` — the project's
+  // footer silently never renders in dev (the build is unaffected). When the
+  // project has its own components, they win; fall back to the framework
+  // defaults only for projects that lean entirely on namespaced scaffolds.
+  const userComponentsAbs = projectPath(userComponentsPath)
+  const componentsDir = existsSync(userComponentsAbs)
+    && readdirSync(userComponentsAbs).some(f => f.endsWith('.stx'))
+    ? userComponentsPath
+    : 'storage/framework/defaults/resources/components'
+
   await serve({
     patterns: [userViewsPath, defaultViewsPath],
     port: preferredPort,
-    // Wider than the dashboard subdir so both Dashboard/* and
-    // Storefront/* (and any future <Namespace>/Component.stx) get
-    // resolved. stx-serve walks one subdirectory deep, so this
-    // gives us discovery without enumerating every namespace.
-    componentsDir: 'storage/framework/defaults/resources/components',
+    componentsDir,
     layoutsDir: userLayoutsPath,
     partialsDir: userComponentsPath,
     fallbackLayoutsDir: defaultLayoutsPath,
@@ -342,7 +352,12 @@ async function loadStxSiteConfig(_stxModule: any): Promise<{ site?: any, i18n?: 
 
   try {
     const mod = await import(sitePath)
-    const site = mod.default
+    // Accept both `export const site = defineSiteConfig(...)` (the scaffolded
+    // convention paweldregan + build.ts use via `import { site }`) and a
+    // plain `export default`. Reading only `mod.default` silently dropped
+    // the whole i18n config for named-export configs, so `{t:key}` tokens
+    // rendered literally in dev.
+    const site = mod.site ?? mod.default
     if (!site)
       return {}
 

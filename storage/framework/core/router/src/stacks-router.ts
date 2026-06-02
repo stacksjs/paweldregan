@@ -2086,12 +2086,19 @@ function wrapHandler(handler: StacksHandler, skipParsing = false): RouteHandlerF
       }
       catch (error) {
         log.error(`[Router] Error handling request for '${handlerPath}':`, error)
+        // Honour a status the action attached to the thrown error. Accept
+        // both `status` (HttpError convention) and `statusCode` (Express
+        // convention) so `throw new HttpError(422, ...)` surfaces as 422
+        // instead of being flattened to the default 500. Mirrors the
+        // middleware-path handling above.
+        const err = error instanceof Error ? error : new Error(String(error))
+        const errStatus = (err as { status?: unknown }).status
+          ?? (err as { statusCode?: unknown }).statusCode
+        const status = typeof errStatus === 'number' && errStatus >= 100 && errStatus < 600
+          ? errStatus
+          : undefined
         // Return Ignition-style error page in development, JSON in production
-        return await createErrorResponse(
-          error instanceof Error ? error : new Error(String(error)),
-          req,
-          { handlerPath },
-        )
+        return await createErrorResponse(err, req, { handlerPath, status })
       }
     }
   }

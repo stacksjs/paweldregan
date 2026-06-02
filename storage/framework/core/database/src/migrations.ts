@@ -149,7 +149,7 @@ export function preprocessSqliteMigrations(): void {
   const migrationsDir = join(process.cwd(), 'database', 'migrations')
   let files: string[]
   try {
-    files = readdirSync(migrationsDir).filter(f => f.endsWith('.sql'))
+    files = readdirSync(migrationsDir).filter(f => f.endsWith('.sql') && !f.endsWith('.down.sql'))
   }
   catch {
     return // directory doesn't exist yet
@@ -471,7 +471,7 @@ async function hideDisabledFeatureMigrations(): Promise<Array<{ original: string
     )
     if (disabledFeatures.size === 0) return hidden
 
-    const files = readdirSync(migrationsDir).filter(f => f.endsWith('.sql'))
+    const files = readdirSync(migrationsDir).filter(f => f.endsWith('.sql') && !f.endsWith('.down.sql'))
     for (const file of files) {
       const owner = (migrationFeature as (filename: string) => string | null)(file)
       if (!owner || !disabledFeatures.has(owner)) continue
@@ -842,7 +842,7 @@ function persistGeneratedMigrations(sqlStatements: string[]): number {
   // and we'd rather no-op than create a duplicate file.
   let existingSql = ''
   try {
-    for (const f of readdirSync(migrationsDir).filter(f => f.endsWith('.sql')))
+    for (const f of readdirSync(migrationsDir).filter(f => f.endsWith('.sql') && !f.endsWith('.down.sql')))
       existingSql += `\n${readFileSync(join(migrationsDir, f), 'utf8')}`
   }
   catch { /* nothing committed yet */ }

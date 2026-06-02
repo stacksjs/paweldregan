@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS "contacts" (
-  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-  "name" TEXT not null,
-  "email" TEXT not null,
-  "message" TEXT not null,
-  "locale" TEXT default 'en',
-  "ip_address" TEXT,
-  "status" TEXT default 'new',
-  "replied_at" TEXT,
-  "created_at" TEXT not null default CURRENT_TIMESTAMP,
-  "updated_at" TEXT,
-  "uuid" TEXT
+  "id" BIGSERIAL PRIMARY KEY,
+  "name" varchar(255),
+  "email" text,
+  "message" text,
+  "locale" varchar(255) default 'en',
+  "ip_address" varchar(255),
+  "status" varchar(255) default 'new',
+  "replied_at" timestamp,
+  "created_at" timestamp not null default CURRENT_TIMESTAMP,
+  "updated_at" timestamp,
+  "uuid" varchar(255)
 );

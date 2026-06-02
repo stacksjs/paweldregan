@@ -1,5 +1,19 @@
-// Mark as binary mode to prevent auto-registration in routes/api.ts
-;(globalThis as any).__STACKS_BINARY_MODE__ = true
+// MUST be first: sets __STACKS_BINARY_MODE__ + SKIP_CONFIG_LOADING before any
+// other module evaluates. See preamble.ts for why this can't be inline here
+// (ES import hoisting runs statement code after all imports).
+import './preamble'
+
+// Side-effect import: utils.ts in @stacksjs/database calls setConfig() on
+// bun-query-builder at module load using DB_CONNECTION / DB_HOST / etc.
+// env vars. Without this, bun-query-builder keeps its postgres+test_db
+// default, the `new SQL('postgres://…/test_db')` call fails, and
+// `getBunSql()` silently falls back to an in-memory SQLite — every model
+// query then 500s with "no such table". Has to land BEFORE any model
+// definition runs (models use `createModel` from bun-query-builder
+// directly, not from `@stacksjs/database`, so they don't trigger this
+// lazy module load themselves). Imported after ./preamble so the
+// SKIP_CONFIG_LOADING flag is already set when its config loader fires.
+import '@stacksjs/database'
 
 // IMPORTANT: Import router package first to ensure it's initialized before routes
 import { loadRoutes, serve } from '@stacksjs/router'

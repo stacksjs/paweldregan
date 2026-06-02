@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "contacts_contacts_uuid_unique" ON "contacts" ("uuid");
