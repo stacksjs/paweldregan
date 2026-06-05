@@ -7,9 +7,9 @@
 .env.keys
 *.local
 .env.keys
+.env.production
 
 # Encrypted, safe to commit
-!.env.production
 !.env.staging
 !.env.ci
 

@@ -26,10 +26,22 @@ export default {
    * - Full emails: ['chris@stacksjs.com']
    * - Objects: [{ email: 'chris', password: '...' }]
    */
+  // NOTE: `mailboxes` is typed `string[] | MailboxConfig[]` — entries must be
+  // all strings OR all objects, not mixed. Using the object form so the new
+  // cross-domain service mailbox can carry an explicit password while the
+  // others keep their MAIL_PASSWORD_<NAME> lookup (password omitted = looked up).
+  // Fully-qualified addresses (not bare usernames) so they don't resolve against
+  // MAIL_DOMAIN — which is now paweldregan.com. The @stacksjs.com boxes keep their
+  // MAIL_PASSWORD_<NAME> lookup (password omitted = looked up from env).
   mailboxes: [
-    'chris',
-    'blake',
-    'glenn',
+    { email: 'chris@stacksjs.com' },
+    { email: 'blake@stacksjs.com' },
+    { email: 'glenn@stacksjs.com' },
+    // Service mailbox for this app's outbound mail (cross-domain on paweldregan.com).
+    // Password tracks MAIL_PASSWORD so the app's SMTP login and the provisioned
+    // mailbox match. Requires paweldregan.com to be a hosted domain on the server
+    // (SMTP_HOSTED_DOMAINS / PR #1 feat/hosted-domains).
+    { email: 'hello@paweldregan.com', password: env.MAIL_PASSWORD },
   ],
 
   url: env.APP_URL || 'https://stacksjs.com',

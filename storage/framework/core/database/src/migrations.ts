@@ -401,33 +401,28 @@ async function ensureDatabaseExists(): Promise<void> {
 
     const adminDb = createQueryBuilder()
 
+    // Check the catalog first and only CREATE when the database is actually
+    // missing — an existing database is then a silent no-op rather than
+    // logging "already exists" / "Ensured ... exists" on every migrate.
+    // Postgres has no `CREATE DATABASE IF NOT EXISTS`, so the try/catch-the-
+    // dup-error approach is unavoidable there without this pre-check; doing
+    // the same for mysql keeps the behaviour (and the logs) uniform. The
+    // existence probe is parameterized — `.unsafe()` mangles inline string
+    // literals, so the db name MUST go through a bound parameter, not
+    // interpolation. (The CREATE still interpolates the quote-stripped
+    // `dbName` as an identifier, which can't be parameterized in DDL.)
     if (dialect === 'postgres') {
-      try {
+      const rows = await adminDb.unsafe(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName])
+      if (!Array.isArray(rows) || rows.length === 0) {
         await adminDb.unsafe(`CREATE DATABASE "${dbName}"`)
         log.info(`Created database "${dbName}"`)
       }
-      catch (e: any) {
-        // 42P04 = database already exists
-        if (e?.message?.includes('already exists') || e?.errno === '42P04') {
-          log.info(`Database "${dbName}" already exists`)
-        }
-        else {
-          throw e
-        }
-      }
     }
     else if (dialect === 'mysql') {
-      try {
-        await adminDb.unsafe(`CREATE DATABASE IF NOT EXISTS \`${dbName}\``)
-        log.info(`Ensured database "${dbName}" exists`)
-      }
-      catch (e: any) {
-        if (e?.message?.includes('database exists')) {
-          log.info(`Database "${dbName}" already exists`)
-        }
-        else {
-          throw e
-        }
+      const rows = await adminDb.unsafe(`SELECT 1 FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = ?`, [dbName])
+      if (!Array.isArray(rows) || rows.length === 0) {
+        await adminDb.unsafe(`CREATE DATABASE \`${dbName}\``)
+        log.info(`Created database "${dbName}"`)
       }
     }
 
