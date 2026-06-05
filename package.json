@@ -51,8 +51,5 @@
       }
     },
     "commit-msg": "bunx gitlint --edit .git/COMMIT_EDITMSG"
-  },
-  "overrides": {
-    "bun-query-builder": "0.1.26"
   }
 }
