@@ -12,9 +12,6 @@ import { libsPath, projectPath } from '@stacksjs/path'
 import { ExitCode } from '@stacksjs/types'
 import { version } from '../../package.json'
 
-/** Local Tools checkout — has non-interactive sudo + `.localhost` hosts skip. */
-const TOOLS_RPX_SRC = join(homedir(), 'Code/Tools/rpx/packages/rpx/src/index.ts')
-
 /** Lines printed before the ready banner (`blank`, `stacks … starting…`, `blank`). */
 const DEV_BOOT_STARTING_LINE_COUNT = 3
 
@@ -29,10 +26,11 @@ function eraseDevBootStartingLines(): void {
 
 type DevelopmentRpx = typeof import('@stacksjs/rpx')
 
+let developmentRpx: DevelopmentRpx | undefined
+
 async function importDevelopmentRpx(): Promise<DevelopmentRpx> {
-  if (existsSync(TOOLS_RPX_SRC))
-    return await import(TOOLS_RPX_SRC) as DevelopmentRpx
-  return await import('@stacksjs/rpx')
+  developmentRpx ??= await import('@stacksjs/rpx')
+  return developmentRpx
 }
 
 // rpx registry ids written by this `./buddy dev` session — cleared on shutdown.
@@ -1098,8 +1096,19 @@ function readCertCommonName(certPath: string): string | null {
   }
 }
 
-function buildDevelopmentTlsOptions(domain: string, includeDashboard: boolean, verbose: boolean) {
+async function buildDevelopmentTlsOptions(domain: string, includeDashboard: boolean, verbose: boolean) {
   const hostnames = buildDevelopmentTlsHostnames(domain, includeDashboard)
+  try {
+    const { getRegistryDir, readAll } = await importDevelopmentRpx()
+    const entries = await readAll(getRegistryDir(), false)
+    for (const entry of entries) {
+      const host = entry.to?.trim()
+      if (host && !hostnames.includes(host))
+        hostnames.push(host)
+    }
+  }
+  catch { /* registry unreadable — app hostnames only */ }
+
   return {
     https: {
       certPath: RPX_HOST_CERT_PATH,
@@ -1134,7 +1143,7 @@ async function ensureRpxDevelopmentHttps(
   } = await importDevelopmentRpx()
 
   const hostnames = buildDevelopmentTlsHostnames(domain, includeDashboard)
-  const tlsOptions = buildDevelopmentTlsOptions(domain, includeDashboard, verbose)
+  const tlsOptions = await buildDevelopmentTlsOptions(domain, includeDashboard, verbose)
 
   const hostnameInCert = hostnames.every((host) => {
     try {
@@ -1193,10 +1202,6 @@ function resolveRpxDaemonSpawnCwd(): string {
   if (fromEnv && existsSync(fromEnv))
     return dirname(fromEnv)
 
-  const toolsPkg = join(homedir(), 'Code/Tools/rpx/packages/rpx')
-  if (existsSync(join(toolsPkg, 'package.json')))
-    return toolsPkg
-
   const bootstrap = join(dirname(fileURLToPath(import.meta.url)), '../../scripts/rpx-daemon-bootstrap.ts')
   if (existsSync(bootstrap))
     return dirname(bootstrap)
@@ -1213,14 +1218,6 @@ async function resolveRpxDaemonSpawnCommand(): Promise<string[]> {
   const fromEnv = process.env.RPX_BIN || process.env.STACKS_RPX_BIN
   if (fromEnv && existsSync(fromEnv))
     return [fromEnv, 'daemon:start']
-
-  const toolsCli = join(homedir(), 'Code/Tools/rpx/packages/rpx/bin/cli.ts')
-  if (existsSync(toolsCli))
-    return [process.execPath, toolsCli, 'daemon:start']
-
-  const toolsBinary = join(homedir(), 'Code/Tools/rpx/packages/rpx/bin/rpx')
-  if (existsSync(toolsBinary))
-    return [toolsBinary, 'daemon:start']
 
   const pkgUrl = import.meta.resolve('@stacksjs/rpx/package.json')
   const cli = join(dirname(fileURLToPath(pkgUrl)), 'dist/bin/cli.js')
@@ -1298,8 +1295,20 @@ async function prepareRpxTlsForDev(input: {
     return h !== 'localhost' && !h.endsWith('.localhost') && !h.endsWith('.localhost.')
   })
 
+  const { addHosts, setupDevelopmentDns } = await importDevelopmentRpx()
+
+  // `.test` / custom dev TLDs: prefer domain-scoped macOS resolver files + the
+  // rpx DNS server on :15353 (RFC 6761 `.localhost` skips this path).
+  const dnsDomains = hostsNeedingFile.length > 0
+    ? hosts
+    : []
+  if (dnsDomains.length > 0) {
+    const dnsReady = await setupDevelopmentDns({ domains: dnsDomains, verbose }).catch(() => false)
+    if (!dnsReady && verbose)
+      log.warn(`Dev DNS not configured for ${dnsDomains.join(', ')} — falling back to /etc/hosts`)
+  }
+
   if (hostsNeedingFile.length > 0) {
-    const { addHosts } = await importDevelopmentRpx()
     await addHosts(hostsNeedingFile, verbose).catch((err) => {
       log.warn(`Could not update /etc/hosts for ${hostsNeedingFile.join(', ')}: ${(err as Error).message}`)
       log.warn('Add 127.0.0.1 entries manually or set SUDO_PASSWORD in .env')
@@ -1357,11 +1366,19 @@ async function registerRpxProxiesForDomain(input: {
   // Drop legacy subdomain proxies from older dev sessions (api./docs. hosts).
   await unregisterRpxProxies([`${domain}-api`, `${domain}-docs`])
 
-  const { stopDaemon: stopRpx, writeEntry } = await importDevelopmentRpx()
+  const {
+    getRegistryDir,
+    readAll,
+    stopDaemon: stopRpx,
+    syncDevelopmentDnsFromRegistry,
+    writeEntry,
+  } = await importDevelopmentRpx()
   const spawnCommand = await resolveRpxDaemonSpawnCommand()
-  const spawnEnv = process.env.SUDO_PASSWORD
-    ? { SUDO_PASSWORD: process.env.SUDO_PASSWORD }
-    : undefined
+  const spawnEnv: Record<string, string> = {}
+  if (process.env.SUDO_PASSWORD)
+    spawnEnv.SUDO_PASSWORD = process.env.SUDO_PASSWORD
+  if (verbose)
+    spawnEnv.RPX_VERBOSE = '1'
 
   try {
     await startRpxDaemonIfNeeded({ spawnCommand, spawnEnv, verbose, stopRpx })
@@ -1391,6 +1408,15 @@ async function registerRpxProxiesForDomain(input: {
     if (verbose)
       console.log(`  ${dim('➜')}  ${dim('Proxy')}:       ${dim(`https://${proxy.to} → ${proxy.from}`)}`)
   }
+
+  const registryDir = getRegistryDir()
+  const entries = await readAll(registryDir, verbose).catch(() => [])
+  await syncDevelopmentDnsFromRegistry(entries, { verbose, ownerPid: process.pid }).catch((err) => {
+    if (verbose) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.log(`  ${dim('    ')}${dim(`Dev DNS sync: ${message}`)}`)
+    }
+  })
 }
 
 function wantsInteractive(options: DevOptions) {

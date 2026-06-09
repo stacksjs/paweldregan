@@ -16,7 +16,7 @@ import './request-augmentation'
 import process from 'node:process'
 import { Buffer } from 'node:buffer'
 import { timingSafeEqual } from 'node:crypto'
-import { log } from '@stacksjs/logging'
+import { log, report } from '@stacksjs/logging'
 import { path as p } from '@stacksjs/path'
 import { UploadedFile } from '@stacksjs/storage'
 import { applyRequestEnhancements, Router } from '@stacksjs/bun-router'
@@ -1434,15 +1434,13 @@ async function resolveStringHandler(handlerPath: string): Promise<RouteHandlerFn
         return formatResult(result, req)
       }
       catch (handleError) {
-        // Print the full stack so action failures are diagnosable.
-        // The previous form passed the error as the second arg, which
-        // log.error treated as `LogErrorOptions` and dropped — every
-        // 500 from an action looked like an empty `[Router] Error in
-        // action.handle() for 'X':` line with no detail.
-        const errMsg = handleError instanceof Error
-          ? (handleError.stack || handleError.message)
-          : String(handleError)
-        log.error(`[Router] Error in action.handle() for '${handlerPath}': ${errMsg}`)
+        // Single chokepoint (stacksjs/stacks#1933) — normalizes the
+        // error (stack + cause), keeps thrown 4xx HttpErrors out of the
+        // error stream, and folds in the full stack. Replaces the old
+        // hand-rolled stack-concat workaround that existed because the
+        // logger's `LogErrorOptions | any` typing silently dropped the
+        // error (stacksjs/stacks#1932, now fixed).
+        report(handleError, { label: `[Router] action.handle() for '${handlerPath}'` })
         throw handleError
       }
     }
@@ -2085,12 +2083,18 @@ function wrapHandler(handler: StacksHandler, skipParsing = false): RouteHandlerF
         return await resolvedHandler(req)
       }
       catch (error) {
-        log.error(`[Router] Error handling request for '${handlerPath}':`, error)
+        // Single chokepoint (stacksjs/stacks#1933): 5xx + non-HTTP throws
+        // log at error with full stack; thrown 4xx HttpErrors are kept out
+        // of the error stream.
+        report(error, { label: `[Router] ${handlerPath}` })
         // Honour a status the action attached to the thrown error. Accept
         // both `status` (HttpError convention) and `statusCode` (Express
         // convention) so `throw new HttpError(422, ...)` surfaces as 422
         // instead of being flattened to the default 500. Mirrors the
-        // middleware-path handling above.
+        // middleware-path handling above. NOTE: upstream #1933 dropped this
+        // status pass-through, which regresses action-thrown HttpError(4xx)
+        // to 500 (createErrorResponse defaults options.status to 500) — kept
+        // here deliberately; see the #1946 fix in error-handler.ts.
         const err = error instanceof Error ? error : new Error(String(error))
         const errStatus = (err as { status?: unknown }).status
           ?? (err as { statusCode?: unknown }).statusCode
