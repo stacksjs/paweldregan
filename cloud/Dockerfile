@@ -8,7 +8,7 @@
 # Dependencies are installed INSIDE the container so native binaries match
 # Linux — host node_modules (macOS) are excluded via .dockerignore.
 
-FROM oven/bun:1.3.13 AS base
+FROM oven/bun:1.4.0-debian AS base
 WORKDIR /usr/src/app
 
 # 1. Install dependencies. We copy the full source first because this is a
