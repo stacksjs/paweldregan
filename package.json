@@ -29,17 +29,17 @@
     "sqlite": "^3.47.2"
   },
   "dependencies": {
-    "@stacksjs/bun-queue": "workspace:*",
-    "@stacksjs/bun-router": "^0.0.16",
-    "@stacksjs/stx": "^0.2.82",
+    "@stacksjs/bun-queue": "workspace:*0.1.8",
+    "@stacksjs/bun-router": "^0.1.8",
+    "@stacksjs/stx": "^0.2.231",
     "@stacksjs/ts-craft": "^0.0.2",
     "@types/d3": "^7.4.3",
-    "bun-plugin-stx": "^0.2.82",
+    "bun-plugin-stx": "^0.2.231",
     "d3": "^7.9.0",
     "stacks": "workspace:*"
   },
   "devDependencies": {
-    "better-dx": "^0.2.15"
+    "better-dx": "^0.2.25"
   },
   "workspaces": [
     "storage/framework/**"

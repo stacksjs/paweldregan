@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "better-dx": "^0.2.12",
-    "@stacksjs/utils": "workspace:*"
+    "@stacksjs/utils": "workspace:*0.72.84"
   },
   "sideEffects": false
 }

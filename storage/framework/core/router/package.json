@@ -57,7 +57,7 @@
     "better-dx": "^0.2.12",
     "@stacksjs/error-handling": "workspace:*",
     "@stacksjs/logging": "workspace:*",
-    "@stacksjs/orm": "workspace:*",
+    "@stacksjs/orm": "workspace:*0.72.84",
     "@stacksjs/path": "workspace:*",
     "@stacksjs/storage": "workspace:*",
     "@stacksjs/types": "workspace:*",
