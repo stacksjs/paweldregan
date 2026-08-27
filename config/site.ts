@@ -76,12 +76,17 @@ export const site = defineSiteConfig({
   },
 })
 
-// @stacksjs/ts-analytics integration. The loader snippet in
-// resources/layouts/default.stx reads from here so siteId + endpoint
-// are configured in one place.
+// analyticshq tracker, embedded by resources/layouts/default.stx.
+//
+// `endpoint` is the host serving the tracker, and the tracker beacons back to
+// whichever host served it. It used to point at analytics.paweldregan.com,
+// which was never provisioned: the name is a Porkbun URL-forward record that
+// 302s to a parked domain, so every page load 404'd on the tracker and no
+// analytics was ever collected. Nothing needs to be provisioned per site --
+// the collect endpoint creates the site row on its first event.
 export const analytics = {
   siteId: 'paweldregan',
-  endpoint: 'https://analytics.paweldregan.com',
+  endpoint: 'https://analyticshq.org',
 }
 
 // Pages that should not be indexed, as base paths (locale variants are

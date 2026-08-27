@@ -22,21 +22,13 @@ import { analytics } from '../../config/site'
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
   </style>
 
-  {{-- @stacksjs/ts-analytics loader. Pulls tracker.js async, queues an
-       initial pageview, and re-fires on stx:navigate so SPA route
-       changes count too. siteId + endpoint live in config/site.ts. --}}
-  <script>
-    (function (w, d, s, endpoint, siteId) {
-      w.sa = w.sa || function () { (w.sa.q = w.sa.q || []).push(arguments) }
-      var f = d.getElementsByTagName(s)[0], j = d.createElement(s)
-      j.async = 1
-      j.src = endpoint + '/sites/' + siteId + '/tracker.js'
-      f.parentNode.insertBefore(j, f)
-      w.sa('init', siteId)
-      w.sa('pageview')
-      w.addEventListener('stx:navigate', function () { w.sa('pageview') })
-    })(window, document, 'script', {{ analytics.endpoint }}, {{ analytics.siteId }})
-  </script>
+  {{-- analyticshq tracker. The script reads `data-site` off its own tag and
+       derives where to beacon from its own src, so this one line is the whole
+       integration: no init call, no queue, and no SPA wiring, because it
+       patches history.pushState itself. Cookie-free, and it honours DNT and
+       Global Privacy Control by default. Host + site id live in
+       config/site.ts. --}}
+  <script defer src="{{ analytics.endpoint }}/script.js" data-site="{{ analytics.siteId }}"></script>
 </head>
 
 <body class="bg-white dark:bg-black text-black dark:text-white font-sans antialiased">
