@@ -22,7 +22,7 @@
 
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
-import { site } from '../config/site'
+import { noindexPaths, site } from '../config/site'
 
 export async function bundleAndInjectStores(distDir: string = './dist'): Promise<void> {
   if (!existsSync(distDir)) return
@@ -33,8 +33,37 @@ export async function bundleAndInjectStores(distDir: string = './dist'): Promise
     const html = readFileSync(file, 'utf8')
     let next = hoistDoctype(html)
     next = stampLocaleLayoutGroup(next, localeOf(file, distDir, locales, defaultLocale))
+    if (isNoindex(file, distDir, locales)) next = stampNoindex(next)
     if (next !== html) writeFileSync(file, next)
   }
+}
+
+/**
+ * Is this file one of the `noindexPaths` pages, in any locale?
+ *
+ * Compares on the base path, so `v2.html`, `de/v2.html` and `pl/v2.html`
+ * are all matched by the single entry `/v2`.
+ */
+function isNoindex(file: string, distDir: string, locales: string[]): boolean {
+  const segments = relative(distDir, file).split(sep)
+  if (locales.includes(segments[0])) segments.shift()
+  const base = `/${segments.join('/').replace(/(?:index)?\.html$/, '').replace(/\/$/, '')}`
+  return noindexPaths.includes(base || '/')
+}
+
+/**
+ * Keep a page out of search results.
+ *
+ * The site config's `sitemap: false` only withholds the page from the
+ * sitemap; it does not tell a crawler that already found the URL to leave
+ * it alone. The framework's page meta has no robots field, so the tag is
+ * stamped here, alongside the other head fixups.
+ */
+function stampNoindex(html: string): string {
+  if (/<meta name="robots"/i.test(html)) return html
+  const meta = '<meta name="robots" content="noindex, follow">'
+  if (/<\/head>/i.test(html)) return html.replace(/<\/head>/i, `${meta}\n</head>`)
+  return html
 }
 
 /**

@@ -41,9 +41,10 @@ export const site = defineSiteConfig({
       changefreq: 'weekly',
     },
     // Alternative homepage, live for A/B comparison against '/'. Kept out
-    // of the sitemap and marked noindex: two pages with the same subject
-    // and near-identical copy would otherwise compete with each other in
-    // search. Reachable only by direct link while the test runs.
+    // of the sitemap, and out of the index via `noindexPaths` below: two
+    // pages with the same subject and near-identical copy would otherwise
+    // compete with each other in search. Reachable only by direct link
+    // while the test runs.
     '/v2': {
       title: 'Paweł Dregan, Ultra Runner',
       description: 'Seven hundred kilometres across the Alps. Five hundred through the Arctic. 1:1 coaching for runners preparing for distances like these.',
@@ -79,5 +80,13 @@ export const analytics = {
   siteId: 'paweldregan',
   endpoint: 'https://analytics.paweldregan.com',
 }
+
+// Pages that should not be indexed, as base paths (locale variants are
+// covered too). `sitemap: false` only stops us from advertising a page;
+// it does not stop a crawler that reaches it another way, and an A/B
+// variant of the homepage competing with the homepage is exactly the
+// case where that matters. The meta tag is stamped in the post-build
+// pass — see scripts/bundle-stores.ts.
+export const noindexPaths = ['/v2']
 
 export default site
