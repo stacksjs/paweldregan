@@ -15,10 +15,13 @@ export const site = defineSiteConfig({
     locale: 'en_US',
     type: 'website',
     favicon: '/favicon.svg',
-    // Default og:image / twitter:image — site-builder will resolve to an
-    // absolute URL against `url` above. Per-page overrides live under
-    // `pages[*].image` so the right shot ships with each share card.
-    image: '/images/og.jpg',
+    // Default og:image / twitter:image, used by any page without a card of
+    // its own (the 404, currently). A generated 1200x630 card rather than a
+    // photograph: the slot is 1.91:1, and the square crop that used to sit
+    // here was letterboxed or centre-cropped by every network that rendered
+    // it. Per-page cards are drawn per locale by `bun run og` and wired up in
+    // scripts/bundle-stores.ts; see config/og.ts.
+    image: '/images/og/en/home.jpg',
   },
   pagesDir: 'resources/views',
   i18n: {

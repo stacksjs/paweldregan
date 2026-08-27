@@ -1,6 +1,13 @@
 import { buildStaticSite } from '@stacksjs/stx'
 import { bundleAndInjectStores } from './scripts/bundle-stores'
+import { verifyOgCards } from './scripts/generate-og'
 import { site } from './config/site'
+
+// Share cards are committed rather than drawn on every build: fifteen cards at
+// roughly a second each would be thirty times this build. The trade only works
+// if staleness is loud, so check the committed cards still match the copy
+// before anything else runs. `bun run og` regenerates them.
+await verifyOgCards()
 
 // config/stx.ts (`root: 'resources'`) is picked up by stxPlugin itself as of
 // @stacksjs/stx 0.2.233, so the build resolves components out of resources/

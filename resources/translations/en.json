@@ -1,4 +1,27 @@
 {
+  "og": {
+    "home": {
+      "headline": "SEVEN HUNDRED KILOMETRES.",
+      "title": "Paweł Dregan · Ultra Runner",
+      "description": "Finisher of SwissPeaks 700K and the Lappland Arctic Ultra 500K. Race reports, results, and 1:1 coaching for ultra distance."
+    },
+    "v2": {
+      "title": "Paweł Dregan · Ultra Distance Coaching",
+      "description": "Seven hundred kilometres across the Alps. Five hundred through the Arctic. 1:1 coaching for runners preparing for distances like these."
+    },
+    "about": {
+      "title": "About · Paweł Dregan",
+      "description": "From first ultra to 700K finisher. The story, the philosophy, and the partnerships behind the journey."
+    },
+    "races": {
+      "title": "Races · Paweł Dregan",
+      "description": "Ranked results from 100K to 700K. Every start line, every finish, every lesson, with times and elevation."
+    },
+    "coaching": {
+      "title": "Coaching · Paweł Dregan",
+      "description": "Personalized 1:1 ultra running coaching built on real experience. From your first 50K to your biggest dream race."
+    }
+  },
   "nav": {
     "home": "Home",
     "about": "About",

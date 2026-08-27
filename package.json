@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "./buddy dev --frontend",
     "build": "bun build.ts",
+    "og": "bun scripts/generate-og.ts",
     "preview": "bun preview.ts",
     "start": "./buddy serve",
     "start:api": "./buddy serve:api",
@@ -32,8 +33,9 @@
     "sqlite": "^3.47.2"
   },
   "dependencies": {
-    "@stacksjs/stx": "^0.2.233",
-    "stacks": "^0.72.86"
+    "@stacksjs/stx": "^0.2.234",
+    "stacks": "^0.72.86",
+    "ts-images": "^0.2.12"
   },
   "devDependencies": {
     "better-dx": "^0.2.15"

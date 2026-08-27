@@ -1,4 +1,27 @@
 {
+  "og": {
+    "home": {
+      "headline": "SIEDEMSET KILOMETRÓW.",
+      "title": "Paweł Dregan · Ultramaratończyk",
+      "description": "Finiszer SwissPeaks 700K i Lappland Arctic Ultra 500K. Relacje z biegów, wyniki i coaching 1:1 na ultradystansach."
+    },
+    "v2": {
+      "title": "Paweł Dregan · Coaching ultradystansowy",
+      "description": "Siedemset kilometrów przez Alpy. Pięćset przez Arktykę. Coaching 1:1 dla biegaczy przygotowujących się do takich dystansów."
+    },
+    "about": {
+      "title": "O mnie · Paweł Dregan",
+      "description": "Od pierwszego ultra do mety 700K. Historia, filozofia i partnerstwa, które napędzają tę drogę."
+    },
+    "races": {
+      "title": "Wyniki · Paweł Dregan",
+      "description": "Wyniki w rankingu od 100K do 700K. Każda linia startu, każda meta, z czasami i przewyższeniem."
+    },
+    "coaching": {
+      "title": "Coaching · Paweł Dregan",
+      "description": "Indywidualny coaching ultra 1:1 oparty na prawdziwym doświadczeniu. Od pierwszego 50K po wymarzony bieg."
+    }
+  },
   "nav": {
     "home": "Strona główna",
     "about": "O mnie",
