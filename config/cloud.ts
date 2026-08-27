@@ -75,7 +75,7 @@ export const tsCloud = {
         DB_PORT: '5432',
         DB_DATABASE: 'paweldregan',
         DB_USERNAME: 'paweldregan',
-        DB_PASSWORD: '',
+        DB_PASSWORD: process.env.DB_PASSWORD || '',
         MAIL_MAILER: 'smtp',
         MAIL_DRIVER: 'smtp',
         MAIL_HOST: 'mail.stacksjs.com',

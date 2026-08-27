@@ -14,6 +14,7 @@
     "deploy": "./buddy deploy --prod --yes",
     "check-locales": "bun scripts/check-locales.ts",
     "verify": "bun scripts/verify.ts",
+    "test": "bun test tests",
     "lint": "./buddy lint",
     "lint:fix": "./buddy lint:fix",
     "typecheck": "bun x --bun tsc --noEmit -p tsconfig.json --pretty false",
