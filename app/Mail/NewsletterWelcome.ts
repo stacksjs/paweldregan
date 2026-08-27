@@ -60,7 +60,7 @@ const COPY: Record<string, Copy> = {
 
 export async function sendNewsletterWelcome(options: NewsletterWelcomeOptions): Promise<void> {
   const localeKey = options.locale && COPY[options.locale] ? options.locale : 'en'
-  const copy = COPY[localeKey]
+  const copy = COPY[localeKey] ?? COPY.en!
 
   const { html, text } = await template('newsletter-welcome', {
     variables: {

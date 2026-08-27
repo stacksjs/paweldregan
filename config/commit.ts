@@ -1,8 +1,7 @@
 import type { UserConfig } from 'cz-git'
-import { components, functions } from '@stacksjs/utils'
 import git from './git'
 
-const scopes = [...new Set([...git.scopes, ...components, ...functions])]
+const scopes = [...new Set(git.scopes)]
 
 export default {
   rules: {

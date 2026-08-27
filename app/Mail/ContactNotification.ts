@@ -70,7 +70,7 @@ function autoReplyCopy(senderName: string, localeKey: string): AutoReplyCopy {
       footer: 'Otrzymujesz tę wiadomość, ponieważ skorzystałeś z formularza na paweldregan.com/coaching.',
     },
   }
-  return dict[localeKey] || dict.en
+  return dict[localeKey] ?? dict.en!
 }
 
 export async function sendContactNotification(options: ContactNotificationOptions): Promise<void> {

@@ -1,4 +1,4 @@
-import type { QueryBuilderConfig, SupportedDialect } from 'bun-query-builder'
+import { defineConfig, type SupportedDialect } from 'bun-query-builder'
 import { env } from '@stacksjs/env'
 
 const dialect = (env.DB_CONNECTION as SupportedDialect) || 'sqlite'
@@ -14,7 +14,7 @@ const databaseConfig = dialect === 'sqlite'
       port: env.DB_PORT || 5432,
     }
 
-export default {
+export default defineConfig({
   verbose: true,
   dialect,
   database: databaseConfig,
@@ -64,4 +64,4 @@ export default {
     column: 'deleted_at',
     defaultFilter: true,
   },
-} satisfies QueryBuilderConfig
+})

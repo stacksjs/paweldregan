@@ -41,7 +41,6 @@ const config: BunPressOptions = {
       '/': [
         {
           text: 'Prologue',
-          collapsed: true,
           items: [
             { text: 'Release Notes', link: '/release-notes' },
             { text: 'Upgrade Guide', link: '/upgrade-guide' },
@@ -51,7 +50,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'Getting Started',
-          collapsed: true,
           items: [
             { text: 'Introduction', link: '/guide/intro' },
             { text: 'Quick Start', link: '/guide/get-started' },
@@ -59,7 +57,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'Basics',
-          collapsed: true,
           items: [
             { text: 'Routing', link: '/basics/routing' },
             { text: 'Middleware', link: '/basics/middleware' },
@@ -77,7 +74,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'Digging Deeper',
-          collapsed: true,
           items: [
             { text: 'Authentication', link: '/guide/auth' },
             { text: 'Database', link: '/packages/database' },
@@ -93,7 +89,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'Cloud',
-          collapsed: true,
           items: [
             { text: 'Deploy', link: '/guide/cloud/deployment' },
             { text: 'Extend Cloud', link: '/guide/cloud/extend' },
@@ -101,7 +96,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'CLI (Buddy)',
-          collapsed: true,
           items: [
             { text: 'Introduction', link: '/guide/buddy/intro' },
             { text: 'Dev', link: '/guide/buddy/dev' },
@@ -114,7 +108,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'Packages',
-          collapsed: true,
           items: [
             { text: 'Actions', link: '/packages/actions' },
             { text: 'AI', link: '/packages/ai' },
@@ -132,7 +125,6 @@ const config: BunPressOptions = {
         },
         {
           text: 'Testing',
-          collapsed: true,
           items: [
             { text: 'Getting Started', link: '/testing/getting-started' },
             { text: 'Unit Tests', link: '/testing/unit-tests' },
@@ -143,25 +135,12 @@ const config: BunPressOptions = {
         },
         {
           text: 'Project',
-          collapsed: true,
           items: [
             { text: 'Roadmap', link: '/project/roadmap' },
             { text: 'Contributing', link: '/project/contributing' },
             { text: 'License', link: '/project/license' },
           ],
         },
-      ],
-    },
-    themeConfig: {
-      logo: '/images/logos/logo-transparent.svg',
-      footer: {
-        message: 'Released under the MIT License.',
-        copyright: 'Copyright 2024-present Stacks.js, Inc.',
-      },
-      socialLinks: [
-        { icon: 'twitter', link: 'https://twitter.com/stacksjs' },
-        { icon: 'github', link: 'https://github.com/stacksjs/stacks' },
-        { icon: 'discord', link: 'https://discord.gg/stacksjs' },
       ],
     },
   },
