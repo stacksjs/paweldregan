@@ -13,7 +13,7 @@ import process from 'node:process'
 
 const baseUrl = process.argv[2] ?? 'https://paweldregan.com'
 
-const pages = ['/', '/about', '/races', '/coaching']
+const pages = ['/', '/v2', '/about', '/races', '/coaching']
 const locales = [
   { code: 'en', prefix: '' },
   { code: 'de', prefix: '/de' },

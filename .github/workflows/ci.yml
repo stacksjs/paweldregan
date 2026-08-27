@@ -41,8 +41,32 @@ jobs:
       - name: Build
         run: bun run build
 
+      # Serve the build we just produced and run the browser checks
+      # against it. These used to point at https://paweldregan.com, which
+      # meant a push was gated on the PREVIOUS deploy rather than on the
+      # commit being tested: a regression sailed through, and a new page
+      # failed the check until after it shipped. Checking dist/ tests the
+      # artifact the deploy job is about to upload.
+      - name: Start preview server
+        run: |
+          bun preview.ts &
+          echo "PREVIEW_PID=$!" >> "$GITHUB_ENV"
+          for _ in $(seq 1 60); do
+            curl -sf http://localhost:4173/ > /dev/null && exit 0
+            sleep 1
+          done
+          echo "preview server never came up" >&2
+          exit 1
+
+      - name: End-to-end checks
+        run: bun run verify http://localhost:4173
+
       - name: Check translations
-        run: bun run check-locales
+        run: bun run check-locales http://localhost:4173
+
+      - name: Stop preview server
+        if: always()
+        run: kill "$PREVIEW_PID" || true
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -82,3 +106,17 @@ jobs:
           PORKBUN_API_KEY: ${{ secrets.PORKBUN_API_KEY }}
           PORKBUN_SECRET_KEY: ${{ secrets.PORKBUN_SECRET_KEY }}
         run: ./buddy deploy --prod --yes
+
+      # The pre-deploy checks prove the artifact is good; this proves the
+      # thing actually being served is. Retried, because the edge can take
+      # a moment to pick up the new build.
+      - name: Verify the live site
+        run: |
+          for attempt in 1 2 3; do
+            sleep 20
+            if bun run check-locales https://paweldregan.com; then
+              exit 0
+            fi
+            echo "attempt $attempt failed, retrying"
+          done
+          exit 1

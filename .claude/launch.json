@@ -7,6 +7,12 @@
       "runtimeArgs": ["dev:frontend"],
       "port": 3100,
       "autoPort": true
+    },
+    {
+      "name": "preview",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["preview.ts"],
+      "port": 4173
     }
   ]
 }
