@@ -1,5 +1,6 @@
 import type { CloudConfig as StacksCloudConfig } from '@stacksjs/types'
 import type { CloudConfig } from '@stacksjs/ts-cloud'
+import process from 'node:process'
 import { env } from '@stacksjs/env'
 
 const domain = 'paweldregan.com'
@@ -81,7 +82,7 @@ export const tsCloud = {
         MAIL_PORT: '587',
         MAIL_ENCRYPTION: 'tls',
         MAIL_USERNAME: `hello@${domain}`,
-        MAIL_PASSWORD: env.MAIL_PASSWORD_HELLO || env.MAIL_PASSWORD || '',
+        MAIL_PASSWORD: process.env.MAIL_PASSWORD_HELLO || env.MAIL_PASSWORD || '',
         MAIL_FROM_NAME: 'Paweł Dregan',
         MAIL_FROM_ADDRESS: `hello@${domain}`,
         MAIL_DOMAIN: domain,

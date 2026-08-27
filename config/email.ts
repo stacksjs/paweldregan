@@ -1,4 +1,5 @@
 import type { EmailConfig } from '@stacksjs/types'
+import process from 'node:process'
 import { env } from '@stacksjs/env'
 
 const domain = 'paweldregan.com'
@@ -16,12 +17,12 @@ export default {
     {
       email: `pawel@${domain}`,
       displayName: 'Paweł Dregan',
-      password: env.MAIL_PASSWORD_PAWEL,
+      password: process.env.MAIL_PASSWORD_PAWEL,
     },
     {
       email: `hello@${domain}`,
       displayName: 'Paweł Dregan',
-      password: env.MAIL_PASSWORD_HELLO || env.MAIL_PASSWORD,
+      password: process.env.MAIL_PASSWORD_HELLO || env.MAIL_PASSWORD,
     },
   ],
   server: {
