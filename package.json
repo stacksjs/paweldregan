@@ -9,27 +9,29 @@
     "dev": "./buddy dev --frontend",
     "build": "bun build.ts",
     "preview": "bun preview.ts",
-    "start": "bun preview.ts",
-    "start:api": "PORT=3008 APP_ENV=production bun storage/framework/core/server/src/start.ts",
-    "deploy": "bun scripts/deploy.ts",
+    "start": "./buddy serve",
+    "start:api": "./buddy serve:api",
+    "deploy": "./buddy deploy --prod --yes",
     "check-locales": "bun scripts/check-locales.ts",
     "verify": "bun scripts/verify.ts",
     "lint": "./buddy lint",
     "lint:fix": "./buddy lint:fix",
-    "typecheck": "./buddy typecheck",
+    "typecheck": "bun x --bun tsc --noEmit -p tsconfig.json --pretty false",
     "fresh": "./buddy fresh",
     "clean": "./buddy clean",
     "upgrade": "./buddy upgrade",
     "buddy": "./buddy",
     "stacks": "./buddy",
-    "stx": "./buddy"
+    "stx": "./buddy",
+    "typecheck:app": "bun x --bun tsc --noEmit -p tsconfig.json --pretty false",
+    "types:check": "bun x --bun tsc --noEmit -p tsconfig.json --pretty false"
   },
   "system": {
     "bun": "^1.4.0",
     "sqlite": "^3.47.2"
   },
   "dependencies": {
-    "stacks": "^0.72.85"
+    "stacks": "^0.72.86"
   },
   "devDependencies": {
     "better-dx": "^0.2.15"

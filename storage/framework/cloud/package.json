@@ -4,7 +4,9 @@
   "version": "0.70.23",
   "description": "The Stacks cloud/serverless integration & implementation.",
   "author": "Chris Breuer",
-  "contributors": ["Chris Breuer <chris@stacksjs.com>"],
+  "contributors": [
+    "Chris Breuer <chris@stacksjs.com>"
+  ],
   "license": "MIT",
   "funding": "https://github.com/sponsors/chrisbbreuer",
   "homepage": "https://github.com/stacksjs/stacks/tree/main/storage/framework/cloud#readme",
@@ -35,25 +37,28 @@
   },
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["README.md", "dist"],
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "scripts": {
     "deploy": "bun deploy.ts",
     "dev": "./dev local"
   },
   "dependencies": {
-    "@stacksjs/config": "workspace:*",
-    "@stacksjs/dns": "workspace:*",
-    "@stacksjs/logging": "workspace:*",
-    "@stacksjs/path": "workspace:*",
-    "@stacksjs/queue": "workspace:*",
-    "@stacksjs/router": "workspace:*",
-    "@stacksjs/storage": "workspace:*",
-    "@stacksjs/utils": "workspace:*",
-    "@stacksjs/validation": "workspace:*"
+    "@stacksjs/config": "^0.72.86",
+    "@stacksjs/dns": "^0.72.86",
+    "@stacksjs/logging": "^0.72.86",
+    "@stacksjs/path": "^0.72.86",
+    "@stacksjs/queue": "^0.72.86",
+    "@stacksjs/router": "^0.72.86",
+    "@stacksjs/storage": "^0.72.86",
+    "@stacksjs/utils": "^0.72.86",
+    "@stacksjs/validation": "^0.72.86"
   },
   "devDependencies": {
-    "@stacksjs/cli": "workspace:*",
+    "@stacksjs/cli": "^0.72.86",
     "better-dx": "^0.2.7",
-    "@stacksjs/env": "workspace:*"
+    "@stacksjs/env": "^0.72.86"
   }
 }

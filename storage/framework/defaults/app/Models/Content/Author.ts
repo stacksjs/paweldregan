@@ -28,15 +28,18 @@ export default defineModel({
       filterable: [],
     },
 
-    useSeeder: {
-      // defaults to a count of 10, `seedable` used as an alias
-      count: 10,
-    },
+    // No faker seeding. Blog authorship lives in markdown frontmatter
+    // (content/blog/*.md); this model backs the CMS dashboard only.
 
     useApi: {
+      // Public catalog: anyone may browse, only authenticated callers may
+      // write. Declared explicitly because the trait now defaults BOTH sides to
+      // `auth` — an undeclared read route is how a customer list leaks
+      // (stacksjs/stacks#2224). Behaviour here is unchanged.
+      middleware: { read: [], write: ['auth'] },
       uri: 'authors',
 
-      routes: ['index', 'store', 'show'],
+      routes: ['index', 'store', 'show', 'update', 'destroy'],
     },
 
     observe: true,
@@ -72,6 +75,32 @@ export default defineModel({
       },
 
       factory: faker => faker.internet.email(),
+    },
+
+    bio: {
+      required: false,
+      order: 3,
+      fillable: true,
+      validation: {
+        rule: schema.string().max(500),
+        message: {
+          max: 'Bio must have a maximum of 500 characters',
+        },
+      },
+      factory: faker => faker.lorem.sentence(),
+    },
+
+    avatar: {
+      required: false,
+      order: 4,
+      fillable: true,
+      validation: {
+        rule: schema.string().url(),
+        message: {
+          url: 'Avatar must be a valid URL',
+        },
+      },
+      factory: faker => faker.image.avatar(),
     },
   },
   dashboard: {

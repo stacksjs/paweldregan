@@ -35,6 +35,7 @@ export default defineModel({
     useApi: {
       uri: 'cards',
       routes: ['index', 'store', 'show', 'update', 'destroy'],
+      middleware: ['auth'],
     },
   },
 
@@ -94,14 +95,14 @@ export default defineModel({
       fillable: true,
       // The user who created the card. Set server-side from
       // `request.user.id` on store; surfaced in the card detail.
-      validation: { rule: schema.number().nullable() },
+      validation: { rule: schema.number() },
       factory: () => null,
     },
 
     dueDate: {
       order: 7,
       fillable: true,
-      validation: { rule: schema.string().nullable() },
+      validation: { rule: schema.string() },
       factory: () => null,
     },
 

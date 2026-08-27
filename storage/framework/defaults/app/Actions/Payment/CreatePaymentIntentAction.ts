@@ -7,19 +7,23 @@ export default new Action({
   description: 'Create Payment Intent for stripe',
   method: 'POST',
   async handle(request: RequestInstance) {
-    const userId = Number(request.getParam('id'))
     const productId = Number(request.get('productId'))
 
     const product = await Product.find(productId)
 
-    const user = await User.find(userId)
+    const user = await request.user()
+
+    if (!user)
+      return response.unauthorized('Authentication required')
 
     if (!product) {
       throw new HttpError(422, 'Product not found!')
     }
 
     const paymentIntent = await user?.paymentIntent({
-      amount: Number(product.unit_price),
+      // The Product model's column is `price`; `unit_price` has never been
+      // one, so this read was undefined and the intent was created for NaN.
+      amount: Number(product.get('price')),
       currency: 'usd',
       payment_method_types: ['card'],
     })
