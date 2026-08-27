@@ -32,6 +32,7 @@
     "sqlite": "^3.47.2"
   },
   "dependencies": {
+    "@stacksjs/stx": "^0.2.231",
     "stacks": "^0.72.86"
   },
   "devDependencies": {
