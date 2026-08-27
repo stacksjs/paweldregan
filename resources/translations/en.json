@@ -42,6 +42,23 @@
       }
     }
   },
+  "home2": {
+    "eyebrow": "Ultra distance coaching",
+    "titleA": "THE DISTANCE",
+    "titleB": "IS LEARNABLE.",
+    "lede": "Seven hundred kilometres across the Alps. Five hundred through the Arctic. I coach runners preparing for distances like these.",
+    "ctaPrimary": "Start coaching",
+    "ctaSecondary": "See the record",
+    "proof": {
+      "longest": "Longest finish",
+      "lappland": "Lappland Arctic Ultra 500K",
+      "utmb": "Ranked finishes"
+    },
+    "recordTitle": "EVERY START LINE.",
+    "recordLede": "Nine ranked races from 100K upward. These are the five longest.",
+    "closingTitle": "YOUR TURN.",
+    "closingBody": "Tell me the race you are afraid of. We will build the year that gets you to the start line ready."
+  },
   "about": {
     "kicker": "About",
     "title": "BORN TO RUN FAR.",

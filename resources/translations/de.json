@@ -42,6 +42,23 @@
       }
     }
   },
+  "home2": {
+    "eyebrow": "Coaching für Ultradistanzen",
+    "titleA": "DIE DISTANZ",
+    "titleB": "IST LERNBAR.",
+    "lede": "Siebenhundert Kilometer durch die Alpen. Fünfhundert durch die Arktis. Ich coache Läufer, die sich auf solche Distanzen vorbereiten.",
+    "ctaPrimary": "Coaching starten",
+    "ctaSecondary": "Alle Ergebnisse",
+    "proof": {
+      "longest": "Längster Zieleinlauf",
+      "lappland": "Lappland Arctic Ultra 500K",
+      "utmb": "Gewertete Zieleinläufe"
+    },
+    "recordTitle": "JEDE STARTLINIE.",
+    "recordLede": "Neun gewertete Rennen ab 100K. Das sind die fünf längsten.",
+    "closingTitle": "DU BIST DRAN.",
+    "closingBody": "Erzähl mir von dem Rennen, vor dem du Respekt hast. Wir bauen das Jahr, das dich vorbereitet an die Startlinie bringt."
+  },
   "about": {
     "kicker": "Über mich",
     "title": "GEBOREN ZUM WEITLAUFEN.",

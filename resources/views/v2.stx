@@ -1,0 +1,312 @@
+{{-- Alternative homepage, built to A/B against `/`.
+
+     `/` leads with the name: a typographic lockup, portrait beside it,
+     three equal preview tiles at the foot. It sells the person.
+
+     This one leads with the proposition and funnels to one conversion
+     (coaching). Every section uses a different layout family from the
+     one above it, so the two pages are comparable on structure rather
+     than on decoration:
+
+       hero (full-bleed photo)  ->  proof row (hairline stats)
+       ->  record rail (scroll-snap)  ->  arctic split (editorial)
+       ->  process (numbered list)    ->  closing band
+
+     Copy is deliberately shared with `/` and `/coaching` wherever the
+     facts are the same, so the test isolates layout instead of wording.
+     Only the hero, the record rail and the closing band carry new
+     strings (`home2.*` in resources/translations). --}}
+
+@extends('layouts/default')
+
+@section('content')
+
+<script server>
+interface RailRace {
+  year: string
+  name: string
+  distance: string
+  elevation: string
+  time: string
+}
+
+// The five longest finishes, taken verbatim from the table on /races so
+// the two pages cannot drift. Ordered longest first, which is also
+// reverse-chronological here.
+const railRaces: RailRace[] = [
+  { year: '2025', name: 'SwissPeaks Trail 700K', distance: '700 km', elevation: '49,000 m+', time: '175:43:56' },
+  { year: '2024', name: 'Eiger Ultra Trail E250', distance: '254 km', elevation: '14,945 m+', time: '70:42:49' },
+  { year: '2023', name: 'KAT100 by UTMB', distance: '160 km', elevation: '9,820 m+', time: '36:15:50' },
+  { year: '2020', name: 'Chiemgauer 100', distance: '160.9 km', elevation: '7,500 m+', time: '31:47:42' },
+  { year: '2023', name: 'KoBoLT 140 KM', distance: '140 km', elevation: '4,450 m+', time: '19:57:00' },
+]
+
+interface Step {
+  title: string
+  body: string
+}
+
+// Reuses the already-translated coaching process copy rather than
+// inventing a parallel set of strings to keep in sync.
+const steps: Step[] = [
+  { title: '{t:coaching.process.step1}', body: '{t:coaching.process.step1Desc}' },
+  { title: '{t:coaching.process.step2}', body: '{t:coaching.process.step2Desc}' },
+  { title: '{t:coaching.process.step3}', body: '{t:coaching.process.step3Desc}' },
+  { title: '{t:coaching.process.step4}', body: '{t:coaching.process.step4Desc}' },
+]
+</script>
+
+{{-- 1. Hero. Full-bleed landscape with a scrim, content bottom-left.
+     `min-h-[100dvh]` (never h-screen) so the iOS address bar cannot
+     shift the layout. The photo is the LCP element, so it loads eagerly
+     at high priority; the aspect is handled by object-cover inside a
+     fixed-height box, which reserves the space without a width/height
+     pair (StxImage would otherwise inline the source's own aspect ratio
+     and fight the layout, as noted on the hero of `/`). --}}
+<section class="flex overflow-hidden relative flex-col justify-end min-h-[100dvh] pb-16 pt-24 lg:pb-24">
+  <div class="absolute inset-0">
+    <StxImage
+      src="/images/landing_landscape.jpg"
+      alt="Paweł Dregan on an alpine ridge during an ultra distance race"
+      class="h-full object-cover w-full grayscale-[0.35]"
+      lazy="false"
+      fetchpriority="high"
+    />
+    {{-- Scrim. Two stops rather than a flat wash: the copy sits in the
+         lower left, so that corner needs the density and the sky does
+         not. Guarantees the AA contrast the headline and buttons below
+         are checked against. --}}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/65 to-transparent"></div>
+  </div>
+
+  {{-- The hero always renders on the dark scrim, in both colour modes,
+       so its type is explicitly white here rather than theme-dependent.
+       Everything below this section follows the page theme. --}}
+  <div class="hero-in relative mx-auto px-6 lg:px-12 w-full max-w-[1400px]">
+    <p class="mb-6 font-semibold text-[0.65rem] text-white/60 tracking-[0.25em] uppercase">{t:home2.eyebrow}</p>
+
+    <h1 class="font-display leading-[0.85] text-white text-[clamp(3.5rem,9vw,9rem)] tracking-tight">
+      {t:home2.titleA}
+      {{-- Second line is deliberately quieter than the first, but it
+           carries half the sentence, so it stays above the 3:1 AA bar
+           for large text rather than dropping to the decorative weight
+           the lockup on `/` uses for a repeated word. --}}
+      <span class="block text-white/70">{t:home2.titleB}</span>
+    </h1>
+
+    <p class="mt-8 max-w-[46ch] font-light leading-relaxed text-base text-white/70">
+      {t:home2.lede}
+    </p>
+
+    <div class="flex flex-wrap gap-4 mt-10">
+      <StxLink
+        to="/coaching"
+        class="inline-flex items-center whitespace-nowrap px-8 py-4 font-semibold text-black text-xs tracking-wide bg-white hover:bg-white/85 active:scale-[0.98] transition"
+      >
+        {t:home2.ctaPrimary}
+      </StxLink>
+      <StxLink
+        to="/races"
+        class="inline-flex items-center whitespace-nowrap px-8 py-4 font-semibold text-white text-xs tracking-wide border border-white/45 hover:bg-white/10 hover:border-white/70 active:scale-[0.98] transition"
+      >
+        {t:home2.ctaSecondary}
+      </StxLink>
+    </div>
+  </div>
+</section>
+
+{{-- 2. Proof row. Separate section rather than a strip inside the hero,
+     which keeps the hero to one message. Hairlines instead of cards:
+     nothing here is elevated above anything else. --}}
+<section class="mx-auto px-6 py-20 lg:px-12 lg:py-24 max-w-[1400px]">
+  <div class="grid grid-cols-1 sm:grid-cols-3 border-black/10 border-t dark:border-white/10">
+    <div class="reveal py-8 sm:pr-10 sm:border-r border-black/10 dark:border-white/10" style="--i: 0">
+      <div class="font-display leading-none text-5xl lg:text-6xl tracking-tight">700 km</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/40 tracking-[0.15em] uppercase dark:text-white/40">{t:home2.proof.longest}</div>
+    </div>
+    <div class="reveal py-8 sm:px-10 sm:border-r border-black/10 border-t sm:border-t-0 dark:border-white/10" style="--i: 1">
+      <div class="font-display leading-none text-5xl lg:text-6xl tracking-tight">2nd</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/40 tracking-[0.15em] uppercase dark:text-white/40">{t:home2.proof.lappland}</div>
+    </div>
+    <div class="reveal py-8 sm:pl-10 border-black/10 border-t sm:border-t-0 dark:border-white/10" style="--i: 2">
+      <div class="font-display leading-none text-5xl lg:text-6xl tracking-tight">9</div>
+      <div class="mt-3 font-medium text-[0.6rem] text-black/40 tracking-[0.15em] uppercase dark:text-white/40">{t:home2.proof.utmb}</div>
+    </div>
+  </div>
+</section>
+
+{{-- 3. Record rail. Nine races is past the point where a bulleted list
+     or a hairline-per-row table reads as anything but a data dump, so
+     the five longest go into a scroll-snap rail and the rest stay on
+     /races behind the same label used in the hero. --}}
+<section class="py-20 lg:py-28">
+  <div class="mx-auto mb-12 px-6 lg:px-12 max-w-[1400px]">
+    <h2 class="font-display leading-[0.9] text-[clamp(2.5rem,5vw,4.5rem)] tracking-tight">{t:home2.recordTitle}</h2>
+    <p class="mt-5 max-w-[52ch] leading-relaxed text-black/45 text-base dark:text-white/45">{t:home2.recordLede}</p>
+  </div>
+
+  {{-- Bleeds to the viewport edge on purpose: the cut-off last card is
+       what tells the reader the row scrolls. Padding on the track keeps
+       the first card aligned to the page gutter. --}}
+  <div class="rail flex overflow-x-auto gap-px px-6 lg:px-12 pb-4 snap-x snap-mandatory">
+    @foreach (railRaces as race)
+      <article class="flex flex-col shrink-0 snap-start justify-between p-8 lg:p-10 w-[280px] lg:w-[340px] min-h-[300px] border border-black/10 dark:border-white/10 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+        <div class="font-medium text-[0.6rem] text-black/30 tracking-[0.2em] dark:text-white/30">{{ race.year }}</div>
+
+        <div class="mt-8">
+          <div class="font-display leading-none text-4xl lg:text-5xl tracking-tight">{{ race.distance }}</div>
+          <h3 class="mt-4 font-semibold leading-snug text-black/70 text-sm dark:text-white/70">{{ race.name }}</h3>
+        </div>
+
+        <dl class="grid gap-2 grid-cols-[auto_1fr] mt-8 pt-5 border-black/10 border-t dark:border-white/10">
+          <dt class="font-medium text-[0.6rem] text-black/30 tracking-[0.1em] uppercase dark:text-white/30">{t:races.table.elevation}</dt>
+          <dd class="text-black/60 text-right text-xs dark:text-white/60">{{ race.elevation }}</dd>
+          <dt class="font-medium text-[0.6rem] text-black/30 tracking-[0.1em] uppercase dark:text-white/30">{t:races.table.time}</dt>
+          <dd class="text-black/60 text-right text-xs dark:text-white/60">{{ race.time }}</dd>
+        </dl>
+      </article>
+    @endforeach
+
+    {{-- End cap. Carries the full list rather than leaving the rail to
+         trail off, and reuses the hero's label for the same intent. --}}
+    <StxLink
+      to="/races"
+      class="flex flex-col shrink-0 snap-start justify-end p-8 lg:p-10 w-[280px] lg:w-[340px] min-h-[300px] bg-black dark:bg-white hover:bg-black/85 dark:hover:bg-white/85 transition-colors"
+    >
+      <span class="font-display leading-none text-4xl text-white lg:text-5xl tracking-tight dark:text-black">9</span>
+      <span class="mt-4 font-semibold text-[0.7rem] text-white/70 tracking-[0.15em] uppercase dark:text-black/70">{t:home2.ctaSecondary}</span>
+    </StxLink>
+  </div>
+</section>
+
+{{-- 4. Arctic split. The one image-and-text section on the page, so the
+     zigzag pattern never gets a chance to establish itself. Portrait
+     crop on the left, the number that matters pulled out of the body
+     copy on the right. --}}
+<section class="mx-auto px-6 py-20 lg:px-12 lg:py-28 max-w-[1400px]">
+  <div class="grid gap-12 grid-cols-1 items-center lg:gap-20 lg:grid-cols-[0.85fr_1fr]">
+    <div class="reveal" style="--i: 0">
+      <StxImage
+        src="/images/lapland.jpg"
+        alt="Pulling a sled across frozen Lapland during the Lappland Arctic Ultra 500K"
+        class="aspect-[3/4] object-cover w-full"
+      />
+    </div>
+
+    <div class="reveal" style="--i: 1">
+      <span class="block mb-6 font-semibold text-[0.6rem] text-black/30 tracking-[0.25em] uppercase dark:text-white/30">{t:home.featured.kicker}</span>
+      <h2 class="font-display leading-[0.9] text-[clamp(2.5rem,5.5vw,5rem)] tracking-tight">LAPPLAND ARCTIC ULTRA 500K</h2>
+      <p class="mt-8 max-w-[54ch] leading-relaxed text-black/45 text-base dark:text-white/45">
+        {t:home.featured.body}
+      </p>
+
+      <div class="grid gap-8 grid-cols-3 mt-10 pt-8 border-black/10 border-t dark:border-white/10">
+        <div>
+          <div class="font-extrabold text-2xl tracking-tight">515 km</div>
+          <div class="mt-1 font-medium text-[0.6rem] text-black/30 tracking-[0.1em] uppercase dark:text-white/30">{t:home.featured.distance}</div>
+        </div>
+        <div>
+          <div class="font-extrabold text-2xl tracking-tight">6d 23h</div>
+          <div class="mt-1 font-medium text-[0.6rem] text-black/30 tracking-[0.1em] uppercase dark:text-white/30">{t:home.featured.time}</div>
+        </div>
+        <div>
+          <div class="font-extrabold text-2xl tracking-tight">2nd</div>
+          <div class="mt-1 font-medium text-[0.6rem] text-black/30 tracking-[0.1em] uppercase dark:text-white/30">{t:home.featured.overall}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{-- 5. Process. Four steps as a numbered list rather than four equal
+     cards. Three columns at md+ (index, step name, description) so the
+     rules span content instead of trailing off into empty space, and
+     the descriptions keep a readable measure without the row collapsing
+     to a narrow left gutter. Stacks to one column below md. --}}
+<section class="mx-auto px-6 py-20 lg:px-12 lg:py-28 max-w-[1400px]">
+  <h2 class="mb-14 font-display leading-[0.9] text-[clamp(2.5rem,5vw,4.5rem)] tracking-tight">{t:coaching.processTitle}</h2>
+
+  <ol class="border-black/10 border-t dark:border-white/10">
+    @foreach (steps as step, index)
+      <li class="reveal grid gap-3 grid-cols-1 md:gap-12 md:grid-cols-[5rem_minmax(0,0.8fr)_minmax(0,1.2fr)] md:items-baseline py-10 border-black/10 border-b dark:border-white/10" style="--i: {{ index }}">
+        <span class="font-display leading-none text-4xl text-black/15 tracking-tight dark:text-white/15">0{{ index + 1 }}</span>
+        <h3 class="font-semibold text-lg tracking-tight">{{ step.title }}</h3>
+        <p class="leading-relaxed text-black/45 text-sm dark:text-white/45">{{ step.body }}</p>
+      </li>
+    @endforeach
+  </ol>
+</section>
+
+{{-- 6. Closing band. A tint inside the same theme, not a mode flip, so
+     the page never reads as two websites. Repeats the hero's primary
+     label because it is the same intent. --}}
+<section class="pb-24 px-6 lg:px-12">
+  <div class="flex flex-col gap-10 items-start justify-between lg:flex-row lg:items-center mx-auto p-10 lg:p-16 max-w-[1400px] bg-black/[0.03] dark:bg-white/[0.04]">
+    <div>
+      <h2 class="font-display leading-[0.9] text-[clamp(2.5rem,5vw,4.5rem)] tracking-tight">{t:home2.closingTitle}</h2>
+      <p class="mt-5 max-w-[52ch] leading-relaxed text-black/50 text-base dark:text-white/50">{t:home2.closingBody}</p>
+    </div>
+    <StxLink
+      to="/coaching"
+      class="inline-flex items-center shrink-0 whitespace-nowrap px-8 py-4 font-semibold text-white text-xs tracking-wide dark:text-black bg-black dark:bg-white hover:bg-black/85 dark:hover:bg-white/85 active:scale-[0.98] transition"
+    >
+      {t:home2.ctaPrimary}
+    </StxLink>
+  </div>
+</section>
+
+<style>
+  /* Motion, all of it optional.
+     Each rule below answers "what does this communicate?": the hero
+     rise marks the page's entry point, and the section reveals carry
+     reading order down the page (the stagger is the order). Nothing
+     loops, and nothing moves that the reader is not arriving at.
+
+     Only transform and opacity are animated, so every frame stays on
+     the compositor. The reveal is gated behind @supports so a browser
+     without scroll-driven timelines simply renders the content in its
+     final state instead of holding it at opacity 0. Both blocks sit
+     inside prefers-reduced-motion: no-preference, so reduced motion is
+     the plain static page rather than a special case bolted on after. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-in {
+      animation: v2-hero-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes v2-hero-in {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+    }
+
+    @supports (animation-timeline: view()) {
+      .reveal {
+        animation: v2-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 55%;
+        animation-delay: calc(var(--i, 0) * 0.06s);
+        will-change: transform, opacity;
+      }
+
+      @keyframes v2-reveal {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+      }
+    }
+  }
+
+  /* The rail scrolls; it should not advertise it with a scrollbar. */
+  .rail {
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+@endsection

@@ -40,6 +40,16 @@ export const site = defineSiteConfig({
       priority: 1.0,
       changefreq: 'weekly',
     },
+    // Alternative homepage, live for A/B comparison against '/'. Kept out
+    // of the sitemap and marked noindex: two pages with the same subject
+    // and near-identical copy would otherwise compete with each other in
+    // search. Reachable only by direct link while the test runs.
+    '/v2': {
+      title: 'Paweł Dregan, Ultra Runner',
+      description: 'Seven hundred kilometres across the Alps. Five hundred through the Arctic. 1:1 coaching for runners preparing for distances like these.',
+      image: '/images/landing_landscape.jpg',
+      sitemap: false,
+    },
     '/about': {
       title: 'About — Paweł Dregan',
       description: 'From first ultra to 700K finisher. The story, the philosophy, and the partnerships behind the journey.',

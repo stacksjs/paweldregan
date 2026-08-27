@@ -42,6 +42,23 @@
       }
     }
   },
+  "home2": {
+    "eyebrow": "Coaching ultradystansowy",
+    "titleA": "DYSTANSU",
+    "titleB": "MOŻNA SIĘ NAUCZYĆ.",
+    "lede": "Siedemset kilometrów przez Alpy. Pięćset przez Arktykę. Trenuję biegaczy, którzy przygotowują się do takich dystansów.",
+    "ctaPrimary": "Zacznij coaching",
+    "ctaSecondary": "Zobacz wyniki",
+    "proof": {
+      "longest": "Najdłuższy ukończony bieg",
+      "lappland": "Lappland Arctic Ultra 500K",
+      "utmb": "Ukończone biegi w rankingu"
+    },
+    "recordTitle": "KAŻDA LINIA STARTU.",
+    "recordLede": "Dziewięć biegów w rankingu od 100K wzwyż. Oto pięć najdłuższych.",
+    "closingTitle": "TWOJA KOLEJ.",
+    "closingBody": "Powiedz mi, przed którym biegiem czujesz respekt. Zbudujemy rok, który przygotuje cię na linię startu."
+  },
   "about": {
     "kicker": "O mnie",
     "title": "URODZONY DO DALEKICH BIEGÓW.",
