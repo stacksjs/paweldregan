@@ -49,7 +49,7 @@ export const tsCloud = {
       path: '/api',
       domain,
       deploy: 'server',
-      start: './buddy serve:api',
+      start: 'bun node_modules/@stacksjs/buddy/dist/cli.js serve:api',
       port: apiPort,
       exclude: [
         'node_modules',
