@@ -25,25 +25,15 @@
     "stx": "./buddy"
   },
   "system": {
-    "bun": "^1.3.0",
+    "bun": "^1.4.0",
     "sqlite": "^3.47.2"
   },
   "dependencies": {
-    "@stacksjs/bun-queue": "workspace:*",
-    "@stacksjs/bun-router": "^0.0.16",
-    "@stacksjs/stx": "^0.2.82",
-    "@stacksjs/ts-craft": "^0.0.2",
-    "@types/d3": "^7.4.3",
-    "bun-plugin-stx": "^0.2.82",
-    "d3": "^7.9.0",
-    "stacks": "workspace:*"
+    "stacks": "^0.72.85"
   },
   "devDependencies": {
     "better-dx": "^0.2.15"
   },
-  "workspaces": [
-    "storage/framework/**"
-  ],
   "git-hooks": {
     "pre-commit": {
       "staged-lint": {
