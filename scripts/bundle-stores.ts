@@ -9,12 +9,19 @@
 // bundle (Bun.build's CJS interop leaked `__` references into the
 // browser). Removed.
 //
-// What remains is the one fixup the framework currently does need
-// help with: `<!DOCTYPE html>` ends up below the framework's
-// `<!-- stx-layout: … -->` comment and signals-runtime <script>,
-// which puts the page into Quirks Mode. We hoist the doctype back
-// to the top of every dist HTML file as a single sweep after each
-// build.
+// What remains are the two head fixups the framework does not cover:
+//
+//  1. `<!DOCTYPE html>` ends up below the framework's
+//     `<!-- stx-layout: … -->` comment and signals-runtime <script>,
+//     which puts the page into Quirks Mode. We hoist it back to the
+//     top of every dist HTML file.
+//  2. `<meta name="robots" content="noindex">` for the pages listed in
+//     `noindexPaths`. The framework's page meta has no robots field,
+//     and `sitemap: false` alone does not keep a crawler out.
+//
+// A third fixup lived here until @stacksjs/stx 0.2.233: the per-locale
+// `<meta name="stx-layout-group">`, which only stx's dev server used to
+// stamp. The static build stamps it now.
 //
 // Kept the filename so existing build.ts / serve.ts imports still
 // work; future fixups (asset hashing, OG image inlining, etc.) can
@@ -27,12 +34,10 @@ import { noindexPaths, site } from '../config/site'
 export async function bundleAndInjectStores(distDir: string = './dist'): Promise<void> {
   if (!existsSync(distDir)) return
   const locales = site.i18n?.locales ?? []
-  const defaultLocale = site.i18n?.defaultLocale ?? locales[0]
 
   for (const file of walkHtml(distDir)) {
     const html = readFileSync(file, 'utf8')
     let next = hoistDoctype(html)
-    next = stampLocaleLayoutGroup(next, localeOf(file, distDir, locales, defaultLocale))
     if (isNoindex(file, distDir, locales)) next = stampNoindex(next)
     if (next !== html) writeFileSync(file, next)
   }
@@ -62,45 +67,6 @@ function isNoindex(file: string, distDir: string, locales: string[]): boolean {
 function stampNoindex(html: string): string {
   if (/<meta name="robots"/i.test(html)) return html
   const meta = '<meta name="robots" content="noindex, follow">'
-  if (/<\/head>/i.test(html)) return html.replace(/<\/head>/i, `${meta}\n</head>`)
-  return html
-}
-
-/**
- * Which locale's copy of a page is this file?
- *
- * Localized output lives under a locale-named directory (`de/about.html`);
- * the default locale keeps the bare path (`about.html`).
- */
-function localeOf(
-  file: string,
-  distDir: string,
-  locales: string[],
-  defaultLocale: string | undefined,
-): string | undefined {
-  if (!defaultLocale) return undefined
-  const [first] = relative(distDir, file).split(sep)
-  return locales.includes(first) ? first : defaultLocale
-}
-
-/**
- * Tag each page with its locale for the SPA router's "layout group".
- *
- * The router swaps only the container (`<main>`) on a same-group navigation,
- * so `<nav>` and `<footer>` keep the markup of whichever page loaded first.
- * That is wrong for every cross-locale hop: the chrome carries translated
- * labels and `/de/`-prefixed hrefs that the build already resolved for the
- * destination. A differing group tells the router to swap the whole body
- * instead — still client-side, no reload — which brings the chrome along.
- *
- * The framework's dev server stamps this; its static build does not (fixed
- * upstream in stx, not yet released). Until that lands, the built site
- * translated `<main>` on a language switch and left the nav in the previous
- * language. Written only when absent, so it is a no-op once stx ships it.
- */
-function stampLocaleLayoutGroup(html: string, locale: string | undefined): string {
-  if (!locale || /<meta name="stx-layout-group"/i.test(html)) return html
-  const meta = `<meta name="stx-layout-group" content="i18n:${locale}">`
   if (/<\/head>/i.test(html)) return html.replace(/<\/head>/i, `${meta}\n</head>`)
   return html
 }
