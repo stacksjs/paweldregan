@@ -72,7 +72,7 @@ export default defineModel({
 
     // Locale of the page the form was submitted from — useful when
     // replying in the visitor's language without asking. Allowed
-    // values: 'en' | 'de' | 'pl' (must match site.config.ts
+    // values: 'en' | 'de' | 'pl' (must match config/site.ts
     // i18n.locales). Modeled as varchar rather than a Postgres enum
     // — see Newsletter.ts for the migration-generator collision
     // that makes enums unsafe across multiple models.

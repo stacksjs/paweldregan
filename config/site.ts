@@ -1,12 +1,5 @@
 import { defineSiteConfig } from '@stacksjs/stx'
 
-// Component/layout/partial source files live under `resources/` (Stacks
-// convention), but bun-plugin-stx hard-resolves <Component /> tags
-// against the root-level `components/`, `layouts/`, `partials/`
-// directories without honoring stx.config.ts or any passed-in dirs.
-// Root-level symlinks (`components -> resources/components`, etc.)
-// bridge the two: editors work in `resources/`, framework finds them
-// at its defaults. The symlinks are committed; no config glue needed.
 export const site = defineSiteConfig({
   name: 'Paweł Dregan',
   port: 5555,
@@ -76,3 +69,5 @@ export const analytics = {
   siteId: 'paweldregan',
   endpoint: 'https://analytics.paweldregan.com',
 }
+
+export default site

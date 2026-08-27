@@ -7,4 +7,7 @@ import { defineStxConfig } from '@stacksjs/stx'
 export default defineStxConfig({
   root: 'resources',
   pagesDir: 'views',
+  componentsDir: 'components',
+  layoutsDir: 'layouts',
+  partialsDir: 'partials',
 })

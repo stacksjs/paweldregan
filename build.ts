@@ -1,6 +1,6 @@
 import { buildStaticSite } from '@stacksjs/stx'
 import { bundleAndInjectStores } from './scripts/bundle-stores'
-import { site } from './site.config'
+import { site } from './config/site'
 
 const result = await buildStaticSite(site)
 

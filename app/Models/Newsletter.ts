@@ -58,7 +58,7 @@ export default defineModel({
       factory: faker => faker.helpers.arrayElement(['subscribed', 'subscribed', 'subscribed', 'unsubscribed', 'pending']),
     },
 
-    // Allowed: 'en' | 'de' | 'pl' (must match site.config.ts i18n.locales).
+    // Allowed: 'en' | 'de' | 'pl' (must match config/site.ts i18n.locales).
     // Same enum-collision reason as `status` above — kept as varchar.
     locale: {
       required: true,
