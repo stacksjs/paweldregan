@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Redeploy without a commit. Some deploys carry no code change at all: the
+  # mail provisioner sets each mailbox's password from the secrets on every
+  # run, so rotating a mailbox password is a secret update plus a redeploy,
+  # and without this that meant pushing an empty commit to trigger one.
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
