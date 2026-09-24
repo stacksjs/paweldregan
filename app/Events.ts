@@ -1,5 +1,14 @@
 import type { Events } from '@stacksjs/types'
 
+// Event names are checked against AppEvents, which only knows the model events
+// buddy generates into storage/framework/types. Declared here so this map does
+// not depend on that file existing.
+declare module '@stacksjs/events' {
+  interface AppEvents {
+    'user:created': { id: number, name: string }
+  }
+}
+
 /**
  * **Events Configuration**
  *
