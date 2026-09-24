@@ -5,11 +5,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  # Redeploy without a commit, for deploys that carry no code change, such as a
-  # rotated MAIL_PASSWORD_* secret: the mail reconcile changes an existing
-  # mailbox's password when it no longer matches the secret, and the deploy log
-  # says "changed the password of N mailbox(es)". If it warns that a change did
-  # not take, set it on the mail box by hand:
+  # Redeploy without a commit, for deploys that carry no code change.
+  #
+  # A deploy only creates missing mailboxes; it never changes the password of
+  # one that exists, whatever MAIL_PASSWORD_* says. Change one on the mail box:
   #   printf '%s' "$NEW" | runuser -u mail-server -- env \
   #     SMTP_DB_PATH=/var/lib/mail-storage/data/smtp.db \
   #     /opt/mail/mail-server user:local change-password <address> --password-stdin

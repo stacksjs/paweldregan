@@ -35,7 +35,7 @@
   "dependencies": {
     "@stacksjs/stx": "^0.2.234",
     "@stacksjs/ts-cloud": "^0.16.10",
-    "stacks": "^0.74.62",
+    "stacks": "^0.74.66",
     "ts-images": "^0.2.12"
   },
   "devDependencies": {
