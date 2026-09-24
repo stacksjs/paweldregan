@@ -5,10 +5,13 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  # Redeploy without a commit. Some deploys carry no code change at all: the
-  # mail provisioner sets each mailbox's password from the secrets on every
-  # run, so rotating a mailbox password is a secret update plus a redeploy,
-  # and without this that meant pushing an empty commit to trigger one.
+  # Redeploy without a commit, for deploys that carry no code change, such as a
+  # rotated MAIL_PASSWORD_* secret. The mail reconcile only changes an existing
+  # mailbox's password from the secret in a @stacksjs/buddy newer than 0.74.59;
+  # older ones leave it untouched. There, set it on the mail box by hand:
+  #   printf '%s' "$NEW" | runuser -u mail-server -- env \
+  #     SMTP_DB_PATH=/var/lib/mail-storage/data/smtp.db \
+  #     /opt/mail/mail-server user:local change-password <address> --password-stdin
   workflow_dispatch:
 
 concurrency:
