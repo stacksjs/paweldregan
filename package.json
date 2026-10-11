@@ -33,13 +33,13 @@
     "sqlite": "^3.47.2"
   },
   "dependencies": {
-    "@stacksjs/stx": "^0.2.234",
-    "@stacksjs/ts-cloud": "^0.16.10",
-    "stacks": "^0.74.66",
-    "ts-images": "^0.2.12"
+    "@stacksjs/stx": "^0.2.441",
+    "@stacksjs/ts-cloud": "^0.16.52",
+    "stacks": "^0.75.133",
+    "ts-images": "^0.2.29"
   },
   "devDependencies": {
-    "better-dx": "^0.2.15"
+    "better-dx": "^0.2.37"
   },
   "git-hooks": {
     "pre-commit": {
