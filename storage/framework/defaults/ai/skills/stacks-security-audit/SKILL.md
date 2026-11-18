@@ -1,6 +1,6 @@
 ---
 name: stacks-security-audit
-description: Use when performing security analysis on a Stacks application — OWASP Top 10, STRIDE threat modeling, attack surface mapping, dependency audit. Requires concrete exploit scenarios. Invoke with /stacks-security-audit.
+description: Use when performing security analysis on a Stacks application - OWASP Top 10, STRIDE threat modeling, attack surface mapping, dependency audit. Requires concrete exploit scenarios. Invoke with /stacks-security-audit.
 license: MIT
 compatibility: Bun >= 1.3.0, TypeScript
 allowed-tools: Read Edit Write Bash Grep Glob
@@ -9,6 +9,10 @@ allowed-tools: Read Edit Write Bash Grep Glob
 # /stacks-security-audit — Security Analysis
 
 You are performing a security analysis for a Stacks application. Be concrete — every finding must include a realistic exploit scenario. Vague warnings are worthless.
+
+## Step 0: Run the scanner
+
+Run `buddy security:scan --show-ignored` first (see the `stacks-security` skill). It already covers vulnerable dependencies, committed secrets, dangerous calls, risky GitHub workflows and repository hygiene, so do not repeat those by hand: verify each finding it reports (read the code, confirm it is reachable) and spend your own effort on what a pattern scan cannot see: authorization gaps, business-logic abuse, trust boundaries and data exposure. Treat every `security-ignore` reason as a claim to check.
 
 ## Determine Scope
 

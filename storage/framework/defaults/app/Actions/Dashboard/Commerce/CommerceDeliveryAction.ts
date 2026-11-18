@@ -1,31 +1,22 @@
-import { Action } from '@stacksjs/actions'
+import { Action } from '@stacksjs/actions/runtime'
 import { config } from '@stacksjs/config'
-import { DeliveryRoute, Driver, ShippingMethod, ShippingZone } from '@stacksjs/orm'
 import { dashboardOperationalError } from '../dashboard-response'
-import { buildDeliveryOverview } from './commerce-delivery'
+import { readDeliveryOverview } from './commerce-delivery-overview'
 
+/**
+ * `GET /api/dashboard/commerce/delivery` - the delivery overview, counted over
+ * every courier, route and zone (commerce-delivery-overview.ts,
+ * stacksjs/stacks#3218). It used to work from the first 500 of each.
+ */
 export default new Action({
   name: 'CommerceDelivery',
-  description: 'Returns the dashboard delivery overview from routes, drivers, shipping methods, and zones.',
+  description: 'Returns the dashboard delivery overview from routes, couriers, shipping methods, and zones.',
   method: 'GET',
   apiResponse: true,
 
   async handle() {
     try {
-      const [allMethods, allRoutes, allZones, allDrivers] = await Promise.all([
-        ShippingMethod.orderBy('id', 'asc').limit(500).get(),
-        DeliveryRoute.orderBy('id', 'asc').limit(500).get(),
-        ShippingZone.orderBy('id', 'asc').limit(500).get(),
-        Driver.orderBy('id', 'asc').limit(500).get(),
-      ])
-
-      return buildDeliveryOverview(
-        allMethods,
-        allRoutes,
-        allZones,
-        allDrivers,
-        (config as any).commerce?.currency,
-      )
+      return await readDeliveryOverview(config.commerce?.currency)
     }
     catch (error) {
       return dashboardOperationalError(error, 'Delivery records could not be read.', 'CommerceDeliveryAction')

@@ -1,5 +1,6 @@
 import type { RequestInstance } from '@stacksjs/types'
-import { db } from '@stacksjs/database'
+import { positiveIdOrNull, storedBoolean } from '@stacksjs/validation/input'
+import { db } from '@stacksjs/database/runtime'
 import { insertedId, str, timestamp } from './content-input'
 
 export { insertedId, timestamp }
@@ -49,17 +50,16 @@ export async function findPost(id: number, database: typeof db = db): Promise<un
 function ids(value: unknown): number[] {
   const values = Array.isArray(value) ? value : value === undefined || value === null ? [] : [value]
   return [...new Set(values
-    .map(item => Number(item))
-    .filter(item => Number.isInteger(item) && item > 0))]
+    .map(positiveIdOrNull)
+    .filter((item): item is number => item !== null))]
 }
 
 function optionalId(value: unknown): number | null {
-  const id = Number(value)
-  return Number.isInteger(id) && id > 0 ? id : null
+  return positiveIdOrNull(value)
 }
 
 function booleanValue(value: unknown): boolean {
-  return value === true || value === 1 || value === '1' || value === 'true' || value === 'on'
+  return storedBoolean(value, false)
 }
 
 export function invalidPostContent(payload: PostPayload): string | null {
@@ -89,7 +89,7 @@ export async function invalidPostReference(payload: PostPayload, database: typeo
       ? database.selectFrom('authors').select(['id']).where('id', '=', payload.authorId).executeTakeFirst()
       : Promise.resolve(undefined),
     payload.categoryIds.length
-      ? database.selectFrom('categories').whereIn('id', payload.categoryIds).select(['id']).execute()
+      ? database.selectFrom('categorizables').where('categorizable_type', '=', 'posts').whereIn('id', payload.categoryIds).select(['id']).execute()
       : Promise.resolve([]),
     payload.tagIds.length
       ? database.selectFrom('tags').whereIn('id', payload.tagIds).select(['id']).execute()
@@ -116,7 +116,7 @@ async function replacePostPivot(
   relatedIds: number[],
   now: string,
 ): Promise<void> {
-  await (database as any)
+  await database
     .deleteFrom(table)
     .where(ownerKey, '=', postId)
     .where(typeKey, '=', 'posts')
@@ -125,7 +125,7 @@ async function replacePostPivot(
   if (relatedIds.length === 0)
     return
 
-  await (database as any)
+  await database
     .insertInto(table)
     .values(relatedIds.map(relatedId => ({
       [foreignKey]: relatedId,
@@ -146,12 +146,12 @@ export async function syncPostRelations(database: typeof db, postId: number, pay
 
 /** Removes both post pivot sets on the caller's database or transaction. */
 export async function detachPostRelations(database: typeof db, postId: number): Promise<void> {
-  await (database as any)
+  await database
     .deleteFrom('categorizable_models')
     .where('categorizable_id', '=', postId)
     .where('categorizable_type', '=', 'posts')
     .execute()
-  await (database as any)
+  await database
     .deleteFrom('taggable_models')
     .where('taggable_id', '=', postId)
     .where('taggable_type', '=', 'posts')

@@ -2,3 +2,7 @@
 export * from './functions'
 export * from './models'
 export * from './jobs'
+export * from './controllers'
+
+// Names more than one barrel exports, which `export *` would drop (TS2308).
+export { MailPreference, NotificationDelivery, QueueWorker, Release } from './models'

@@ -28,12 +28,18 @@ export interface ApiRequestOptions {
 export class DashboardApiError extends Error {
   readonly status: number
   readonly fields?: Record<string, string>
+  /**
+   * The answer's body as it came, for a caller that needs more of it than the
+   * message and the fields: where a combined save was refused, say.
+   */
+  readonly body?: unknown
 
-  constructor(message: string, status: number, fields?: Record<string, string>) {
+  constructor(message: string, status: number, fields?: Record<string, string>, body?: unknown) {
     super(message)
     this.name = 'DashboardApiError'
     this.status = status
     this.fields = fields
+    this.body = body
   }
 }
 
@@ -78,7 +84,7 @@ async function dashboardResponseError(res: Response): Promise<DashboardApiError>
   const failure = describeResponseError(res.status, payload)
   if (failure.unexpected)
     console.error('[dashboard-api] Unexpected request failure:', failure.cause)
-  return new DashboardApiError(failure.message, res.status, failure.fields)
+  return new DashboardApiError(failure.message, res.status, failure.fields, payload)
 }
 
 /**
@@ -104,10 +110,23 @@ export async function dashboardApi<T = unknown>(path: string, options: ApiReques
     const failure = describeResponseError(res.status, payload as ApiErrorBody | null)
     if (failure.unexpected)
       console.error('[dashboard-api] Unexpected request failure:', failure.cause)
-    throw new DashboardApiError(failure.message, res.status, failure.fields)
+    throw new DashboardApiError(failure.message, res.status, failure.fields, payload)
   }
 
   return payload as T
+}
+
+/**
+ * Open a guarded dashboard stream - server-sent events read through `fetch`,
+ * because `EventSource` cannot send the bearer token the dashboard
+ * authenticates with. Throws on a non-2xx response, as `dashboardApi` does;
+ * the caller reads `res.body`.
+ */
+export async function dashboardStream(path: string, options: Pick<ApiRequestOptions, 'signal'> = {}): Promise<Response> {
+  const res = await dashboardResponse(path, options, 'text/event-stream')
+  if (!res.ok)
+    throw await dashboardResponseError(res)
+  return res
 }
 
 /**

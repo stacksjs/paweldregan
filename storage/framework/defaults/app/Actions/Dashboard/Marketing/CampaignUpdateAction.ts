@@ -1,5 +1,5 @@
 import type { RequestInstance } from '@stacksjs/types'
-import { Action } from '@stacksjs/actions'
+import { Action } from '@stacksjs/actions/runtime'
 import { config } from '@stacksjs/config'
 import { Campaign } from '@stacksjs/orm'
 import { response } from '@stacksjs/router'
@@ -18,7 +18,7 @@ export default new Action({
       return response.json({ message: 'A valid campaign id is required.' }, 400)
     const data = campaignWriteData(
       await request.all(),
-      String((config as any).commerce?.currency || 'USD').toUpperCase(),
+      String(config.commerce?.currency || 'USD').toUpperCase(),
     )
     const validationError = validateCampaignWriteData(data)
     if (validationError)
